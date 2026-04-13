@@ -4,7 +4,7 @@ import React, { useRef, useState, useCallback, useMemo } from 'react';
 import type { KeyboardEvent } from 'react';
 import { UserCircleIcon, ScrollIcon, GearIcon, QuestionIcon, SignOutIcon, SparkleIcon } from '@phosphor-icons/react';
 import { Avatar } from '../Avatar/Avatar';
-import type { AvatarPerson } from '../Avatar/Avatar';
+import type { AvatarProps } from '../Avatar/Avatar';
 import { Button } from '../Button/Button';
 import { MenuItem } from '../Menu/MenuItem';
 import { Divider } from '../Divider/Divider';
@@ -48,44 +48,29 @@ export interface ProfileMenuUpgradeConfig {
 export interface ProfileMenuProps {
     name?: string;
     email?: string;
-    person?: AvatarPerson;
-    /** Main menu items. Overrides defaults when provided. */
+    /**
+     * Props forwarded to the Avatar component in the header.
+     * Supports all Avatar variants (image, initials, placeholder)
+     * and every Avatar prop (size, color, person, initials, etc.).
+     * @default { size: 'l', type: 'image', person: 'adam-smith' }
+     */
+    avatarProps?: AvatarProps;
+    /** Main menu items. Defaults to view-profile, billing, settings, support. */
     items?: ProfileMenuItemConfig[];
-    /** Footer items below divider. Pass `[]` to hide. */
+    /** Footer items below divider. Defaults to logout. Pass `[]` to hide. */
     footerItems?: ProfileMenuItemConfig[];
-    /** Upgrade button. `false` to hide, object to customise. */
+    /** Upgrade button. `false` to hide, `true` for defaults, or object to customise. */
     upgrade?: boolean | ProfileMenuUpgradeConfig;
-    /** @deprecated Use `items` prop */
-    onViewProfile?: () => void;
-    /** @deprecated Use `items` prop */
-    onBilling?: () => void;
-    /** @deprecated Use `items` prop */
-    onSettings?: () => void;
-    /** @deprecated Use `items` prop */
-    onSupport?: () => void;
-    /** @deprecated Use `footerItems` prop */
-    onLogout?: () => void;
-    /** @deprecated Use `upgrade` prop */
-    onUpgrade?: () => void;
-    /** @deprecated Use `upgrade` prop */
-    showUpgradeButton?: boolean;
     className?: string;
 }
 
 export const ProfileMenu: React.FC<ProfileMenuProps> = ({
     name = 'Adam Smith',
     email = 'adam.smith@outlook.com',
-    person = 'adam-smith',
+    avatarProps = { size: 'l', type: 'image', person: 'adam-smith' },
     items,
     footerItems,
     upgrade,
-    showUpgradeButton,
-    onViewProfile,
-    onBilling,
-    onSettings,
-    onSupport,
-    onLogout,
-    onUpgrade,
     className = '',
 }) => {
     const [focusedId, setFocusedId] = useState<string | null>(null);
@@ -93,16 +78,9 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
     const menuRef = useRef<HTMLDivElement>(null);
 
     // ── Resolve items ─────────────────────────────────────────────────────
-    const resolvedItems: ProfileMenuItemConfig[] = items ?? [
-        { ...DEFAULT_PROFILE_MENU_ITEMS[0], onClick: onViewProfile },
-        { ...DEFAULT_PROFILE_MENU_ITEMS[1], onClick: onBilling },
-        { ...DEFAULT_PROFILE_MENU_ITEMS[2], onClick: onSettings },
-        { ...DEFAULT_PROFILE_MENU_ITEMS[3], onClick: onSupport },
-    ];
+    const resolvedItems: ProfileMenuItemConfig[] = items ?? DEFAULT_PROFILE_MENU_ITEMS;
 
-    const resolvedFooter: ProfileMenuItemConfig[] = footerItems ?? [
-        { ...DEFAULT_PROFILE_FOOTER_ITEMS[0], onClick: onLogout },
-    ];
+    const resolvedFooter: ProfileMenuItemConfig[] = footerItems ?? DEFAULT_PROFILE_FOOTER_ITEMS;
 
     // Combined list for keyboard navigation across both sections
     const allItems = useMemo(
@@ -111,15 +89,13 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
     );
 
     // ── Resolve upgrade button ────────────────────────────────────────────
-    let showUpgrade = true;
+    let showUpgrade = false;
     let upgradeLabel = 'Upgrade Plan';
     let upgradeIcon: React.ReactNode = <SparkleIcon size={16} weight="regular" />;
-    let upgradeOnClick = onUpgrade;
+    let upgradeOnClick: (() => void) | undefined;
 
-    if (upgrade === false) {
-        showUpgrade = false;
-    } else if (upgrade === true || upgrade === undefined) {
-        if (showUpgradeButton === false) showUpgrade = false;
+    if (upgrade === true) {
+        showUpgrade = true;
     } else if (typeof upgrade === 'object') {
         showUpgrade = true;
         if (upgrade.label) upgradeLabel = upgrade.label;
@@ -195,18 +171,22 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
                 elevation="floating"
                 className={`w-[280px] p-3 inline-flex flex-col items-center self-start gap-3 ${className}`}
                 role="menu"
-                aria-label={`${name} profile menu`}
+                aria-label={name ? `${name} profile menu` : 'Profile menu'}
             >
                 {/* Profile header */}
                 <div className="self-stretch pt-1.5 flex flex-col items-center gap-3" role="presentation">
-                    <Avatar size="l" type="image" person={person} />
+                    <Avatar {...avatarProps} />
                     <div className="self-stretch flex flex-col items-start gap-1">
-                        <span className="text-h7 self-stretch text-center text-[var(--color-neutral-text-strong)]">
-                            {name}
-                        </span>
-                        <span className="text-b4 self-stretch text-center text-[var(--color-neutral-text-medium)]">
-                            {email}
-                        </span>
+                        {name && (
+                            <span className="text-h7 self-stretch text-center text-[var(--color-neutral-text-strong)]">
+                                {name}
+                            </span>
+                        )}
+                        {email && (
+                            <span className="text-b4 self-stretch text-center text-[var(--color-neutral-text-medium)]">
+                                {email}
+                            </span>
+                        )}
                     </div>
                 </div>
 

@@ -15,7 +15,8 @@ import { CompactIconButton } from '../Button/CompactIconButton';
 import { NotificationIcon } from '../Notification/NotificationIcon';
 import { ProfileDropdown } from '../Menu/ProfileDropdown';
 import { BrandIcon } from '../BrandIcon/BrandIcon';
-import { ProfileMenu } from '../Menu/ProfileMenu';
+import { ProfileMenu, DEFAULT_PROFILE_MENU_ITEMS, DEFAULT_PROFILE_FOOTER_ITEMS } from '../Menu/ProfileMenu';
+import type { ProfileMenuItemConfig } from '../Menu/ProfileMenu';
 import { NotificationDropdown, type NotificationData } from '../Notification/NotificationDropdown';
 import type { AvatarPerson } from '../Avatar/Avatar';
 
@@ -471,14 +472,21 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
                 <ProfileMenu
                     name={userName}
                     email={userEmail}
-                    person={userPerson}
-                    showUpgradeButton={showUpgradeButton}
-                    onViewProfile={wrapCallback(profileMenuCallbacks.onViewProfile)}
-                    onBilling={wrapCallback(profileMenuCallbacks.onBilling)}
-                    onSettings={wrapCallback(profileMenuCallbacks.onSettings)}
-                    onSupport={wrapCallback(profileMenuCallbacks.onSupport)}
-                    onLogout={wrapCallback(profileMenuCallbacks.onLogout)}
-                    onUpgrade={wrapCallback(profileMenuCallbacks.onUpgrade)}
+                    avatarProps={{ size: 'l', type: 'image', person: userPerson }}
+                    upgrade={showUpgradeButton}
+                    items={DEFAULT_PROFILE_MENU_ITEMS.map(item => {
+                        const callbackMap: Record<string, (() => void) | undefined> = {
+                            'view-profile': profileMenuCallbacks.onViewProfile,
+                            'billing': profileMenuCallbacks.onBilling,
+                            'settings': profileMenuCallbacks.onSettings,
+                            'support': profileMenuCallbacks.onSupport,
+                        };
+                        return { ...item, onClick: wrapCallback(callbackMap[item.id]) };
+                    })}
+                    footerItems={DEFAULT_PROFILE_FOOTER_ITEMS.map(item => ({
+                        ...item,
+                        onClick: item.id === 'logout' ? wrapCallback(profileMenuCallbacks.onLogout) : item.onClick,
+                    }))}
                 />
             </div>
         </div>
