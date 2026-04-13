@@ -1,0 +1,53 @@
+{
+  "name": "@versaui/ui",
+  "version": "0.1.0",
+  "description": "Versa UI — A free, production-ready React component library with design tokens, theming, and accessible components.",
+  "type": "module",
+  "exports": {
+    "./components/*": "./src/components/*.tsx",
+    "./utils/*": "./src/utils/*.ts",
+    "./styles/*": "./src/styles/*.css",
+    "./assets/*": "./src/assets/*",
+    "./generated/*": "./src/generated/*.ts"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.27.18",
+    "@phosphor-icons/react": "^2.1.10",
+    "@react-aria/button": "^3.14.4",
+    "@react-aria/focus": "^3.21.3",
+    "@react-aria/interactions": "^3.26.0",
+    "@react-aria/progress": "^3.4.29",
+    "@react-aria/utils": "^3.33.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "react-aria-components": "^1.15.1",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  },
+  "keywords": [
+    "react",
+    "component-library",
+    "design-system",
+    "design-tokens",
+    "ui-components",
+    "tailwindcss",
+    "accessible",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/versaui/versaui.git"
+  },
+  "homepage": "https://www.versaui.pro",
+  "bugs": {
+    "url": "https://github.com/versaui/versaui/issues"
+  }
+}
