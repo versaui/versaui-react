@@ -141,6 +141,21 @@ const getLogoUrl = (brand: LogoBrand, type: 'icon' | 'wordmark' | 'contained'): 
 const svgCache = new Map<string, string>();
 
 /**
+ * Pre-fetches and caches the Versa UI icon and wordmark SVGs.
+ * Call this at module scope to ensure the logo renders instantly.
+ */
+export function preloadVersaUiLogo(): void {
+    const urls = [LOGO_URLS['versa-ui_icon'], LOGO_URLS['versa-ui_wordmark']];
+    for (const url of urls) {
+        if (!url || svgCache.has(url)) continue;
+        fetch(url)
+            .then(res => res.text())
+            .then(svg => { svgCache.set(url, svg); })
+            .catch(() => {});
+    }
+}
+
+/**
  * Fetches SVG content from a URL and caches it.
  */
 function useSvgContent(url: string): string | null {

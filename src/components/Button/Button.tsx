@@ -214,27 +214,26 @@ export const Button: React.FC<ButtonProps> = ({
             {...focusProps}
             {...props}
         >
-            {loading ? (
+            {loading && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <Loader size={iconSize} variant={variant} />
                 </div>
-            ) : (
-                <div className="flex items-center justify-center w-full h-full gap-[inherit]">
-                    {leadingIcon && (
-                        <span className="flex items-center justify-center shrink-0" style={{ width: iconSize, height: iconSize }}>
-                            {renderIcon(leadingIcon)}
-                        </span>
-                    )}
-                    {!isIconOnly && children && (
-                        <span className="flex items-center justify-center px-1 whitespace-nowrap">{children}</span>
-                    )}
-                    {trailingIcon && (
-                        <span className="flex items-center justify-center shrink-0" style={{ width: iconSize, height: iconSize }}>
-                            {renderIcon(trailingIcon)}
-                        </span>
-                    )}
-                </div>
             )}
+            <div className={cn("flex items-center justify-center w-full h-full gap-[inherit]", loading && "invisible")}>
+                {leadingIcon && (
+                    <span className="flex items-center justify-center shrink-0" style={{ width: iconSize, height: iconSize }}>
+                        {renderIcon(leadingIcon)}
+                    </span>
+                )}
+                {!isIconOnly && children && (
+                    <span className="flex items-center justify-center px-1 whitespace-nowrap">{children}</span>
+                )}
+                {trailingIcon && (
+                    <span className="flex items-center justify-center shrink-0" style={{ width: iconSize, height: iconSize }}>
+                        {renderIcon(trailingIcon)}
+                    </span>
+                )}
+            </div>
         </button>
     );
 };
