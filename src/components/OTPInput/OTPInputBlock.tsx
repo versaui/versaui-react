@@ -27,8 +27,7 @@ export interface OTPInputBlockProps extends Omit<React.InputHTMLAttributes<HTMLI
 // =============================================================================
 
 /**
- * OTP Input Block styling variants
- * Based on Figma specs: 2 sizes × 6 states
+ * OTP Input Block styling variants — 2 sizes × 6 states
  */
 const otpInputBlockVariants = cva(
     [

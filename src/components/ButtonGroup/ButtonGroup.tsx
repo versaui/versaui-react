@@ -105,7 +105,7 @@ export function ButtonGroup({
         }
     }, [disabled, items, activeId, onChange]);
 
-    // Container styles matching Figma design - using design token for shadow
+    // Container styles - using design token for shadow
     const containerStyle: React.CSSProperties = useMemo(() => ({
         display: 'inline-flex',
         alignItems: 'center',

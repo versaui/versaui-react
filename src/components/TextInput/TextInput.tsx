@@ -354,6 +354,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({
             {/* Main Field */}
             <div style={{
                 ...flex(), justifyContent: 'flex-start', gap: s.gap, width: '100%', height: s.h,
+                position: 'relative',
                 paddingLeft: isInline || hasLead ? 0 : s.px,
                 paddingRight: isInline || hasTrail ? 0 : s.px,
                 background: isInline ? (isHover ? C.bg.hover : 'transparent') : colors.bg,
@@ -362,13 +363,12 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({
                 borderBottomWidth: isInline ? 1 : disabled ? 0 : 1,
                 borderBottomColor: isInline ? ((isFocus || resolvedStatus !== 'default') && !disabled ? colors.border : 'transparent') : (disabled ? 'transparent' : C.border.default),
                 borderRadius: isInline ? 0 : radius,
-                outline: !isInline && !readOnly && (isFocus || resolvedStatus !== 'default') && !disabled ? `1px solid ${colors.border}` : '1px solid transparent',
-                outlineOffset: -1,
+                outline: 'none',
                 boxShadow: focusRing,
                 cursor: disabled ? 'not-allowed' : 'text',
                 boxSizing: 'border-box',
                 overflow: inputType === 'country' ? 'visible' : 'hidden',
-                transition: 'border-color 150ms, background-color 150ms, outline-color 150ms, border-bottom-color 150ms, box-shadow 150ms',
+                transition: 'border-color 150ms, background-color 150ms, border-bottom-color 150ms, box-shadow 150ms',
             }}>
                 {/* Leading Section */}
                 {hasLead && (
@@ -513,7 +513,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({
                     <div {...stopProp} style={{ ...flex(), alignItems: 'stretch', alignSelf: 'stretch', flexShrink: 0 }}>
                         <div style={divider} />
                         {inputType === 'button' ? (
-                            <div style={{ ...flex(), alignSelf: 'stretch', padding: 0, background: C.section, borderTopRightRadius: radius, borderBottomRightRadius: radius }}>
+                            <div style={{ ...flex(), alignSelf: 'stretch', padding: 0, background: C.section, borderTopRightRadius: radius, borderBottomRightRadius: radius, position: 'relative', zIndex: 1 }}>
                                 <Button
                                     variant="neutral" buttonStyle="subtle" size={size} leadingIcon={buttonIcon}
                                     onClick={e => { e.stopPropagation(); if (!disabled) onButtonClick?.(); }}
@@ -526,6 +526,15 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({
                             </div>
                         )}
                     </div>
+                )}
+
+                {/* Focus/status border overlay — renders above all children (including Button with position:relative) */}
+                {!isInline && !readOnly && (isFocus || resolvedStatus !== 'default') && !disabled && (
+                    <div style={{
+                        position: 'absolute', inset: 0, borderRadius: radius,
+                        border: `1px solid ${colors.border}`,
+                        pointerEvents: 'none', zIndex: 2,
+                    }} />
                 )}
             </div>
 

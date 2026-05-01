@@ -75,7 +75,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
         boxShadow: isClickable && isFocusVisible ? 'var(--focus-ring-primary)' : 'none',
     }), [isCurrent, isClickable, isFocusVisible]);
 
-    // Text styles - H8 typography from Figma
+    // Text styles - H8 typography
     const textStyle: React.CSSProperties = useMemo(() => ({
         color: stateStyles.textColor,
         whiteSpace: 'nowrap',

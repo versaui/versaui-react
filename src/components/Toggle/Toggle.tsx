@@ -11,7 +11,7 @@ export const TOGGLE_SIZES = ['large', 'medium', 'small'] as const;
 export type ToggleStyle = (typeof TOGGLE_STYLES)[number];
 export type ToggleSize = (typeof TOGGLE_SIZES)[number];
 
-// Size configurations from Figma - exact dimensions
+// Size configurations - exact dimensions
 // Default style: thumb is 80% of container height (square)
 // Pill style: thumb is wider (20:16 aspect ratio)
 // wrapperPadding: padding around the toggle for focus states

@@ -95,7 +95,7 @@ export interface SliderProps {
 /**
  * Slider - Interactive slider for selecting single value or range.
  * 
- * Layout from Figma:
+ * Layout:
  * - Labels (0 and 100) are at container edges
  * - Track is inset by 10px from each side (half of handle width)
  * - Handles are positioned on the track, centered at their position

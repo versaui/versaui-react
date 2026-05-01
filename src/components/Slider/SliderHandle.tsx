@@ -54,7 +54,7 @@ export interface SliderHandleProps extends VariantProps<typeof handleVariants> {
     max?: number;
     /** Value text for screen readers */
     valueText?: string;
-    /** Show value indicator on hover/drag (legacy prop, handled by parent) */
+    /** Show value indicator on hover/drag (managed by parent Slider) */
     showValueIndicator?: boolean;
     /** Additional class name */
     className?: string;
@@ -75,7 +75,7 @@ export interface SliderHandleProps extends VariantProps<typeof handleVariants> {
 /**
  * SliderHandle - The draggable thumb that users interact with to select a value.
  * 
- * Specs from Figma:
+ * Specs:
  * - Size: 20×20px fixed
  * - Shape: Fully rounded (200px border-radius)
  * - Background: Static white (disabled: neutral surface strong)

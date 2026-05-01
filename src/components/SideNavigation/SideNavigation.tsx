@@ -47,9 +47,9 @@ export interface SideNavigationProps {
     onSelect?: (id: string) => void;
     /** Style variant for navigation items */
     variant?: SideNavigationItemVariant;
-    /** Menu sections (backward compatibility) */
+    /** Menu sections (data-driven API) */
     sections?: MenuSection[];
-    /** Bottom navigation items (backward compatibility) */
+    /** Bottom navigation items (data-driven API) */
     bottomItems?: MenuItem[];
     /** Whether to show the logo slot */
     showLogo?: boolean;
@@ -329,7 +329,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
             [collapsed, headerHovered, handleCollapseToggle, showLogo, logo, collapsedLogo, logoBrand]
         );
 
-        // Render a menu item (backward compatibility)
+        // Render a menu item (data-driven API)
         const renderMenuItem = useCallback(
             (item: MenuItem) => {
                 const hasChildren = item.children && item.children.length > 0;
@@ -381,7 +381,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
             [collapsed, expandedItems, selectedId, handleSelect, toggleExpanded, variant]
         );
 
-        // Determine if using compound component pattern (children provided) or legacy props
+        // Determine if using compound component pattern (children) or data-driven props
         const isCompoundPattern = !!children;
 
         // Container style for height

@@ -130,7 +130,7 @@ export const RadioLabel: React.FC<RadioLabelProps> = ({
         ? 'var(--color-neutral-text-disabled)'
         : 'var(--color-neutral-text-strong)';
 
-    // Supporting text color - using text-medium from Figma
+    // Supporting text color
     const supportingColor = disabled
         ? 'var(--color-neutral-text-disabled)'
         : 'var(--color-neutral-text-medium)';

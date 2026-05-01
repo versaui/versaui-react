@@ -12,9 +12,7 @@ export type SearchBarSize = (typeof SEARCH_BAR_SIZES)[number];
 export type SearchBarState = (typeof SEARCH_BAR_STATES)[number];
 
 /**
- * SearchBar Component - Exact Figma Implementation
- * 
- * Based on Figma node 1584:1328 - "Search Bar"
+ * SearchBar Component
  * 
  * Variants: 18 total (3 sizes × 6 states)
  * - Sizes: Large (48px), Default (40px), Small (32px)
@@ -34,7 +32,7 @@ interface SearchBarProps extends Omit<React.InputHTMLAttributes<HTMLInputElement
     className?: string;
 }
 
-// Exact Figma size specifications with asymmetric padding
+// Size specifications with asymmetric padding
 const SIZE_CONFIG = {
     large: {
         h: 48,           // Container height
@@ -98,7 +96,7 @@ const SIZE_CONFIG = {
     },
 };
 
-// Figma color tokens
+// Color tokens
 const COLORS = {
     bg: {
         default: 'var(--color-neutral-surface-subtle, #F9FAFB)',

@@ -76,7 +76,7 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     items,
     className = '',
 }) => {
-    // Container styles from Figma - reset list styles
+    // Container styles - reset list styles
     const containerStyle: React.CSSProperties = useMemo(() => ({
         display: 'inline-flex',
         alignItems: 'center',

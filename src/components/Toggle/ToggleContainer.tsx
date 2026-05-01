@@ -119,7 +119,7 @@ export const ToggleContainer: React.FC<ToggleContainerProps> = ({
         }
     }, [handleClick]);
 
-    // Container styles - applying Figma specs directly
+    // Container styles
     const containerStyles: React.CSSProperties = useMemo(() => ({
         display: 'flex',
         alignItems: 'flex-start', // Top-align text with toggle
@@ -141,7 +141,7 @@ export const ToggleContainer: React.FC<ToggleContainerProps> = ({
         border: checked && !disabled
             ? '1px solid var(--color-brand-primary-subtle)'
             : '1px solid var(--color-neutral-outline-subtle)',
-        // Elevation shadow from Figma
+        // Elevation shadow
         boxShadow: 'var(--elevation-small-1-shadow)',
         backdropFilter: 'blur(var(--elevation-small-blur))',
         WebkitBackdropFilter: 'blur(var(--elevation-small-blur))',
@@ -163,7 +163,7 @@ export const ToggleContainer: React.FC<ToggleContainerProps> = ({
         ? 'var(--color-neutral-text-disabled)'
         : 'var(--color-neutral-text-strong)';
 
-    // Supporting text color - using text-medium from Figma
+    // Supporting text color
     const supportingColor = disabled
         ? 'var(--color-neutral-text-disabled)'
         : 'var(--color-neutral-text-medium)';

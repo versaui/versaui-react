@@ -21,7 +21,7 @@ interface CircularProgressBarProps {
 }
 
 /**
- * Size configurations based on Figma specifications
+ * Size configurations
  * Large: Container 64x64, Circle 56x56, Bar stroke 4px, Container stroke 2px
  * Default: Container 48x48, Circle 40x40, Bar stroke 3px, Container stroke 1.5px
  * Small: Container 40x40, Circle 32x32, Bar stroke 2px, Container stroke 1px

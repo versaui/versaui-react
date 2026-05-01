@@ -9,7 +9,7 @@ export const RADIO_SIZES = ['small', 'medium', 'large'] as const;
 
 export type RadioSize = (typeof RADIO_SIZES)[number];
 
-// Size configurations from Figma
+// Size configurations
 // container: wrapper size for interactions and focus states
 // outer: radio SVG size (centered in container)
 // Active: inner circle is centered dot

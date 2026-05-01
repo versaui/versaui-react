@@ -35,11 +35,11 @@ const BRAND_NAMES: Record<LogoBrand, string> = {
     'vox': 'Vox',
 };
 
-// ── Size configuration from Figma specs ──
+// ── Size configuration ──
 // Each size defines: inner icon dimension, container padding, border width,
 // and which inset composite token to use (small vs medium).
 //
-// Figma specs (Contained Icon):
+// Contained Icon sizes:
 //   XL: icon=32, pad=8, border=1, inset=medium
 //   L:  icon=28, pad=6, border=1, inset=medium
 //   M:  icon=22, pad=5, border=1, inset=small
@@ -292,14 +292,14 @@ export const Logo: React.FC<LogoProps> = ({
     const iconSvg = useSvgContent(iconUrl);
     const wordmarkSvg = useSvgContent(wordmarkUrl);
 
-    // For non-Versa-UI brands, use the legacy pre-composed SVGs
+    // Non-Versa-UI brands use pre-composed SVGs
     const containedUrl = !isVersaUi ? getLogoUrl(brand, 'contained') : '';
     const containedSvg = useSvgContent(containedUrl || '');
 
-    // ── Non-Versa-UI brands: use legacy flat SVG approach ──
+    // ── Non-Versa-UI brands: flat SVG approach ──
     if (!isVersaUi) {
-        const legacySrc = style === 'contained' ? containedUrl : style === 'icon' ? iconUrl : wordmarkUrl;
-        const legacySvg = style === 'contained' ? containedSvg : style === 'icon' ? iconSvg : wordmarkSvg;
+        const svgSrc = style === 'contained' ? containedUrl : style === 'icon' ? iconUrl : wordmarkUrl;
+        const svgContent = style === 'contained' ? containedSvg : style === 'icon' ? iconSvg : wordmarkSvg;
         const totalHeight = spec.iconSize + spec.containerPadding * 2;
 
         return (
@@ -317,8 +317,8 @@ export const Logo: React.FC<LogoProps> = ({
                 role="img"
                 aria-label={ariaLabel || `${brandName} logo`}
                 dangerouslySetInnerHTML={
-                    legacySvg
-                        ? { __html: legacySvg.replace(/<svg/, `<svg style="height: 100%; width: auto;"`) }
+                    svgContent
+                        ? { __html: svgContent.replace(/<svg/, `<svg style="height: 100%; width: auto;"`) }
                         : undefined
                 }
             />

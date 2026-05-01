@@ -27,7 +27,7 @@ export interface VerticalBarTabsProps {
     showLeftLine?: boolean;
     /** Additional CSS class for the container */
     className?: string;
-    /** Width of the container (default: 160px per Figma) */
+    /** Width of the container (default: 160px) */
     width?: string | number;
 }
 
