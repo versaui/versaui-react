@@ -202,6 +202,29 @@ export function Dropdown({
             if (!isOpen) {
                 setIsOpen(true);
                 setSearchQuery('');
+            } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                // Menu is open but focus is still on input — move it into the menu
+                if (flyoutRef.current) {
+                    const searchInput = flyoutRef.current.querySelector('input[type="text"]') as HTMLElement;
+                    if (searchInput) {
+                        searchInput.focus();
+                    } else {
+                        const firstItem = flyoutRef.current.querySelector('[role="menuitem"]') as HTMLElement;
+                        firstItem?.focus();
+                    }
+                }
+            }
+        } else if (e.key === 'Tab' && isOpen) {
+            // Tab while open: move focus into menu instead of away
+            e.preventDefault();
+            if (flyoutRef.current) {
+                const searchInput = flyoutRef.current.querySelector('input[type="text"]') as HTMLElement;
+                if (searchInput) {
+                    searchInput.focus();
+                } else {
+                    const firstItem = flyoutRef.current.querySelector('[role="menuitem"]') as HTMLElement;
+                    firstItem?.focus();
+                }
             }
         }
     }, [disabled, isOpen]);

@@ -166,10 +166,10 @@ const PlaceholderSvg = React.memo<{ fillColor: string }>(({ fillColor }) => (
             d="M0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8Z"
             fill={fillColor}
         />
-        <circle cx="8" cy="4.8" r="3.2" fill="var(--color-neutral-surface-subtlest)" />
+        <circle cx="8" cy="4.8" r="3.2" fill="var(--color-neutral-background-default)" />
         <path
             d="M1.31762 12.4C2.7486 10.2311 5.20718 8.8 8 8.8C10.7928 8.8 13.2514 10.2311 14.6824 12.4C13.2514 14.5689 10.7928 16 8 16C5.20718 16 2.7486 14.5689 1.31762 12.4Z"
-            fill="var(--color-neutral-surface-subtlest)"
+            fill="var(--color-neutral-background-default)"
         />
     </svg>
 ));
