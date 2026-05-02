@@ -11,6 +11,8 @@ export interface FileUploadAreaProps {
     browseButtonText?: string;
     sampleLinkText?: string;
     showSampleLink?: boolean;
+    /** Whether to show the browse/upload button. Defaults to true. */
+    showBrowseButton?: boolean;
     accept?: string;
     multiple?: boolean;
     disabled?: boolean;
@@ -50,6 +52,7 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
     browseButtonText = 'Browse Files',
     sampleLinkText = 'Download Sample File',
     showSampleLink = true,
+    showBrowseButton = true,
     accept,
     multiple = false,
     disabled = false,
@@ -109,6 +112,11 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         if (!disabled) fileInputRef.current?.click();
     }, [disabled]);
 
+    // When browse button is hidden, clicking the container opens the file picker
+    const handleContainerClick = useCallback(() => {
+        if (!disabled && !showBrowseButton) fileInputRef.current?.click();
+    }, [disabled, showBrowseButton]);
+
     const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.length) onFilesSelected?.(e.target.files);
         e.target.value = '';
@@ -155,6 +163,7 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
             onDrop={handleDrop}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleContainerClick}
             onKeyDown={handleKeyDown}
         >
             <div style={{ padding: 12, borderRadius: 200, background: colors.iconBg, display: 'inline-flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -171,16 +180,18 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-                <Button
-                    variant="primary"
-                    size="medium"
-                    buttonStyle="outline"
-                    leadingIcon={<FolderOpenIcon />}
-                    onClick={handleBrowseClick}
-                    disabled={disabled}
-                >
-                    {browseButtonText}
-                </Button>
+                {showBrowseButton && (
+                    <Button
+                        variant="primary"
+                        size="medium"
+                        buttonStyle="outline"
+                        leadingIcon={<FolderOpenIcon />}
+                        onClick={handleBrowseClick}
+                        disabled={disabled}
+                    >
+                        {browseButtonText}
+                    </Button>
+                )}
 
                 {showSampleLink && (
                     <LinkButton

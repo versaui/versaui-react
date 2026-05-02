@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { UploadSimpleIcon } from '@phosphor-icons/react';
+import { useFocusRing } from '@react-aria/focus';
 import { Button } from '../Button/Button';
 import { Avatar } from '../Avatar/Avatar';
 
@@ -51,6 +52,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     const [state, setState] = useState<ImageUploadState>(imageUrl ? 'uploaded' : 'default');
     const [previewUrl, setPreviewUrl] = useState<string | undefined>(imageUrl);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { isFocusVisible, focusProps } = useFocusRing();
 
     const defaultTitle = imageType === 'logo' ? 'Upload Logo' : 'Upload Avatar';
     const displayTitle = title || defaultTitle;
@@ -113,6 +115,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
     const renderLogoIcon = () => {
         const colors = state === 'hovered' ? STATE_COLORS.logo.hovered : STATE_COLORS.logo.default;
+        const focusRingStyle = (isFocusVisible && state !== 'uploaded')
+            ? { boxShadow: 'var(--focus-ring-primary)' }
+            : {};
         return (
             <div style={{
                 padding: 12,
@@ -124,15 +129,23 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 gap: 8,
+                ...focusRingStyle,
             }}>
                 <UploadSimpleIcon size={24} weight="regular" color="var(--color-brand-primary-strong)" />
             </div>
         );
     };
 
-    const renderAvatarPlaceholder = () => (
-        <Avatar size="l" type="placeholder" color="neutral" />
-    );
+    const renderAvatarPlaceholder = () => {
+        const focusRingStyle = (isFocusVisible && state !== 'uploaded')
+            ? { boxShadow: 'var(--focus-ring-primary)', borderRadius: '9999px' }
+            : {};
+        return (
+            <div style={{ display: 'inline-flex', borderRadius: '9999px', ...focusRingStyle }}>
+                <Avatar size="l" type="placeholder" color="neutral" />
+            </div>
+        );
+    };
 
     const renderUploadedLogo = () => (
         <div style={{
@@ -190,6 +203,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             onMouseLeave={handleMouseLeave}
             onClick={state !== 'uploaded' ? handleClick : undefined}
             onKeyDown={handleKeyDown}
+            {...(state !== 'uploaded' ? focusProps : {})}
         >
             {renderIcon()}
 
