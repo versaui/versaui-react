@@ -16,7 +16,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
-[Documentation](https://www.versaui.pro/docs) · [Components](https://www.versaui.pro/docs/components) · [Website](https://www.versaui.pro)
+[Documentation](https://www.versaui.com/docs) · [Components](https://www.versaui.com/docs/components) · [Website](https://www.versaui.com)
 
 </div>
 
@@ -168,9 +168,8 @@ src/
 
 ## 🔗 Links
 
-- **Website:** [versaui.pro](https://www.versaui.pro)
-- **Documentation:** [versaui.pro/docs](https://www.versaui.pro/docs)
-- **Figma:** [Versa UI Design System](https://www.versaui.pro/figma)
+- **Website:** [versaui.com](https://www.versaui.com)
+- **Documentation:** [versaui.com/docs](https://www.versaui.com/docs)
 
 ---
 

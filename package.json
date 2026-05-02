@@ -44,10 +44,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/versaui/versaui.git"
+    "url": "https://github.com/versaui/versaui-react.git"
   },
-  "homepage": "https://www.versaui.pro",
+  "homepage": "https://www.versaui.com",
   "bugs": {
-    "url": "https://github.com/versaui/versaui/issues"
+    "url": "https://github.com/versaui/versaui-react/issues"
   }
 }
