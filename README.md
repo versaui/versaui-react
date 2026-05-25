@@ -1,5 +1,3 @@
-<img width="2400" height="1620" alt="Versa UI React Starter" src="https://github.com/user-attachments/assets/b7d9a35a-1989-4b71-9d07-286ebcc0016b" />
-
 <div align="center">
 
 <svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

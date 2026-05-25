@@ -105,6 +105,8 @@ export interface TooltipProps extends VariantProps<typeof tooltipVariants> {
     children?: React.ReactNode;
     isOpen?: boolean;
     offset?: number;
+    /** Whether to show the arrow pointer. Default: true. */
+    showArrow?: boolean;
 }
 
 const DEFAULT_CONTENT = 'Tooltips are informative, specific, and action-oriented text labels that provide contextual support.';
@@ -119,6 +121,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     children,
     isOpen,
     offset = 8,
+    showArrow = true,
 }) => {
     const isRich = type === 'rich';
 
@@ -210,9 +213,11 @@ export const Tooltip: React.FC<TooltipProps> = ({
                     transform: isEntering || isExiting ? 'scale(0.97)' : 'scale(1)',
                 })}
             >
-                <OverlayArrow>
-                    {({ placement: arrowPlacement }) => renderArrow(arrowPlacement)}
-                </OverlayArrow>
+                {showArrow && (
+                    <OverlayArrow>
+                        {({ placement: arrowPlacement }) => renderArrow(arrowPlacement)}
+                    </OverlayArrow>
+                )}
                 {isRich ? (
                     <>
                         <div className={tooltipTitleVariants()}>{title}</div>
