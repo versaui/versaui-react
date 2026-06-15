@@ -6,6 +6,7 @@ import React, {
     useCallback,
     useMemo,
     useState,
+    useEffect,
     createContext,
     useContext,
 } from 'react';
@@ -77,6 +78,8 @@ export interface SideNavigationProps {
     logoBrand?: LogoBrand;
     /** Height of the sidebar */
     height?: number | string;
+    /** Whether to show the collapse/expand toggle button on desktop. Automatically hidden on mobile overlay drawers. */
+    showCollapseButton?: boolean;
     /** Additional className for container */
     className?: string;
     /** Children for compound component usage */
@@ -140,6 +143,7 @@ interface SideNavigationInternalContextValue {
     setHeaderHovered: (hovered: boolean) => void;
     handleCollapseToggle: () => void;
     showLogo: boolean;
+    shouldShowCollapseButton: boolean;
     logo: ReactNode;
     collapsedLogo: ReactNode;
     logoBrand?: LogoBrand;
@@ -156,7 +160,7 @@ function useSideNavigationInternal() {
 // Compound Sub-components
 /** Logo slot - renders appropriate logo based on collapsed state */
 function SideNavigationLogo({ children }: { children?: ReactNode }) {
-    const { collapsed, headerHovered, handleCollapseToggle, showLogo, logo, collapsedLogo, logoBrand } =
+    const { collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand } =
         useSideNavigationInternal();
 
     if (!showLogo && !children) return null;
@@ -166,7 +170,7 @@ function SideNavigationLogo({ children }: { children?: ReactNode }) {
     }
 
     if (collapsed) {
-        if (headerHovered) {
+        if (shouldShowCollapseButton && headerHovered) {
             return (
                 <Button
                     variant="neutral"
@@ -243,9 +247,21 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
     usagePercentage = 80,
     logoBrand = 'versa-ui',
     height = '100%',
+    showCollapseButton = true,
     className = '',
     children,
 }) => {
+        // Mobile breakpoint detection — hides collapse button on overlay drawers
+        const [isMobile, setIsMobile] = useState(false);
+        useEffect(() => {
+            const mql = window.matchMedia('(max-width: 767px)');
+            setIsMobile(mql.matches);
+            const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+            mql.addEventListener('change', handler);
+            return () => mql.removeEventListener('change', handler);
+        }, []);
+
+        const shouldShowCollapseButton = showCollapseButton && !isMobile;
         const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
         const [headerHovered, setHeaderHovered] = useState(false);
 
@@ -322,11 +338,12 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                 setHeaderHovered,
                 handleCollapseToggle,
                 showLogo,
+                shouldShowCollapseButton,
                 logo,
                 collapsedLogo,
                 logoBrand,
             }),
-            [collapsed, headerHovered, handleCollapseToggle, showLogo, logo, collapsedLogo, logoBrand]
+            [collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand]
         );
 
         // Render a menu item (data-driven API)
@@ -413,7 +430,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                         {collapsed ? (
                                             showLogo ? (
                                                 <div className="flex justify-center items-center min-h-[32px]">
-                                                    {headerHovered ? (
+                                                    {shouldShowCollapseButton && headerHovered ? (
                                                         <Button
                                                             variant="neutral"
                                                             size="small"
@@ -430,7 +447,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                         <Logo brand={logoBrand} size="m" style="contained" />
                                                     )}
                                                 </div>
-                                            ) : (
+                                            ) : shouldShowCollapseButton ? (
                                                 <Button
                                                     variant="neutral"
                                                     size="small"
@@ -439,7 +456,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                     onClick={handleCollapseToggle}
                                                     aria-label="Expand sidebar"
                                                 />
-                                            )
+                                            ) : null
                                         ) : (
                                             <>
                                                 {showLogo && (
@@ -455,14 +472,16 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                         )}
                                                     </div>
                                                 )}
-                                                <Button
-                                                    variant="neutral"
-                                                    size="small"
-                                                    buttonStyle="thematic"
-                                                    leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
-                                                    onClick={handleCollapseToggle}
-                                                    aria-label="Collapse sidebar"
-                                                />
+                                                {shouldShowCollapseButton && (
+                                                    <Button
+                                                        variant="neutral"
+                                                        size="small"
+                                                        buttonStyle="thematic"
+                                                        leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
+                                                        onClick={handleCollapseToggle}
+                                                        aria-label="Collapse sidebar"
+                                                    />
+                                                )}
                                             </>
                                         )}
                                     </div>

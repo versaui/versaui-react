@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { SealCheck as SealCheckIcon } from '@phosphor-icons/react';
 
 // Demo Avatar Imports
 
@@ -21,10 +22,12 @@ import salmaSiddiqui from '../../assets/avatars/salma-siddiqui.png';
 export const AVATAR_SIZES = ['xxxs', 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl'] as const;
 export const AVATAR_TYPES = ['initials', 'placeholder', 'image'] as const;
 export const AVATAR_COLORS = ['neutral', 'primary', 'secondary', 'tertiary', 'quaternary'] as const;
+export const AVATAR_STATUS_TYPES = ['online', 'busy', 'offline', 'verified'] as const;
 
 export type AvatarSize = (typeof AVATAR_SIZES)[number];
 export type AvatarType = (typeof AVATAR_TYPES)[number];
 export type AvatarColor = (typeof AVATAR_COLORS)[number];
+export type AvatarStatusType = (typeof AVATAR_STATUS_TYPES)[number];
 
 // Demo Person Map
 
@@ -63,17 +66,19 @@ interface AvatarSizeConfig {
     outlineWidth: number;
     /** Illustration shadow token for placeholder inner effects */
     illustrationShadow: string;
+    /** Status indicator size variant: 'default' for m–xxl, 'small' for xxxs–s */
+    statusSize: 'default' | 'small';
 }
 
 const AVATAR_SIZE_CONFIG: Record<AvatarSize, AvatarSizeConfig> = {
-    xxxs: { container: 16, fontClass: 'text-b6', outlineWidth: 1, illustrationShadow: 'var(--illustration-inset-small-shadow)' },
-    xxs: { container: 20, fontClass: 'text-b6', outlineWidth: 1, illustrationShadow: 'var(--illustration-inset-small-shadow)' },
-    xs: { container: 24, fontClass: 'text-b5', outlineWidth: 1, illustrationShadow: 'var(--illustration-inset-small-shadow)' },
-    s: { container: 32, fontClass: 'text-b4', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)' },
-    m: { container: 40, fontClass: 'text-h8', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)' },
-    l: { container: 48, fontClass: 'text-h6', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)' },
-    xl: { container: 64, fontClass: 'text-h5', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)' },
-    xxl: { container: 80, fontClass: 'text-h4', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)' },
+    xxxs: { container: 16, fontClass: 'text-b6', outlineWidth: 1, illustrationShadow: 'var(--illustration-inset-small-shadow)', statusSize: 'small' },
+    xxs: { container: 20, fontClass: 'text-b6', outlineWidth: 1, illustrationShadow: 'var(--illustration-inset-small-shadow)', statusSize: 'small' },
+    xs: { container: 24, fontClass: 'text-b5', outlineWidth: 1, illustrationShadow: 'var(--illustration-inset-small-shadow)', statusSize: 'small' },
+    s: { container: 32, fontClass: 'text-b4', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)', statusSize: 'small' },
+    m: { container: 40, fontClass: 'text-h8', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)', statusSize: 'small' },
+    l: { container: 48, fontClass: 'text-h6', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)', statusSize: 'default' },
+    xl: { container: 64, fontClass: 'text-h5', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)', statusSize: 'default' },
+    xxl: { container: 80, fontClass: 'text-h4', outlineWidth: 2, illustrationShadow: 'var(--illustration-inset-medium-shadow)', statusSize: 'default' },
 };
 
 // Color Configuration
@@ -176,6 +181,71 @@ const PlaceholderSvg = React.memo<{ fillColor: string }>(({ fillColor }) => (
 
 PlaceholderSvg.displayName = 'PlaceholderSvg';
 
+// Avatar Status Indicator
+
+/** Status dot/badge color mapping */
+const STATUS_DOT_COLORS: Record<Exclude<AvatarStatusType, 'verified'>, string> = {
+    online: 'var(--color-state-success-medium)',
+    busy: 'var(--color-state-error-medium)',
+    offline: 'var(--color-neutral-surface-strongest)',
+};
+
+/** Status indicator size configs */
+const STATUS_SIZE_CONFIG = {
+    default: { dot: 12, icon: 20, padding: 4 },
+    small: { dot: 6, icon: 16, padding: 5 },
+} as const;
+
+interface AvatarStatusIndicatorProps {
+    type: AvatarStatusType;
+    sizeVariant: 'default' | 'small';
+}
+
+/** Renders a status dot or verified badge indicator */
+const AvatarStatusIndicator = React.memo<AvatarStatusIndicatorProps>(({ type, sizeVariant }) => {
+    const config = STATUS_SIZE_CONFIG[sizeVariant];
+
+    if (type === 'verified') {
+        const iconSize = config.icon;
+        return (
+            <div
+                className="absolute flex items-center justify-center"
+                style={{
+                    width: iconSize,
+                    height: iconSize,
+                    bottom: sizeVariant === 'small' ? -3 : -2,
+                    right: sizeVariant === 'small' ? -3 : -2,
+                }}
+                aria-label="Verified"
+            >
+                <SealCheckIcon weight="fill" size={iconSize} color="var(--color-brand-primary-medium)" />
+            </div>
+        );
+    }
+
+    const dotSize = config.dot;
+    const dotColor = STATUS_DOT_COLORS[type];
+    const borderWidth = sizeVariant === 'small' ? 1.5 : 2;
+
+    return (
+        <div
+            className="absolute rounded-full"
+            style={{
+                width: dotSize,
+                height: dotSize,
+                bottom: sizeVariant === 'small' ? -1 : 0,
+                right: sizeVariant === 'small' ? -1 : 0,
+                backgroundColor: dotColor,
+                border: `${borderWidth}px solid var(--color-neutral-background-default)`,
+                boxSizing: 'content-box',
+            }}
+            aria-label={`Status: ${type}`}
+        />
+    );
+});
+
+AvatarStatusIndicator.displayName = 'AvatarStatusIndicator';
+
 // Props Interface
 
 export interface AvatarProps {
@@ -200,6 +270,10 @@ export interface AvatarProps {
     'aria-label'?: string;
     /** If true, avatar is decorative and hidden from screen readers */
     decorative?: boolean;
+    /** Show a status indicator on the bottom-right of the avatar */
+    status?: boolean;
+    /** Type of status indicator to display */
+    statusType?: AvatarStatusType;
     /** Additional className */
     className?: string;
 }
@@ -235,6 +309,8 @@ export const Avatar: React.FC<AvatarProps> = ({
     alt,
     'aria-label': ariaLabel,
     decorative = false,
+    status = false,
+    statusType = 'online',
     className = '',
 }) => {
     const config = AVATAR_SIZE_CONFIG[size];
@@ -269,6 +345,9 @@ export const Avatar: React.FC<AvatarProps> = ({
                     alt={decorative ? '' : imageAlt}
                     className="w-full h-full object-cover rounded-full"
                 />
+                {status && (
+                    <AvatarStatusIndicator type={statusType} sizeVariant={config.statusSize} />
+                )}
             </div>
         );
     }
@@ -303,6 +382,9 @@ export const Avatar: React.FC<AvatarProps> = ({
                         style={{ boxShadow: config.illustrationShadow }}
                     />
                 </div>
+                {status && (
+                    <AvatarStatusIndicator type={statusType} sizeVariant={config.statusSize} />
+                )}
             </div>
         );
     }
@@ -328,6 +410,9 @@ export const Avatar: React.FC<AvatarProps> = ({
             <span className="leading-none flex items-center justify-center uppercase">
                 {displayInitials}
             </span>
+            {status && (
+                <AvatarStatusIndicator type={statusType} sizeVariant={config.statusSize} />
+            )}
         </div>
     );
 };

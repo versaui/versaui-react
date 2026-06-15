@@ -6,7 +6,15 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffe
 const useIsomorphicLayoutEffect =
     typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 import { cva } from 'class-variance-authority';
-import { MagnifyingGlassIcon, ArrowLeftIcon } from '@phosphor-icons/react';
+import {
+    MagnifyingGlassIcon,
+    ArrowLeftIcon,
+    User as UserIcon,
+    Shield as ShieldIcon,
+    CreditCard as CreditCardIcon,
+    Envelope as EnvelopeIcon,
+    Buildings as BuildingsIcon
+} from '@phosphor-icons/react';
 import { Logo } from '../Logo/Logo';
 import { HorizontalContainerTabs } from '../ContainerTab/HorizontalContainerTabs';
 import type { ContainerTabItem } from '../ContainerTab/HorizontalContainerTabs';
@@ -52,6 +60,9 @@ export interface ProfileMenuCallbacks {
     onSupport?: () => void;
     onLogout?: () => void;
     onUpgrade?: () => void;
+    onSecurity?: () => void;
+    onEmail?: () => void;
+    onAccount?: () => void;
 }
 
 export interface TopNavigationProps {
@@ -413,10 +424,18 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
         </div>
     );
 
+    const profileMenuItems = useMemo<ProfileMenuItemConfig[]>(() => [
+        { id: 'profile', label: 'Profile Information', icon: React.createElement(UserIcon, { size: 16, weight: 'regular' }) },
+        { id: 'security', label: 'Security', icon: React.createElement(ShieldIcon, { size: 16, weight: 'regular' }) },
+        { id: 'billing', label: 'Subscription & Billing', icon: React.createElement(CreditCardIcon, { size: 16, weight: 'regular' }) },
+        { id: 'email', label: 'Email Preferences', icon: React.createElement(EnvelopeIcon, { size: 16, weight: 'regular' }) },
+        { id: 'account', label: 'Account Information', icon: React.createElement(BuildingsIcon, { size: 16, weight: 'regular' }) },
+    ], []);
+
     return (
-        <div ref={wrapperRef} className="relative" style={{ width }}>
+        <div ref={wrapperRef} className={`relative ${className}`} style={{ width }}>
             <nav
-                className={`w-full h-16 px-8 py-4 bg-[var(--color-neutral-surface-subtlest)] border-b border-[var(--color-neutral-outline-subtlest)] flex justify-between items-center box-border ${className}`}
+                className="w-full h-16 px-6 md:px-8 py-4 bg-[var(--color-neutral-surface-subtlest)] border-b border-[var(--color-neutral-outline-subtlest)] flex justify-between items-center box-border"
                 role="navigation"
                 aria-label="Main navigation"
             >
@@ -474,12 +493,13 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
                     email={userEmail}
                     avatarProps={{ size: 'l', type: 'image', person: userPerson }}
                     upgrade={showUpgradeButton}
-                    items={DEFAULT_PROFILE_MENU_ITEMS.map(item => {
+                    items={profileMenuItems.map(item => {
                         const callbackMap: Record<string, (() => void) | undefined> = {
-                            'view-profile': profileMenuCallbacks.onViewProfile,
+                            'profile': profileMenuCallbacks.onViewProfile,
+                            'security': profileMenuCallbacks.onSecurity,
                             'billing': profileMenuCallbacks.onBilling,
-                            'settings': profileMenuCallbacks.onSettings,
-                            'support': profileMenuCallbacks.onSupport,
+                            'email': profileMenuCallbacks.onEmail,
+                            'account': profileMenuCallbacks.onAccount,
                         };
                         return { ...item, onClick: wrapCallback(callbackMap[item.id]) };
                     })}

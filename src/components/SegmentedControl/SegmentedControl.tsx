@@ -252,11 +252,11 @@ export function SegmentedControl({
                             gridAutoFlow: 'column',
                             gridAutoColumns: '1fr',
                             alignItems: 'center',
-                          }
+                        }
                         : {
                             display: 'flex',
                             alignItems: 'center',
-                          }),
+                        }),
                 }}
             >
                 {items.map((item, index) => (
