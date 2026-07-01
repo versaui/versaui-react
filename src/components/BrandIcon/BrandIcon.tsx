@@ -154,6 +154,7 @@ export const ALL_PLATFORMS = Object.keys(PLATFORM_NAMES) as BrandPlatform[];
 // Platforms whose brand SVGs use `currentColor` and need icon/strong in brand style
 const CURRENT_COLOR_BRAND_PLATFORMS: Set<BrandPlatform> = new Set([
     'apple', 'github', 'x', 'threads', 'framer', 'hashicorp', 'okta', 'scim',
+    'amazon', 'meridia',
 ]);
 
 // Resolve icon URL from statically imported assets (works in any bundler environment)
@@ -204,7 +205,7 @@ export const BrandIcon: React.FC<BrandIconProps> = ({
     const shouldEnableHover = style === 'gray' && interactive;
 
     // Determine if this brand icon uses currentColor and needs inline rendering
-    const useInlineSvg = style === 'brand' && (CURRENT_COLOR_BRAND_PLATFORMS.has(platform) || platform === 'versa-ui');
+    const useInlineSvg = style === 'brand' && (CURRENT_COLOR_BRAND_PLATFORMS.has(platform) || platform === 'versa-ui' || platform === 'axus');
     const inlineColor = style === 'brand' && platform === 'versa-ui'
         ? 'var(--color-brand-primary-strong)'
         : style === 'brand' && CURRENT_COLOR_BRAND_PLATFORMS.has(platform)

@@ -14,7 +14,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
 import { SidebarSimpleIcon } from '@phosphor-icons/react';
 import { Logo, type LogoBrand } from '../Logo/Logo';
-import { Button } from '../Button/Button';
+import { Button, type ButtonStyle } from '../Button/Button';
 import { Divider } from '../Divider/Divider';
 import { SideNavigationItem, type SideNavigationItemVariant } from './SideNavigationItem';
 import { SubNavigationItem } from './SubNavigationItem';
@@ -80,6 +80,8 @@ export interface SideNavigationProps {
     height?: number | string;
     /** Whether to show the collapse/expand toggle button on desktop. Automatically hidden on mobile overlay drawers. */
     showCollapseButton?: boolean;
+    /** Props to customize the collapse/expand toggle button. Accepts Button component props such as buttonStyle, variant, and size. */
+    collapseButtonProps?: { buttonStyle?: ButtonStyle; variant?: 'primary' | 'neutral' | 'error'; size?: 'small' | 'medium' | 'large' };
     /** Additional className for container */
     className?: string;
     /** Children for compound component usage */
@@ -147,6 +149,7 @@ interface SideNavigationInternalContextValue {
     logo: ReactNode;
     collapsedLogo: ReactNode;
     logoBrand?: LogoBrand;
+    collapseButtonProps?: { buttonStyle?: ButtonStyle; variant?: 'primary' | 'neutral' | 'error'; size?: 'small' | 'medium' | 'large' };
 }
 
 const SideNavigationInternalContext = createContext<SideNavigationInternalContextValue | null>(null);
@@ -160,7 +163,7 @@ function useSideNavigationInternal() {
 // Compound Sub-components
 /** Logo slot - renders appropriate logo based on collapsed state */
 function SideNavigationLogo({ children }: { children?: ReactNode }) {
-    const { collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand } =
+    const { collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand, collapseButtonProps } =
         useSideNavigationInternal();
 
     if (!showLogo && !children) return null;
@@ -179,6 +182,7 @@ function SideNavigationLogo({ children }: { children?: ReactNode }) {
                     leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
                     onClick={handleCollapseToggle}
                     aria-label="Expand sidebar"
+                    {...collapseButtonProps}
                 />
             );
         }
@@ -248,6 +252,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
     logoBrand = 'versa-ui',
     height = '100%',
     showCollapseButton = true,
+    collapseButtonProps,
     className = '',
     children,
 }) => {
@@ -342,8 +347,9 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                 logo,
                 collapsedLogo,
                 logoBrand,
+                collapseButtonProps,
             }),
-            [collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand]
+            [collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand, collapseButtonProps]
         );
 
         // Render a menu item (data-driven API)
@@ -440,6 +446,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                             }
                                                             onClick={handleCollapseToggle}
                                                             aria-label="Expand sidebar"
+                                                            {...collapseButtonProps}
                                                         />
                                                     ) : collapsedLogo ? (
                                                         collapsedLogo
@@ -455,6 +462,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                     leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
                                                     onClick={handleCollapseToggle}
                                                     aria-label="Expand sidebar"
+                                                    {...collapseButtonProps}
                                                 />
                                             ) : null
                                         ) : (
@@ -480,6 +488,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                         leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
                                                         onClick={handleCollapseToggle}
                                                         aria-label="Collapse sidebar"
+                                                        {...collapseButtonProps}
                                                     />
                                                 )}
                                             </>

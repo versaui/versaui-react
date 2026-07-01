@@ -12,32 +12,32 @@
 </g>
 <defs>
 <linearGradient id="paint0_linear_9599_38460" x1="11.9994" y1="1.6839" x2="11.9994" y2="22.39" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7C86FF"/>
-<stop offset="1" stop-color="#8200DB"/>
+<stop stop-color="var(--color-thematic-fill-primary-top)"/>
+<stop offset="1" stop-color="var(--color-thematic-fill-secondary-bottom)"/>
 </linearGradient>
 <linearGradient id="paint1_linear_9599_38460" x1="11.9994" y1="1.6839" x2="11.9994" y2="22.39" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7C86FF"/>
-<stop offset="1" stop-color="#8200DB"/>
+<stop stop-color="var(--color-thematic-fill-primary-top)"/>
+<stop offset="1" stop-color="var(--color-thematic-fill-secondary-bottom)"/>
 </linearGradient>
 <linearGradient id="paint2_linear_9599_38460" x1="11.9994" y1="1.6839" x2="11.9994" y2="22.39" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7C86FF"/>
-<stop offset="1" stop-color="#8200DB"/>
+<stop stop-color="var(--color-thematic-fill-primary-top)"/>
+<stop offset="1" stop-color="var(--color-thematic-fill-secondary-bottom)"/>
 </linearGradient>
 <linearGradient id="paint3_linear_9599_38460" x1="11.9994" y1="1.6839" x2="11.9994" y2="22.39" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7C86FF"/>
-<stop offset="1" stop-color="#8200DB"/>
+<stop stop-color="var(--color-thematic-fill-primary-top)"/>
+<stop offset="1" stop-color="var(--color-thematic-fill-secondary-bottom)"/>
 </linearGradient>
 <linearGradient id="paint4_linear_9599_38460" x1="11.9994" y1="1.6839" x2="11.9994" y2="22.39" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7C86FF"/>
-<stop offset="1" stop-color="#8200DB"/>
+<stop stop-color="var(--color-thematic-fill-primary-top)"/>
+<stop offset="1" stop-color="var(--color-thematic-fill-secondary-bottom)"/>
 </linearGradient>
 <linearGradient id="paint5_linear_9599_38460" x1="11.9994" y1="1.6839" x2="11.9994" y2="22.39" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7C86FF"/>
-<stop offset="1" stop-color="#8200DB"/>
+<stop stop-color="var(--color-thematic-fill-primary-top)"/>
+<stop offset="1" stop-color="var(--color-thematic-fill-secondary-bottom)"/>
 </linearGradient>
 <linearGradient id="paint6_linear_9599_38460" x1="11.9994" y1="1.6839" x2="11.9994" y2="22.39" gradientUnits="userSpaceOnUse">
-<stop stop-color="#7C86FF"/>
-<stop offset="1" stop-color="#8200DB"/>
+<stop stop-color="var(--color-thematic-fill-primary-top)"/>
+<stop offset="1" stop-color="var(--color-thematic-fill-secondary-bottom)"/>
 </linearGradient>
 <clipPath id="clip0_9599_38460">
 <rect width="24" height="24" fill="white"/>
