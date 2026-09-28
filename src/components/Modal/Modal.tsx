@@ -10,7 +10,14 @@ import { cva } from 'class-variance-authority';
 import { X as CloseIcon } from '@phosphor-icons/react';
 import { cn } from '../../utils/cn';
 import { Material } from '../Material/Material';
-import { CompactIconButton } from '../Button/CompactIconButton';
+import { CompactButton } from '../Button/CompactButton';
+import {
+    ContainedIcon,
+    type ContainedIconRole,
+    type ContainedIconStyle,
+    type ContainedIconSize,
+    type ContainedIconCornerRadiusType,
+} from '../../assets/ContainedIcon';
 
 // --- Size Variants ---
 
@@ -154,8 +161,16 @@ export interface ModalHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
     title: string;
     /** Optional description text below the title */
     description?: string;
-    /** Optional leading icon (Phosphor icon element) */
+    /** Optional leading icon (Phosphor icon element or custom node) */
     icon?: React.ReactNode;
+    /** Visual style for the contained icon (defaults to 'simple') */
+    iconStyle?: ContainedIconStyle;
+    /** Semantic role for the contained icon (defaults to 'secondary') */
+    iconRole?: ContainedIconRole;
+    /** Size variant for the contained icon (defaults to 'medium') */
+    iconSize?: ContainedIconSize;
+    /** Corner radius type for the contained icon (defaults to 'control') */
+    iconCornerRadiusType?: ContainedIconCornerRadiusType;
     /** Whether the header should be sticky when body scrolls */
     sticky?: boolean;
     /** Whether to show the close button */
@@ -166,6 +181,10 @@ const ModalHeader = ({
     title,
     description,
     icon,
+    iconStyle = 'simple',
+    iconRole = 'secondary',
+    iconSize = 'medium',
+    iconCornerRadiusType = 'control',
     sticky = false,
     showCloseButton = true,
     className,
@@ -176,7 +195,7 @@ const ModalHeader = ({
     return (
         <div
             className={cn(
-                "flex items-center gap-[var(--spacing-4)] py-[var(--spacing-7)] px-[var(--spacing-6)]",
+                "flex items-center gap-[var(--spacing-5)] p-[var(--spacing-6)]",
                 "border-b border-[var(--color-neutral-outline-subtlest)]",
                 sticky && "sticky top-0 z-10 bg-[var(--color-neutral-surface-subtlest)]",
                 className
@@ -185,20 +204,17 @@ const ModalHeader = ({
         >
             {/* Leading Icon */}
             {icon && (
-                <div
-                    className="flex items-center justify-center shrink-0 w-10 h-10 rounded-full"
-                    style={{
-                        background: `linear-gradient(var(--color-brand-secondary-subtlest), var(--color-brand-secondary-subtlest)) padding-box, var(--gradient-thematic-outline-secondary-subtle) border-box`,
-                        border: '1px solid transparent',
-                        boxShadow: 'var(--inset-subtle-large)',
-                    }}
-                >
-                    <span className="text-[var(--color-brand-secondary-strong)]">
-                        {React.isValidElement(icon)
-                            ? React.cloneElement(icon as React.ReactElement<any>, { size: 20, weight: 'duotone' })
-                            : icon}
-                    </span>
-                </div>
+                React.isValidElement(icon) && ((icon.type as any) === ContainedIcon || (icon.type as any)?.displayName === 'ContainedIcon') ? (
+                    icon
+                ) : (
+                    <ContainedIcon
+                        icon={icon}
+                        role={iconRole}
+                        style={iconStyle}
+                        size={iconSize}
+                        cornerRadiusType={iconCornerRadiusType}
+                    />
+                )
             )}
 
             {/* Title & Description */}
@@ -221,7 +237,7 @@ const ModalHeader = ({
 
             {/* Close Button */}
             {showCloseButton && (
-                <CompactIconButton
+                <CompactButton
                     icon={<CloseIcon />}
                     variant="filled"
                     size="default"

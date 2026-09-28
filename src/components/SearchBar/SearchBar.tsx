@@ -3,7 +3,7 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from 'react';
 import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react';
 import { useFocusRing } from '@react-aria/focus';
-import { CompactIconButton } from '../Button/CompactIconButton';
+import { CompactButton } from '../Button/CompactButton';
 
 export const SEARCH_BAR_SIZES = ['large', 'default', 'small'] as const;
 export const SEARCH_BAR_STATES = ['default', 'hovered', 'focused', 'typing', 'filled', 'disabled'] as const;
@@ -19,9 +19,10 @@ export type SearchBarState = (typeof SEARCH_BAR_STATES)[number];
  * - States: Default, Hovered, Focused, Typing, Filled, Disabled
  */
 
-interface SearchBarProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface SearchBarProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
     size?: SearchBarSize;
     shortcutKey?: boolean;
+    shortcutLabel?: string;
     value?: string;
     defaultValue?: string;
     placeholder?: string;
@@ -49,10 +50,10 @@ const SIZE_CONFIG = {
         badge: {
             px: 8,       // spacing/4
             py: 2,       // spacing/1
-            r: 'var(--corner-radius-thematic-medium, 6px)',
+            r: 'var(--corner-radius-control-medium, 6px)',
             font: { size: 16, lh: 24 },
         },
-        r: 'var(--corner-radius-thematic-large, 8px)',
+        r: 'var(--corner-radius-control-large, 8px)',
     },
     default: {
         h: 40,
@@ -69,10 +70,10 @@ const SIZE_CONFIG = {
         badge: {
             px: 6,       // spacing/3
             py: 2,
-            r: 'var(--corner-radius-thematic-small, 4px)',
+            r: 'var(--corner-radius-control-small, 4px)',
             font: { size: 14, lh: 20 },
         },
-        r: 'var(--corner-radius-thematic-medium, 6px)',
+        r: 'var(--corner-radius-control-medium, 6px)',
     },
     small: {
         h: 32,
@@ -89,10 +90,10 @@ const SIZE_CONFIG = {
         badge: {
             px: 4,       // spacing/2
             py: 2,
-            r: 'var(--corner-radius-thematic-x-small, 2px)',
+            r: 'var(--corner-radius-control-x-small, 2px)',
             font: { size: 12, lh: 16 },
         },
-        r: 'var(--corner-radius-thematic-small, 4px)',
+        r: 'var(--corner-radius-control-small, 4px)',
     },
 };
 
@@ -128,6 +129,7 @@ const COLORS = {
 export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(({
     size = 'default',
     shortcutKey = true,
+    shortcutLabel,
     placeholder = 'Search',
     disabled = false,
     value,
@@ -144,6 +146,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(({
     const [localIsHovered, setLocalIsHovered] = useState(false);
     const [localIsFocused, setLocalIsFocused] = useState(false);
     const [internalValue, setInternalValue] = useState(defaultValue?.toString() || '');
+    const [detectedShortcut, setDetectedShortcut] = useState('⌘K');
     const inputRef = useRef<HTMLInputElement>(null);
 
     useImperativeHandle(ref, () => inputRef.current!);
@@ -156,10 +159,17 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(({
     // Focus ring for keyboard navigation (focusProps passed to container for within focus)
     const { focusProps } = useFocusRing({ within: true });
 
-    // Keyboard shortcut: Cmd/Ctrl + K to activate search
+    // Keyboard shortcut: Cmd/Ctrl + K to activate search & OS platform detection
     useEffect(() => {
+        if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+            const userAgentData = (navigator as { userAgentData?: { platform?: string } }).userAgentData;
+            const platform = userAgentData?.platform || navigator.platform || navigator.userAgent || '';
+            const isMac = /(Mac|iPhone|iPod|iPad)/i.test(platform);
+            setDetectedShortcut(isMac ? '⌘K' : 'Ctrl K');
+        }
+
         const handleKeyDown = (e: KeyboardEvent) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
                 inputRef.current?.focus();
             }
@@ -167,6 +177,8 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(({
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
+
+    const resolvedShortcut = shortcutLabel ?? detectedShortcut;
 
     // Determine visual state
     const getState = (): SearchBarState => {
@@ -329,7 +341,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(({
 
                 {/* Clear Button (Filled state) */}
                 {showClearButton && (
-                    <CompactIconButton
+                    <CompactButton
                         variant="subtle"
                         size={size === 'large' ? 'default' : 'small'}
                         icon={<XIcon />}
@@ -351,16 +363,20 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(({
                         borderRadius: s.badge.r,
                         boxSizing: 'border-box',
                     }}>
-                        <span style={{
-                            fontFamily: 'var(--typography-font-family-body, Manrope, sans-serif)',
-                            fontWeight: 400,
-                            fontSize: s.badge.font.size,
-                            lineHeight: `${s.badge.font.lh}px`,
-                            color: COLORS.badge.text,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.96px',
-                            whiteSpace: 'nowrap',
-                        }}>⌘K</span>
+                        <span
+                            suppressHydrationWarning
+                            style={{
+                                fontFamily: 'var(--typography-font-family-body, Manrope, sans-serif)',
+                                fontWeight: 400,
+                                fontSize: s.badge.font.size,
+                                lineHeight: `${s.badge.font.lh}px`,
+                                color: COLORS.badge.text,
+                                letterSpacing: '0.96px',
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
+                            {resolvedShortcut}
+                        </span>
                     </div>
                 )}
             </div>

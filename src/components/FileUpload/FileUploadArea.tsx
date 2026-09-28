@@ -8,11 +8,11 @@ import { LinkButton } from '../Button/LinkButton';
 export interface FileUploadAreaProps {
     title?: string;
     description?: string;
-    browseButtonText?: string;
+    uploadButtonText?: string;
     sampleLinkText?: string;
     showSampleLink?: boolean;
-    /** Whether to show the browse/upload button. Defaults to true. */
-    showBrowseButton?: boolean;
+    /** Whether to show the upload button. Defaults to true. */
+    showUploadButton?: boolean;
     accept?: string;
     multiple?: boolean;
     disabled?: boolean;
@@ -49,10 +49,10 @@ const STATE_COLORS = {
 export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
     title = 'Drag and drop a file here',
     description = 'File type must be PDF, PNG or JPG under 5 MB',
-    browseButtonText = 'Browse Files',
+    uploadButtonText = 'Upload Files',
     sampleLinkText = 'Download Sample File',
     showSampleLink = true,
-    showBrowseButton = true,
+    showUploadButton = true,
     accept,
     multiple = false,
     disabled = false,
@@ -108,14 +108,14 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         if (!disabled && state !== 'dragover') setState('default');
     }, [disabled, state]);
 
-    const handleBrowseClick = useCallback(() => {
+    const handleUploadClick = useCallback(() => {
         if (!disabled) fileInputRef.current?.click();
     }, [disabled]);
 
-    // When browse button is hidden, clicking the container opens the file picker
+    // When upload button is hidden, clicking the container opens the file picker
     const handleContainerClick = useCallback(() => {
-        if (!disabled && !showBrowseButton) fileInputRef.current?.click();
-    }, [disabled, showBrowseButton]);
+        if (!disabled && !showUploadButton) fileInputRef.current?.click();
+    }, [disabled, showUploadButton]);
 
     const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.length) onFilesSelected?.(e.target.files);
@@ -154,7 +154,7 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
             className={className}
             style={containerStyle}
             role="button"
-            aria-label="File upload area. Drag and drop files here or press Enter to browse."
+            aria-label="File upload area. Drag and drop files here or press Enter to upload."
             aria-disabled={disabled}
             tabIndex={disabled ? -1 : 0}
             onDragEnter={handleDragEnter}
@@ -180,16 +180,16 @@ export const FileUploadArea: React.FC<FileUploadAreaProps> = ({
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-                {showBrowseButton && (
+                {showUploadButton && (
                     <Button
                         variant="primary"
                         size="medium"
                         buttonStyle="outline"
                         leadingIcon={<FolderOpenIcon />}
-                        onClick={handleBrowseClick}
+                        onClick={handleUploadClick}
                         disabled={disabled}
                     >
-                        {browseButtonText}
+                        {uploadButtonText}
                     </Button>
                 )}
 

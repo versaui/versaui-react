@@ -5,9 +5,11 @@ import { useFocusRing } from '@react-aria/focus';
 
 export const SEGMENT_TYPES = ['primary', 'neutral'] as const;
 export const SEGMENT_SIZES = ['small', 'medium', 'large'] as const;
+export const SEGMENT_STYLES = ['simple', 'expressive'] as const;
 
 export type SegmentType = (typeof SEGMENT_TYPES)[number];
 export type SegmentSize = (typeof SEGMENT_SIZES)[number];
+export type SegmentStyle = (typeof SEGMENT_STYLES)[number] | 'Simple' | 'Expressive';
 
 // Icon sizes per size variant
 const ICON_SIZES: Record<SegmentSize, number> = {
@@ -22,8 +24,6 @@ const SIZE_HEIGHTS: Record<SegmentSize, number> = {
     medium: 32,
     large: 40
 };
-
-
 
 // Horizontal padding per size variant
 const PADDINGS: Record<SegmentSize, number> = {
@@ -48,14 +48,15 @@ const TYPOGRAPHY_CLASSES: Record<SegmentSize, string> = {
 
 // Border radius classes
 const BORDER_RADIUS_CLASSES: Record<SegmentSize, string> = {
-    small: 'rounded-[var(--corner-radius-thematic-small)]',
-    medium: 'rounded-[var(--corner-radius-thematic-medium)]',
-    large: 'rounded-[var(--corner-radius-thematic-large)]'
+    small: 'rounded-[var(--corner-radius-control-small)]',
+    medium: 'rounded-[var(--corner-radius-control-medium)]',
+    large: 'rounded-[var(--corner-radius-control-large)]'
 };
 
-interface SegmentProps {
+export interface SegmentProps {
     type?: SegmentType;
     size?: SegmentSize;
+    style?: SegmentStyle;
     selected?: boolean;
     isHovered?: boolean;
     icon?: ReactNode;
@@ -68,6 +69,7 @@ interface SegmentProps {
 export function Segment({
     type = 'primary',
     size = 'medium',
+    style = 'simple',
     selected = false,
     isHovered: propIsHovered,
     icon,
@@ -79,6 +81,8 @@ export function Segment({
     const [localIsHovered, setLocalIsHovered] = useState(false);
     const { isFocusVisible, focusProps } = useFocusRing();
 
+    const normalizedStyle = (style ? String(style).toLowerCase() : 'simple') as 'simple' | 'expressive';
+    const isExpressive = normalizedStyle === 'expressive';
     const isHovered = propIsHovered ?? localIsHovered;
     const hasChildren = Children.count(children) > 0;
     const isIconOnly = !hasChildren && !!icon;
@@ -94,8 +98,13 @@ export function Segment({
             iconColor = 'var(--color-neutral-icon-disabled)';
         } else if (selected) {
             if (isPrimary) {
-                textColor = 'var(--color-neutral-text-inverse)';
-                iconColor = 'var(--color-neutral-icon-inverse)';
+                if (isExpressive) {
+                    textColor = 'var(--color-neutral-text-inverse)';
+                    iconColor = 'var(--color-neutral-icon-inverse)';
+                } else {
+                    textColor = 'var(--color-brand-primary-strong)';
+                    iconColor = 'var(--color-brand-primary-strong)';
+                }
             } else {
                 textColor = 'var(--color-neutral-text-strong)';
                 iconColor = 'var(--color-neutral-icon-strong)';
@@ -129,7 +138,7 @@ export function Segment({
                 height: `${ICON_SIZES[size]}px`,
             }
         };
-    }, [type, size, selected, isHovered, disabled, isPrimary, isIconOnly]);
+    }, [type, size, isExpressive, selected, isHovered, disabled, isPrimary, isIconOnly]);
 
     // Focus ring styles using design tokens
     const focusRingStyle = useMemo((): React.CSSProperties => {
@@ -165,12 +174,15 @@ export function Segment({
         weight?: string;
     }
 
+    const iconWeight: 'regular' | 'duotone' = isExpressive ? 'duotone' : 'regular';
+
     // Render icon with proper size and weight
     const renderIcon = (iconElement: ReactNode) => {
         if (isValidElement(iconElement)) {
+            const customWeight = (iconElement.props as any)?.weight;
             return cloneElement(iconElement as ReactElement<IconProps>, {
                 size: ICON_SIZES[size],
-                weight: 'duotone'
+                weight: customWeight ?? iconWeight,
             });
         }
         return iconElement;

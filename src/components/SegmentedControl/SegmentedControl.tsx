@@ -3,15 +3,17 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { Segment } from './Segment';
-import { Material } from '../Material/Material';
+import { Material, type MaterialSize } from '../Material/Material';
 import { Divider } from '../Divider/Divider';
 
 export const SEGMENTED_CONTROL_TYPES = ['primary', 'neutral'] as const;
 export const SEGMENTED_CONTROL_SIZES = ['small', 'medium', 'large'] as const;
+export const SEGMENTED_CONTROL_STYLES = ['simple', 'expressive'] as const;
 export const SEGMENTED_CONTROL_WIDTH_MODES = ['equal', 'content'] as const;
 
 export type SegmentedControlType = (typeof SEGMENTED_CONTROL_TYPES)[number];
 export type SegmentedControlSize = (typeof SEGMENTED_CONTROL_SIZES)[number];
+export type SegmentedControlStyle = (typeof SEGMENTED_CONTROL_STYLES)[number] | 'Simple' | 'Expressive';
 export type SegmentedControlWidthMode = (typeof SEGMENTED_CONTROL_WIDTH_MODES)[number];
 
 export interface SegmentItem {
@@ -20,9 +22,10 @@ export interface SegmentItem {
     icon?: ReactNode;
 }
 
-interface SegmentedControlProps {
+export interface SegmentedControlProps {
     type?: SegmentedControlType;
     size?: SegmentedControlSize;
+    style?: SegmentedControlStyle;
     items: SegmentItem[];
     selectedId: string;
     onChange: (id: string) => void;
@@ -30,7 +33,7 @@ interface SegmentedControlProps {
     showDividers?: boolean;
     widthMode?: SegmentedControlWidthMode;
     className?: string;
-    style?: React.CSSProperties;
+    containerStyle?: React.CSSProperties;
 }
 
 // Container heights for each size
@@ -41,31 +44,38 @@ const CONTAINER_HEIGHTS: Record<SegmentedControlSize, number> = {
 };
 
 // Container padding for each size
-const CONTAINER_PADDINGS: Record<SegmentedControlSize, { primary: number; neutral: number }> = {
-    small: { primary: 2, neutral: 2 },
-    medium: { primary: 4, neutral: 2 },
-    large: { primary: 4, neutral: 2 }
+const CONTAINER_PADDINGS: Record<SegmentedControlSize, number> = {
+    small: 2,
+    medium: 2,
+    large: 2
 };
 
 // Border radius CSS var for each size — container uses one size larger
 const BORDER_RADIUS_VARS: Record<SegmentedControlSize, string> = {
-    small: 'var(--corner-radius-thematic-medium)',
-    medium: 'var(--corner-radius-thematic-large)',
-    large: 'var(--corner-radius-thematic-x-large)'
+    small: 'var(--corner-radius-control-medium)',
+    medium: 'var(--corner-radius-control-large)',
+    large: 'var(--corner-radius-control-x-large)'
 };
 
 // Inner border radius (for mover/segments)
 const INNER_BORDER_RADIUS_VARS: Record<SegmentedControlSize, string> = {
-    small: 'var(--corner-radius-thematic-small)',
-    medium: 'var(--corner-radius-thematic-medium)',
-    large: 'var(--corner-radius-thematic-large)'
+    small: 'var(--corner-radius-control-small)',
+    medium: 'var(--corner-radius-control-medium)',
+    large: 'var(--corner-radius-control-large)'
 };
 
-// Inset effect vars for each size (Primary type)
+// Inset effect vars for each size (Primary Expressive type)
 const INSET_VARS: Record<SegmentedControlSize, string> = {
-    small: 'var(--inset-default-small)',
-    medium: 'var(--inset-default-small)',
-    large: 'var(--inset-default-small)'
+    small: 'var(--expressive-inset-strong-small)',
+    medium: 'var(--expressive-inset-strong-small)',
+    large: 'var(--expressive-inset-strong-medium)'
+};
+
+// Inset effect vars for each size (Neutral Expressive type)
+const NEUTRAL_INSET_VARS: Record<SegmentedControlSize, string> = {
+    small: 'var(--expressive-inset-subtle-small)',
+    medium: 'var(--expressive-inset-subtle-small)',
+    large: 'var(--expressive-inset-subtle-medium)'
 };
 
 // Fixed divider heights per size variant
@@ -78,6 +88,7 @@ const DIVIDER_HEIGHTS: Record<SegmentedControlSize, number> = {
 export function SegmentedControl({
     type = 'primary',
     size = 'medium',
+    style = 'simple',
     items,
     selectedId,
     onChange,
@@ -85,7 +96,7 @@ export function SegmentedControl({
     showDividers = false,
     widthMode = 'equal',
     className = '',
-    style: customStyle
+    containerStyle,
 }: SegmentedControlProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const segmentRefs = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -93,11 +104,24 @@ export function SegmentedControl({
     const [moverReady, setMoverReady] = useState(false);
     const [enableTransition, setEnableTransition] = useState(false);
 
+    const normalizedStyle: 'simple' | 'expressive' = (
+        typeof style === 'string' ? style.toLowerCase() : 'simple'
+    ) as 'simple' | 'expressive';
+
+    const customInlineStyle: React.CSSProperties | undefined = (
+        typeof style === 'object' ? style : containerStyle
+    );
+
     const isPrimary = type === 'primary';
+    const isNeutral = type === 'neutral';
+    const isExpressive = normalizedStyle === 'expressive';
+    const isSimple = normalizedStyle === 'simple';
+    const useNeutralMaterial = isNeutral && isSimple;
+
     const selectedIndex = items.findIndex(item => item.id === selectedId);
 
-    // Get the appropriate padding for this type and size (moved here for use in updateMoverPosition)
-    const containerPadding = isPrimary ? CONTAINER_PADDINGS[size].primary : CONTAINER_PADDINGS[size].neutral;
+    // Get the appropriate padding for this size (uniform across primary and neutral variants)
+    const containerPadding = CONTAINER_PADDINGS[size];
 
     // Calculate mover position from actual segment DOM position
     const updateMoverPosition = useCallback(() => {
@@ -147,7 +171,21 @@ export function SegmentedControl({
     // Update on resize
     useEffect(() => {
         window.addEventListener('resize', updateMoverPosition);
-        return () => window.removeEventListener('resize', updateMoverPosition);
+
+        let resizeObserver: ResizeObserver | null = null;
+        if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+            resizeObserver = new ResizeObserver(() => {
+                updateMoverPosition();
+            });
+            resizeObserver.observe(containerRef.current);
+        }
+
+        return () => {
+            window.removeEventListener('resize', updateMoverPosition);
+            if (resizeObserver) {
+                resizeObserver.disconnect();
+            }
+        };
     }, [updateMoverPosition]);
 
     // Register segment ref
@@ -159,7 +197,7 @@ export function SegmentedControl({
         }
     }, []);
 
-    // Mover styles based on type
+    // Mover styles based on type and visual style
     const getMoverStyle = (): React.CSSProperties => {
         const baseStyle: React.CSSProperties = {
             position: 'absolute',
@@ -178,24 +216,34 @@ export function SegmentedControl({
             boxSizing: 'border-box'
         };
 
-        if (isPrimary) {
+        if (isPrimary && isExpressive) {
             return {
                 ...baseStyle,
-                background: 'var(--gradient-thematic-fill-primary) padding-box, var(--gradient-thematic-outline-primary) border-box',
+                background: 'var(--gradient-expressive-fill-primary-strong) padding-box, var(--gradient-expressive-outline-primary-strong) border-box',
                 backgroundOrigin: 'border-box',
                 backgroundClip: 'padding-box, border-box',
                 border: '1px solid transparent',
                 boxShadow: INSET_VARS[size]
             };
-        } else {
+        } else if (isPrimary && isSimple) {
             return {
                 ...baseStyle,
-                background: 'var(--color-neutral-surface-subtlest)',
-                border: '1px solid var(--color-neutral-outline-subtle)',
-                boxShadow: 'var(--elevation-medium-1-shadow)',
-                backdropFilter: 'blur(var(--elevation-medium-blur))',
-                WebkitBackdropFilter: 'blur(var(--elevation-medium-blur))'
+                background: 'var(--color-brand-primary-subtlest)',
+                border: '1px solid var(--color-brand-primary-subtler)',
+                boxShadow: 'none'
             };
+        } else if (isNeutral && isExpressive) {
+            return {
+                ...baseStyle,
+                background: 'var(--gradient-expressive-fill-neutral) padding-box, var(--gradient-expressive-outline-neutral) border-box',
+                backgroundOrigin: 'border-box',
+                backgroundClip: 'padding-box, border-box',
+                border: '1px solid transparent',
+                boxShadow: NEUTRAL_INSET_VARS[size]
+            };
+        } else {
+            // Neutral Simple - Material component wrapper provides surface and default elevation
+            return baseStyle;
         }
     };
 
@@ -210,21 +258,26 @@ export function SegmentedControl({
     // Fixed divider height per size
     const dividerHeight = DIVIDER_HEIGHTS[size];
 
+    const containerSurfaceColor = isPrimary
+        ? 'var(--color-neutral-surface-subtlest)'
+        : 'var(--color-neutral-surface-subtle)';
+
     const isEqualWidth = widthMode === 'equal';
+    const materialSize: MaterialSize = (useNeutralMaterial && size === 'large') ? 'medium' : 'small';
 
     return (
         <Material
             ref={containerRef}
             elevation="flat"
-            size="medium"
-            cornerRadiusType="thematic"
+            size={materialSize}
+            cornerRadiusType="control"
             cornerRadius={BORDER_RADIUS_VARS[size]}
-            surfaceColor="var(--color-neutral-surface-subtle)"
+            surfaceColor={containerSurfaceColor}
             className={`inline-flex items-center ${className}`}
             style={{
                 height: `${CONTAINER_HEIGHTS[size]}px`,
                 padding: `${containerPadding}px`,
-                ...customStyle
+                ...customInlineStyle
             }}
         >
             {/* Overflow clip layer — clips content but lets Material's outset hairline show */}
@@ -239,11 +292,21 @@ export function SegmentedControl({
             />
 
             {/* Animated mover */}
-            <div style={getMoverStyle()} />
+            {useNeutralMaterial ? (
+                <Material
+                    size={materialSize}
+                    elevation="default"
+                    cornerRadiusType="control"
+                    cornerRadius={INNER_BORDER_RADIUS_VARS[size]}
+                    style={getMoverStyle()}
+                />
+            ) : (
+                <div style={getMoverStyle()} />
+            )}
 
             {/* Segments container — grid for equal-width (1fr equalizes to widest), flex for content-width */}
             <div
-                className="relative"
+                className="relative w-full h-full"
                 style={{
                     zIndex: 2,
                     ...(isEqualWidth
@@ -264,7 +327,7 @@ export function SegmentedControl({
                         {/* Segment wrapper — grid cell in equal mode, flex item in content mode */}
                         <div
                             ref={(el) => registerSegmentRef(item.id, el)}
-                            className="relative flex items-center justify-center"
+                            className={`relative flex items-center justify-center ${isEqualWidth ? 'w-full h-full' : ''}`}
                         >
                             {/* Divider at left edge (inside wrapper so it doesn't become a grid column) */}
                             {showDividers && index > 0 && (
@@ -291,6 +354,7 @@ export function SegmentedControl({
                             <Segment
                                 type={type}
                                 size={size}
+                                style={normalizedStyle}
                                 selected={item.id === selectedId}
                                 icon={item.icon}
                                 onClick={() => onChange(item.id)}

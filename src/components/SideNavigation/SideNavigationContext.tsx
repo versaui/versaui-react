@@ -2,6 +2,8 @@
 
 import { createContext, useContext } from 'react';
 
+import type { SideNavigationItemStyle } from './SideNavigationItem';
+
 /**
  * Context value for the Side Navigation system.
  * Shared across SideNavigation, SideNavigationItem, SubNavigationItem, and SideNavigationFeatureCard.
@@ -17,6 +19,8 @@ export interface SideNavigationContextValue {
     onNavigate: (id: string) => void;
     /** Callback to toggle expansion of a nested item */
     onToggleExpand: (id: string) => void;
+    /** Visual style treatment for navigation: 'simple' | 'expressive' */
+    style?: SideNavigationItemStyle;
 }
 
 const SideNavigationContext = createContext<SideNavigationContextValue | null>(null);

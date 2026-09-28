@@ -43,12 +43,12 @@ export interface NotificationItemProps {
 
 // CVA Variants for main container
 const containerVariants = cva(
-    'flex items-start cursor-pointer p-2',
+    'flex items-start cursor-pointer p-2 gap-3',
     {
         variants: {
             size: {
-                default: 'gap-2', // old 'small'
-                large: 'gap-3',   // old 'default'
+                default: '',
+                large: '',
             },
         },
         defaultVariants: {
@@ -208,36 +208,38 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
             {renderLeadingItem()}
 
             {/* Content Container */}
-            <div className="flex-1 flex flex-col gap-[2px] min-w-0">
-                {/* Title Row with Unread Indicator */}
-                <div className="flex items-center gap-2 w-full">
-                    <p
-                        className={cn("flex-1 min-w-0 truncate text-[var(--color-neutral-text-strong)]", config.titleClass)}
-                    >
-                        {title}
-                    </p>
-                    {unread && (
-                        <div
-                            className="shrink-0 w-2 h-2 rounded-full"
-                            style={{ backgroundColor: '#FB2C36' }}
-                            aria-label="Unread"
-                        />
+            <div className="flex-1 flex flex-col gap-1 min-w-0">
+                {/* Title & Description group */}
+                <div className="flex flex-col gap-[2px]">
+                    {/* Title Row with Unread Indicator */}
+                    <div className="flex items-center gap-2 w-full">
+                        <p
+                            className={cn("flex-1 min-w-0 truncate text-[var(--color-neutral-text-strong)]", config.titleClass)}
+                        >
+                            {title}
+                        </p>
+                        {unread && (
+                            <div
+                                className="shrink-0 w-2 h-2 rounded-full bg-[var(--color-state-error-medium)]"
+                                aria-label="Unread"
+                            />
+                        )}
+                    </div>
+
+                    {/* Description */}
+                    {description && (
+                        <p
+                            className={cn("text-[var(--color-neutral-text-medium)]", config.descriptionClass)}
+                        >
+                            {description}
+                        </p>
                     )}
                 </div>
-
-                {/* Description */}
-                {description && (
-                    <p
-                        className={cn("text-[var(--color-neutral-text-medium)]", config.descriptionClass)}
-                    >
-                        {description}
-                    </p>
-                )}
 
                 {/* Timestamp */}
                 {timestamp && (
                     <p
-                        className={cn("text-[var(--color-neutral-text-medium)]", config.timestampClass)}
+                        className={cn("text-[var(--color-neutral-text-subtle)]", config.timestampClass)}
                     >
                         {timestamp}
                     </p>

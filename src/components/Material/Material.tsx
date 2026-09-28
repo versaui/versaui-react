@@ -6,7 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 // Size and elevation variants
 export const MATERIAL_SIZES = ['small', 'medium', 'large'] as const;
 export const MATERIAL_ELEVATIONS = ['flat', 'default', 'elevated', 'floating'] as const;
-export const MATERIAL_CORNER_RADIUS_TYPES = ['default', 'thematic'] as const;
+export const MATERIAL_CORNER_RADIUS_TYPES = ['default', 'control', 'thematic'] as const;
 
 export type MaterialSize = (typeof MATERIAL_SIZES)[number];
 export type MaterialElevation = (typeof MATERIAL_ELEVATIONS)[number];
@@ -19,7 +19,7 @@ export type MaterialCornerRadiusType = (typeof MATERIAL_CORNER_RADIUS_TYPES)[num
  * - Background color (surface-subtlest)
  * - Corner radius (per size — default tokens; overridable via cornerRadiusType prop)
  * - Box shadow (per size × elevation)
- * - Gradient outline (thematic-outline-surface)
+ * - Gradient outline (material-outline)
  */
 const materialVariants = cva(
     // Base classes - presentational only, no layout
@@ -65,11 +65,14 @@ const DEFAULT_CORNER_RADIUS: Record<MaterialSize, string> = {
     large: 'var(--corner-radius-default-large)',
 };
 
-const THEMATIC_CORNER_RADIUS: Record<MaterialSize, string> = {
-    small: 'var(--corner-radius-thematic-small)',
-    medium: 'var(--corner-radius-thematic-medium)',
-    large: 'var(--corner-radius-thematic-large)',
+const CONTROL_CORNER_RADIUS: Record<MaterialSize, string> = {
+    small: 'var(--corner-radius-control-small)',
+    medium: 'var(--corner-radius-control-medium)',
+    large: 'var(--corner-radius-control-large)',
 };
+
+/** @deprecated Alias for CONTROL_CORNER_RADIUS */
+const THEMATIC_CORNER_RADIUS = CONTROL_CORNER_RADIUS;
 
 export interface MaterialProps
     extends React.HTMLAttributes<HTMLDivElement>,
@@ -78,10 +81,10 @@ export interface MaterialProps
     size?: MaterialSize;
     /** Elevation level controlling shadow depth */
     elevation?: MaterialElevation;
-    /** Corner radius type: 'default' uses default tokens, 'thematic' uses thematic tokens */
+    /** Corner radius type: 'default' uses default tokens, 'control' uses control tokens ('thematic' supported as alias) */
     cornerRadiusType?: MaterialCornerRadiusType;
-    /** Explicit corner radius CSS value. When provided with cornerRadiusType='thematic',
-     *  overrides the default thematic size map. e.g. 'var(--corner-radius-thematic-large)' */
+    /** Explicit corner radius CSS value. When provided with cornerRadiusType='control',
+     *  overrides the default control size map. e.g. 'var(--corner-radius-control-large)' */
     cornerRadius?: string;
     /** Custom surface background color. Defaults to var(--color-neutral-surface-subtlest) */
     surfaceColor?: string;
@@ -98,7 +101,7 @@ export interface MaterialProps
  * - Background color (surface-subtlest, or custom via surfaceColor prop)
  * - Corner radius (default or thematic tokens, per size)
  * - Elevation shadow (flat/default/elevated/floating)
- * - Gradient outline (thematic-outline-surface)
+ * - Gradient outline (material-outline)
  *
  * This component is purely presentational - it does NOT control:
  * - Layout (no flex, grid, absolute)
@@ -112,8 +115,8 @@ export interface MaterialProps
  * </Material>
  *
  * @example
- * // With thematic corner radius and custom surface
- * <Material size="medium" elevation="flat" cornerRadiusType="thematic" cornerRadius="var(--corner-radius-thematic-large)" surfaceColor="var(--color-neutral-surface-subtle)">
+ * // With control corner radius and custom surface
+ * <Material size="medium" elevation="flat" cornerRadiusType="control" cornerRadius="var(--corner-radius-control-large)" surfaceColor="var(--color-neutral-surface-subtle)">
  *   <TabContent />
  * </Material>
  */
@@ -122,8 +125,9 @@ export const Material = forwardRef<HTMLDivElement, MaterialProps>(
         // Resolve effective corner radius:
         // 1. rounded-full className → 9999px
         // 2. Explicit cornerRadius prop → use directly
-        // 3. Otherwise → use size-based map (default or thematic)
-        const radiusMap = cornerRadiusType === 'thematic' ? THEMATIC_CORNER_RADIUS : DEFAULT_CORNER_RADIUS;
+        // 3. Otherwise → use size-based map (default or control)
+        const isControlRadius = cornerRadiusType === 'control' || cornerRadiusType === 'thematic';
+        const radiusMap = isControlRadius ? CONTROL_CORNER_RADIUS : DEFAULT_CORNER_RADIUS;
         const effectiveRadius = className.includes('rounded-full') ? '9999px'
             : cornerRadius || radiusMap[size];
 

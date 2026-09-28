@@ -196,25 +196,41 @@ const STATUS_SIZE_CONFIG = {
     small: { dot: 6, icon: 16, padding: 5 },
 } as const;
 
+/** Status indicator bottom/right offset configs per avatar size */
+const STATUS_OFFSETS: Record<AvatarSize, { dot: number; verified: number }> = {
+    xxxs: { dot: -2.5, verified: -6.5 },
+    xxs: { dot: -1.5, verified: -5.5 },
+    xs: { dot: -1, verified: -4.5 },
+    s: { dot: -1, verified: -3 },
+    m: { dot: 0, verified: -2.5 },
+    l: { dot: -1, verified: -3 },
+    xl: { dot: 0, verified: -2 },
+    xxl: { dot: 1, verified: 0 },
+};
+
 interface AvatarStatusIndicatorProps {
     type: AvatarStatusType;
-    sizeVariant: 'default' | 'small';
+    size: AvatarSize;
 }
 
 /** Renders a status dot or verified badge indicator */
-const AvatarStatusIndicator = React.memo<AvatarStatusIndicatorProps>(({ type, sizeVariant }) => {
-    const config = STATUS_SIZE_CONFIG[sizeVariant];
+const AvatarStatusIndicator = React.memo<AvatarStatusIndicatorProps>(({ type, size }) => {
+    const config = AVATAR_SIZE_CONFIG[size];
+    const sizeVariant = config.statusSize;
+    const statusConfig = STATUS_SIZE_CONFIG[sizeVariant];
+    const offsets = STATUS_OFFSETS[size];
 
     if (type === 'verified') {
-        const iconSize = config.icon;
+        const iconSize = statusConfig.icon;
         return (
             <div
                 className="absolute flex items-center justify-center"
                 style={{
                     width: iconSize,
                     height: iconSize,
-                    bottom: sizeVariant === 'small' ? -3 : -2,
-                    right: sizeVariant === 'small' ? -3 : -2,
+                    bottom: offsets.verified,
+                    right: offsets.verified,
+                    filter: 'drop-shadow(1px 0 0 var(--color-neutral-background-default)) drop-shadow(-1px 0 0 var(--color-neutral-background-default)) drop-shadow(0 1px 0 var(--color-neutral-background-default)) drop-shadow(0 -1px 0 var(--color-neutral-background-default))',
                 }}
                 aria-label="Verified"
             >
@@ -223,7 +239,7 @@ const AvatarStatusIndicator = React.memo<AvatarStatusIndicatorProps>(({ type, si
         );
     }
 
-    const dotSize = config.dot;
+    const dotSize = statusConfig.dot;
     const dotColor = STATUS_DOT_COLORS[type];
     const borderWidth = sizeVariant === 'small' ? 1.5 : 2;
 
@@ -233,8 +249,8 @@ const AvatarStatusIndicator = React.memo<AvatarStatusIndicatorProps>(({ type, si
             style={{
                 width: dotSize,
                 height: dotSize,
-                bottom: sizeVariant === 'small' ? -1 : 0,
-                right: sizeVariant === 'small' ? -1 : 0,
+                bottom: offsets.dot,
+                right: offsets.dot,
                 backgroundColor: dotColor,
                 border: `${borderWidth}px solid var(--color-neutral-background-default)`,
                 boxSizing: 'content-box',
@@ -346,7 +362,7 @@ export const Avatar: React.FC<AvatarProps> = ({
                     className="w-full h-full object-cover rounded-full"
                 />
                 {status && (
-                    <AvatarStatusIndicator type={statusType} sizeVariant={config.statusSize} />
+                    <AvatarStatusIndicator type={statusType} size={size} />
                 )}
             </div>
         );
@@ -367,7 +383,7 @@ export const Avatar: React.FC<AvatarProps> = ({
             >
                 {/* Gradient border ring — mask-composite renders only the ring */}
                 <div
-                    className="absolute inset-0 rounded-full thematic-surface-outline"
+                    className="absolute inset-0 rounded-full material-outline"
                     style={{
                         border: '0.5px solid var(--color-neutral-outline-subtle)',
                         pointerEvents: 'none',
@@ -383,7 +399,7 @@ export const Avatar: React.FC<AvatarProps> = ({
                     />
                 </div>
                 {status && (
-                    <AvatarStatusIndicator type={statusType} sizeVariant={config.statusSize} />
+                    <AvatarStatusIndicator type={statusType} size={size} />
                 )}
             </div>
         );
@@ -411,7 +427,7 @@ export const Avatar: React.FC<AvatarProps> = ({
                 {displayInitials}
             </span>
             {status && (
-                <AvatarStatusIndicator type={statusType} sizeVariant={config.statusSize} />
+                <AvatarStatusIndicator type={statusType} size={size} />
             )}
         </div>
     );

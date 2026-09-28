@@ -12,7 +12,7 @@ const containerVariants = cva(
     [
         'relative flex items-center justify-center',
         'w-8 h-8 p-1.5',
-        'rounded-[var(--corner-radius-thematic-small)]',
+        'rounded-[var(--corner-radius-control-small)]',
         'cursor-pointer outline-none',
         'transition-[background-color,border-color] duration-150 ease-out',
         'box-border',

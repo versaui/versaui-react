@@ -13,6 +13,7 @@
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![npm version](https://img.shields.io/npm/v/@versaui/ui.svg)](https://www.npmjs.com/package/@versaui/ui)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 [Documentation](https://www.versaui.com/docs) · [Components](https://www.versaui.com/docs/components) · [Website](https://www.versaui.com)
@@ -31,7 +32,7 @@ Components ship with full keyboard navigation, ARIA attributes, focus management
 Versa UI follows a copy-paste model - you own every line of code. No black-box dependencies. Drop components into your project, customise freely, and maintain full control over your codebase.
 
 ### Composable Components
-35+ components built with composition in mind. Combine primitives like `Material`, `Segment`, and `AccordionItem` into complex patterns. Each component does one thing well and composes with everything else.
+36+ free components built with composition in mind. Combine primitives like `Material`, `Segment`, and `AccordionItem` into complex patterns. Each component does one thing well and composes with everything else.
 
 ### Light and Dark Mode
 Every component supports both light and dark modes out of the box. Toggle between them by changing the `data-mode` attribute on your root element - all design tokens automatically adapt.
@@ -45,14 +46,20 @@ Built on React 19, Tailwind CSS 4, TypeScript 5, and Class Variance Authority. N
 |---|---|
 | **Actions** | Button, Compact Icon Button, Link Button, Social Button, Button Group |
 | **Data Entry** | Text Input, Text Area, OTP Input, Search Bar, Checkbox, Radio, Toggle, Slider, Dropdown, File Upload, Image Upload |
-| **Data Display** | Avatar, Badge, Tag, Status Tag, Brand Icon, Country Flag, Logo, Tooltip, Divider, Progress Bar, Circular Progress Bar |
+| **Data Display** | Avatar, Badge, Tag, Status Tag, File Card, Brand Icon, Country Flag, Logo, Tooltip, Divider, Progress Bar, Circular Progress Bar |
 | **Feedback** | Alert, Toast, Notification, Modal, Status Modal |
-| **Navigation** | Bar Tabs, Container Tabs, Breadcrumbs, Side Navigation, Top Navigation, Segmented Control, Pagination |
+| **Navigation** | Bar Tabs, Container Tabs, Breadcrumbs, Side Navigation, Top Navigation, Segmented Control, Pagination, Menu |
 | **Layout** | Material, Accordion |
 
 ---
 
 ## Getting Started
+
+### Installation
+
+```bash
+npm install @versaui/ui
+```
 
 ### Prerequisites
 - **React** 18.0+ (React 19 recommended)
@@ -107,8 +114,8 @@ Toggle dark mode by changing `data-mode` to `"dark"`.
 ### Use a Component
 
 ```tsx
-import { Button } from './components/Button/Button';
-import { Tooltip } from './components/Tooltip/Tooltip';
+import { Button } from '@versaui/ui/components/Button';
+import { Tooltip } from '@versaui/ui/components/Tooltip';
 
 function App() {
   return (

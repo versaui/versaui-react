@@ -1,5 +1,5 @@
 export * from './Button';
-export * from './CompactIconButton';
+export * from './CompactButton';
 export * from './LinkButton';
 export * from './Loader';
 export * from './SocialButton';

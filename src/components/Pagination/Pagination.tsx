@@ -3,7 +3,7 @@
 import React from 'react';
 import { CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { cn } from '../../utils/cn';
-import { CompactIconButton } from '../Button/CompactIconButton';
+import { CompactButton } from '../Button/CompactButton';
 import { Dropdown } from '../Dropdown/Dropdown';
 
 export const PAGINATION_SIZES = ['default', 'small'] as const;
@@ -55,6 +55,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         width: '100%',
         padding: '12px 16px',
         backgroundColor: 'var(--color-neutral-surface-subtlest)',
+        borderTop: '1px solid var(--color-neutral-outline-subtle)',
         boxSizing: 'border-box',
     };
 
@@ -112,7 +113,7 @@ export const Pagination: React.FC<PaginationProps> = ({
     }));
 
     return (
-        <div className={cn('table-pagination', className)} style={containerStyle}>
+        <div className={cn('table-pagination border-t border-[var(--color-neutral-outline-subtle)]', className)} style={containerStyle}>
             {/* Left section: Page info */}
             <div style={sectionStyle}>
                 {showItemRange && totalItems !== undefined && (
@@ -127,7 +128,7 @@ export const Pagination: React.FC<PaginationProps> = ({
 
             {/* Center section: Page navigation */}
             <div style={{ ...sectionStyle, justifyContent: 'center', flex: 'none' }}>
-                <CompactIconButton
+                <CompactButton
                     size="small"
                     variant="subtle"
                     icon={<CaretLeftIcon size={16} weight="regular" />}
@@ -185,7 +186,7 @@ export const Pagination: React.FC<PaginationProps> = ({
                     })}
                 </div>
 
-                <CompactIconButton
+                <CompactButton
                     size="small"
                     variant="subtle"
                     icon={<CaretRightIcon size={16} weight="regular" />}

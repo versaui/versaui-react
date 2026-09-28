@@ -154,7 +154,7 @@ export const ALL_PLATFORMS = Object.keys(PLATFORM_NAMES) as BrandPlatform[];
 // Platforms whose brand SVGs use `currentColor` and need icon/strong in brand style
 const CURRENT_COLOR_BRAND_PLATFORMS: Set<BrandPlatform> = new Set([
     'apple', 'github', 'x', 'threads', 'framer', 'hashicorp', 'okta', 'scim',
-    'amazon', 'meridia',
+    'amazon', 'aws', 'meridia',
 ]);
 
 // Resolve icon URL from statically imported assets (works in any bundler environment)

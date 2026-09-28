@@ -19,7 +19,7 @@ import { Logo } from '../Logo/Logo';
 import { HorizontalContainerTabs } from '../ContainerTab/HorizontalContainerTabs';
 import type { ContainerTabItem } from '../ContainerTab/HorizontalContainerTabs';
 import { SearchBar } from '../SearchBar/SearchBar';
-import { CompactIconButton } from '../Button/CompactIconButton';
+import { CompactButton } from '../Button/CompactButton';
 import { NotificationIcon } from '../Notification/NotificationIcon';
 import { ProfileDropdown } from '../Menu/ProfileDropdown';
 import { BrandIcon } from '../BrandIcon/BrandIcon';
@@ -41,13 +41,13 @@ export type { NotificationData };
  * Allowed component types for each slot.
  * 
  * Left Slot:
- * - Logo, BrandIcon, Button, CompactIconButton, Title (text), Breadcrumbs, HorizontalContainerTabs, HorizontalBarTabs
+ * - Logo, BrandIcon, Button, CompactButton, Title (text), Breadcrumbs, HorizontalContainerTabs, HorizontalBarTabs
  * 
  * Center Slot:
  * - Title (text), Breadcrumbs, HorizontalContainerTabs, HorizontalBarTabs, SearchBar
  * 
  * Right Slot:
- * - SearchBar, CompactIconButton, Button, ProfileDropdown, NotificationIcon
+ * - SearchBar, CompactButton, Button, ProfileDropdown, NotificationIcon
  */
 export type LeftSlotContent = React.ReactNode;
 export type CenterSlotContent = React.ReactNode;
@@ -93,7 +93,7 @@ export interface TopNavigationProps {
     className?: string;
     /**
      * Slot for custom left section content (replaces logo + tabs).
-     * Allowed components: Logo, BrandIcon, Button, CompactIconButton, Title (text),
+     * Allowed components: Logo, BrandIcon, Button, CompactButton, Title (text),
      * Breadcrumbs, HorizontalContainerTabs, HorizontalBarTabs
      */
     leftSlot?: LeftSlotContent;
@@ -105,7 +105,7 @@ export interface TopNavigationProps {
     centerSlot?: CenterSlotContent;
     /**
      * Slot for custom right section content (replaces search, notifications, profile).
-     * Allowed components: SearchBar, CompactIconButton, Button, ProfileDropdown, NotificationIcon
+     * Allowed components: SearchBar, CompactButton, Button, ProfileDropdown, NotificationIcon
      */
     rightSlot?: RightSlotContent;
 }
@@ -339,7 +339,7 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
     const defaultLeftContent = (
         <div className={leftSectionVariants({ type })}>
             {showBackButton && type === 'title' && (
-                <CompactIconButton
+                <CompactButton
                     size="default"
                     variant="subtle"
                     icon={<ArrowLeftIcon size={20} weight="regular" />}
@@ -379,7 +379,7 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
                 </div>
             ) : (
                 <div className="flex items-center gap-1.5">
-                    <CompactIconButton
+                    <CompactButton
                         size="default"
                         variant="subtle"
                         icon={<MagnifyingGlassIcon />}

@@ -36,7 +36,17 @@ export interface ButtonGroupItemProps {
     style?: React.CSSProperties;
     /** Accessible label for screen readers */
     ariaLabel?: string;
+    /** Whether this item is the first item in the group (rounds outer left corners) */
+    isFirst?: boolean;
+    /** Whether this item is the last item in the group (rounds outer right corners) */
+    isLast?: boolean;
 }
+
+// Border radius based on size (using control tokens)
+const BORDER_RADIUS: Record<ButtonGroupItemSize, string> = {
+    default: 'var(--corner-radius-control-medium)',
+    small: 'var(--corner-radius-control-small)',
+};
 
 // Size configurations
 const SIZE_CONFIG = {
@@ -219,6 +229,8 @@ export function ButtonGroupItem({
     className = '',
     style,
     ariaLabel,
+    isFirst = false,
+    isLast = false,
 }: ButtonGroupItemProps) {
     const [isHovered, setIsHovered] = useState(false);
     const { isFocusVisible, focusProps } = useFocusRing();
@@ -238,6 +250,27 @@ export function ButtonGroupItem({
 
     const sizeConfig = SIZE_CONFIG[size];
     const colors = getColors(type, active, actualState);
+
+    // Focus ring corner-radius style for terminal items (only applied when focused)
+    const focusStyle: React.CSSProperties = useMemo(() => {
+        if (actualState !== 'focused') return {};
+        const radius = BORDER_RADIUS[size];
+        const borderRadiusProps: React.CSSProperties = {};
+        if (isFirst && isLast) {
+            borderRadiusProps.borderRadius = radius;
+        } else if (isFirst) {
+            borderRadiusProps.borderTopLeftRadius = radius;
+            borderRadiusProps.borderBottomLeftRadius = radius;
+        } else if (isLast) {
+            borderRadiusProps.borderTopRightRadius = radius;
+            borderRadiusProps.borderBottomRightRadius = radius;
+        }
+        return {
+            position: 'relative',
+            zIndex: 1,
+            ...borderRadiusProps,
+        };
+    }, [actualState, size, isFirst, isLast]);
 
     const handleMouseEnter = useCallback(() => {
         if (!isDisabled && state === 'default') {
@@ -284,9 +317,10 @@ export function ButtonGroupItem({
             cursor: isDisabled ? 'not-allowed' : 'pointer',
             transition: 'background-color 150ms ease-out, outline 150ms ease-out',
             boxSizing: 'border-box',
+            ...focusStyle,
             ...style,
         };
-    }, [sizeConfig, isIconOnly, colors, isDisabled, style]);
+    }, [sizeConfig, isIconOnly, colors, isDisabled, focusStyle, style]);
 
     // Icon wrapper styles
     const getIconWrapperStyle = (): React.CSSProperties => ({

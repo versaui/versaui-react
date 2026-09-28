@@ -2,16 +2,20 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { FilePdfIcon, FileDocIcon, FileImageIcon, FileIcon, XIcon, TrashIcon, ArrowClockwiseIcon, WarningCircleIcon } from '@phosphor-icons/react';
+import { ContainedIcon, type ContainedIconStyle } from '../../assets/ContainedIcon';
 import { Button } from '../Button/Button';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 import { Material } from '../Material/Material';
 
+export type { ContainedIconStyle };
 export type UploadStatus = 'uploading' | 'uploaded' | 'failed';
 
 export interface FileUploadProgressProps {
     fileName: string;
     fileSize: number; // in bytes
     fileType?: string;
+    /** Visual style for the contained file icon */
+    iconStyle?: ContainedIconStyle;
     /** Initial status - component manages transitions internally */
     initialStatus?: UploadStatus;
     /** Upload speed in bytes per second for progress simulation */
@@ -112,8 +116,9 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
     fileName,
     fileSize,
     fileType,
+    iconStyle = 'simple',
     initialStatus = 'uploading',
-    uploadSpeed = 50000, // 50KB/s default
+    uploadSpeed = 200000, // 200KB/s default for faster progress
     simulateProgress = true,
     onComplete,
     onCancel,
@@ -209,12 +214,16 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
     const renderUploading = () => (
         <>
             <div style={{ alignSelf: 'stretch', display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 16, minWidth: 0 }}>
-                <div style={{ padding: 12, background: 'var(--color-brand-secondary-subtlest)', borderRadius: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
-                    <FileIcon size={24} weight="duotone" color="var(--color-brand-secondary-strong)" />
-                </div>
+                <ContainedIcon
+                    style={iconStyle}
+                    role="secondary"
+                    size="large"
+                    cornerRadiusType="full"
+                    icon={FileIcon}
+                />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, minWidth: 0 }}>
                     <TruncatedFileName fileName={fileName} />
-                    <div className="text-b3" style={{ color: 'var(--color-neutral-text-medium)' }}>
+                    <div className="text-b4" style={{ color: 'var(--color-neutral-text-medium)' }}>
                         {formatFileSize(uploadedBytes)} of {formatFileSize(fileSize)} • {formatTimeRemaining(timeRemaining)}
                     </div>
                 </div>
@@ -228,7 +237,7 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
             </div>
             <div style={{ alignSelf: 'stretch', display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <ProgressBar value={progress} showLabel size="default" />
-                <div className="text-b5" style={{ color: 'var(--color-neutral-text-medium)' }}>Uploading...</div>
+                <div className="text-b4" style={{ color: 'var(--color-neutral-text-medium)' }}>Uploading...</div>
             </div>
         </>
     );
@@ -236,12 +245,16 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
     const renderUploaded = () => (
         <>
             <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 16, minWidth: 0 }}>
-                <div style={{ padding: 12, background: 'var(--color-brand-secondary-subtlest)', borderRadius: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
-                    <FileIcon size={24} weight="duotone" color="var(--color-brand-secondary-strong)" />
-                </div>
+                <ContainedIcon
+                    style={iconStyle}
+                    role="secondary"
+                    size="large"
+                    cornerRadiusType="full"
+                    icon={FileIcon}
+                />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, minWidth: 0 }}>
                     <TruncatedFileName fileName={fileName} />
-                    <div className="text-b3" style={{ color: 'var(--color-neutral-text-medium)' }}>{formatFileSize(fileSize)}</div>
+                    <div className="text-b4" style={{ color: 'var(--color-neutral-text-medium)' }}>{formatFileSize(fileSize)}</div>
                 </div>
             </div>
             <Button
@@ -257,14 +270,18 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
     const renderFailed = () => (
         <>
             <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: 16, minWidth: 0 }}>
-                <div style={{ padding: 12, background: 'var(--color-brand-secondary-subtlest)', borderRadius: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
-                    <FileIcon size={24} weight="duotone" color="var(--color-brand-secondary-strong)" />
-                </div>
+                <ContainedIcon
+                    style={iconStyle}
+                    role="secondary"
+                    size="large"
+                    cornerRadiusType="full"
+                    icon={FileIcon}
+                />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 4, minWidth: 0 }}>
                     <TruncatedFileName fileName={fileName} />
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                         <WarningCircleIcon size={16} weight="regular" color="var(--color-state-error-strong)" />
-                        <span className="text-b3" style={{ color: 'var(--color-state-error-strong)' }}>{errorMessage}</span>
+                        <span className="text-b4" style={{ color: 'var(--color-state-error-strong)' }}>{errorMessage}</span>
                     </div>
                 </div>
             </div>
@@ -286,6 +303,7 @@ export const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
             />
         </>
     );
+
 
     return (
         <Material

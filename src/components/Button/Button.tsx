@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, forwardRef } from 'react';
 import { useFocusRing } from '@react-aria/focus';
 import { useHover } from '@react-aria/interactions';
 import { cva } from 'class-variance-authority';
@@ -10,7 +10,7 @@ import { Loader } from './Loader';
 // Types
 export const BUTTON_TYPES = ['primary', 'neutral', 'error'] as const;
 export const BUTTON_SIZES = ['small', 'medium', 'large'] as const;
-export const BUTTON_STYLES = ['filled', 'thematic', 'subtle', 'outline'] as const;
+export const BUTTON_STYLES = ['filled', 'expressive', 'subtle', 'outline'] as const;
 
 export type ButtonType = (typeof BUTTON_TYPES)[number];
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
@@ -29,19 +29,19 @@ const buttonVariants = cva(
         },
         compoundVariants: [
             // Icon-only buttons
-            { size: 'small', isIconOnly: true, class: 'w-8 h-8 text-h9 rounded-[var(--corner-radius-thematic-small)] gap-[2px]' },
-            { size: 'medium', isIconOnly: true, class: 'w-10 h-10 text-h8 rounded-[var(--corner-radius-thematic-medium)] gap-[4px]' },
-            { size: 'large', isIconOnly: true, class: 'w-12 h-12 text-h7 rounded-[var(--corner-radius-thematic-large)] gap-[6px]' },
+            { size: 'small', isIconOnly: true, class: 'w-8 h-8 text-h9 rounded-[var(--corner-radius-control-small)] gap-[2px]' },
+            { size: 'medium', isIconOnly: true, class: 'w-10 h-10 text-h8 rounded-[var(--corner-radius-control-medium)] gap-[4px]' },
+            { size: 'large', isIconOnly: true, class: 'w-12 h-12 text-h7 rounded-[var(--corner-radius-control-large)] gap-[6px]' },
             // Text buttons
-            { size: 'small', isIconOnly: false, class: 'px-[var(--spacing-5)] h-8 text-h9 rounded-[var(--corner-radius-thematic-small)] gap-[2px]' },
-            { size: 'medium', isIconOnly: false, class: 'px-[var(--spacing-6)] h-10 text-h8 rounded-[var(--corner-radius-thematic-medium)] gap-[4px]' },
-            { size: 'large', isIconOnly: false, class: 'px-[var(--spacing-6)] h-12 text-h7 rounded-[var(--corner-radius-thematic-large)] gap-[6px]' },
+            { size: 'small', isIconOnly: false, class: 'px-[var(--spacing-5)] h-8 text-h9 rounded-[var(--corner-radius-control-small)] gap-[2px]' },
+            { size: 'medium', isIconOnly: false, class: 'px-[var(--spacing-6)] h-10 text-h8 rounded-[var(--corner-radius-control-medium)] gap-[4px]' },
+            { size: 'large', isIconOnly: false, class: 'px-[var(--spacing-6)] h-12 text-h7 rounded-[var(--corner-radius-control-large)] gap-[6px]' },
         ],
         defaultVariants: { size: 'medium', isIconOnly: false, fullWidth: false },
     }
 );
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonType;
     size?: ButtonSize;
     buttonStyle?: ButtonStyle;
@@ -53,7 +53,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     fullWidth?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     children,
     variant = 'primary',
     size = 'medium',
@@ -67,7 +67,7 @@ export const Button: React.FC<ButtonProps> = ({
     disabled,
     fullWidth = false,
     ...props
-}) => {
+}, ref) => {
     const { isFocusVisible, focusProps } = useFocusRing();
     const { isHovered: ariaIsHovered, hoverProps } = useHover({ isDisabled: disabled || loading });
 
@@ -92,7 +92,6 @@ export const Button: React.FC<ButtonProps> = ({
 
         let bg: string, color: string, border: string, boxShadow: string | undefined;
         let hoverBg: string | undefined, hoverShadow: string | undefined, hoverBorder: string | undefined;
-        let backgroundOrigin: string | undefined, backgroundClip: string | undefined;
 
         switch (buttonStyle) {
             case 'filled':
@@ -104,18 +103,20 @@ export const Button: React.FC<ButtonProps> = ({
                 hoverShadow = isNeutral ? undefined : `var(--elevation-${size}-2-shadow)`;
                 break;
 
-            case 'thematic': {
+            case 'expressive': {
                 const themeColor = isPrimary ? 'primary' : isError ? 'error' : 'neutral';
-                const insetType = isNeutral ? 'subtle' : 'default';
-                const fillGradient = `var(--gradient-thematic-fill-${themeColor})`;
-                const outlineGradient = `var(--gradient-thematic-outline-${themeColor})`;
+                const fillGradient = themeColor === 'neutral'
+                    ? 'var(--gradient-expressive-fill-neutral)'
+                    : `var(--gradient-expressive-fill-${themeColor}-strong)`;
+                const outlineGradient = themeColor === 'neutral'
+                    ? 'var(--gradient-expressive-outline-neutral)'
+                    : `var(--gradient-expressive-outline-${themeColor}-strong)`;
                 bg = `${fillGradient} padding-box, ${outlineGradient} border-box`;
-                backgroundOrigin = 'border-box';
-                backgroundClip = 'padding-box, border-box';
                 color = isNeutral ? 'var(--color-neutral-text-strong)' : 'var(--color-neutral-text-inverse)';
                 border = '1px solid transparent';
+                const insetType = isNeutral ? 'subtle' : 'strong';
                 const insetSize = size === 'small' ? 'small' : 'medium';
-                boxShadow = `var(--inset-${insetType}-${insetSize})`;
+                boxShadow = `var(--expressive-inset-${insetType}-${insetSize})`;
                 const hoverFill = isPrimary ? 'var(--color-brand-primary-stronger)'
                     : isError ? 'var(--color-state-error-stronger)'
                         : 'var(--color-neutral-surface-strong)';
@@ -190,8 +191,6 @@ export const Button: React.FC<ButtonProps> = ({
             color,
             border,
             boxShadow: combinedShadow,
-            backgroundOrigin,
-            backgroundClip,
             outline: 'none',
             backdropFilter: `blur(var(--elevation-${size}-blur))`,
             WebkitBackdropFilter: `blur(var(--elevation-${size}-blur))`,
@@ -207,6 +206,7 @@ export const Button: React.FC<ButtonProps> = ({
 
     return (
         <button
+            ref={ref}
             className={cn(buttonVariants({ size, isIconOnly, fullWidth }), className, 'group')}
             disabled={disabled || loading}
             style={styles}
@@ -236,4 +236,6 @@ export const Button: React.FC<ButtonProps> = ({
             </div>
         </button>
     );
-};
+});
+
+Button.displayName = 'Button';

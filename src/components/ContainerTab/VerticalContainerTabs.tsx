@@ -3,7 +3,7 @@
 import React, { useCallback, type ReactNode } from 'react';
 import { cva } from 'class-variance-authority';
 import clsx from 'clsx';
-import { ContainerTab, type ContainerTabSize, type ContainerTabVariant } from './ContainerTab';
+import { ContainerTab, type ContainerTabSize, type ContainerTabVariant, type ContainerTabStyle } from './ContainerTab';
 
 export interface ContainerTabItem {
     id: string;
@@ -26,6 +26,8 @@ export interface VerticalContainerTabsProps {
     size?: ContainerTabSize;
     /** Style variant of the tabs */
     variant?: ContainerTabVariant;
+    /** Visual style treatment: 'simple' | 'expressive' */
+    style?: ContainerTabStyle;
     /** Additional CSS class for the container */
     className?: string;
     /** Width of the container (default: 160px) */
@@ -45,6 +47,7 @@ export function VerticalContainerTabs({
     showIcons = true,
     size = 'default',
     variant = 'primary',
+    style = 'simple',
     className = '',
     width = 160,
 }: VerticalContainerTabsProps) {
@@ -102,6 +105,7 @@ export function VerticalContainerTabs({
                     orientation="vertical"
                     size={size}
                     variant={variant}
+                    style={style}
                     selected={item.id === selectedId}
                     disabled={item.disabled}
                     showIcon={showIcons && !!item.icon}

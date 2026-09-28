@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useMemo, type CSSProperties, type FC, type ReactNode } from 'react';
-import { cva } from 'class-variance-authority';
 import {
     File,
     FilePdf,
@@ -12,15 +11,31 @@ import {
     DownloadSimple,
     X,
 } from '@phosphor-icons/react';
+import {
+    ContainedIcon,
+    type ContainedIconCornerRadiusType,
+    type ContainedIconRole,
+    type ContainedIconSize,
+} from '../../assets/ContainedIcon';
+import { Material, type MaterialSize } from '../Material/Material';
+import { Button, type ButtonSize } from '../Button/Button';
 import { cn } from '../../utils/cn';
 
 // Types & Constants
 
-export const FILE_CARD_SIZES = ['small', 'default', 'large'] as const;
+export const FILE_CARD_SIZES = ['small', 'medium', 'large'] as const;
+export const FILE_CARD_ICON_STYLES = ['simple', 'expressive'] as const;
 export const FILE_CARD_FORMATS = ['general', 'pdf', 'zip', 'figma', 'document', 'spreadsheet'] as const;
 
-export type FileCardSize = (typeof FILE_CARD_SIZES)[number];
+export type FileCardSize = (typeof FILE_CARD_SIZES)[number] | 'default';
+export type FileCardIconStyle = (typeof FILE_CARD_ICON_STYLES)[number];
 export type FileCardFormat = (typeof FILE_CARD_FORMATS)[number];
+
+const MATERIAL_SIZE_MAP: Record<'small' | 'medium' | 'large', MaterialSize> = {
+    small: 'small',
+    medium: 'medium',
+    large: 'medium',
+};
 
 // Size Configuration
 
@@ -35,64 +50,52 @@ interface SizeConfig {
     gap: string;
     /** Corner radius class */
     borderRadius: string;
-    /** Elevation size token */
-    elevationSize: 'small' | 'medium' | 'large';
-    /** Icon container padding */
-    iconPadding: string;
-    /** Icon size in pixels */
-    iconSize: number;
+    /** Contained icon size variant */
+    iconSize: ContainedIconSize;
     /** File name typography class */
     nameClass: string;
     /** File size typography class */
     sizeClass: string;
     /** Details gap (only small has explicit gap) */
     detailsGap: string;
-    /** Button padding */
-    buttonPadding: string;
+    /** Button size variant */
+    buttonSize: ButtonSize;
     /** Button icon size */
     buttonIconSize: number;
-    /** Button corner radius */
-    buttonRadius: string;
     /** Buttons container padding-right */
     buttonsPaddingRight: string;
     /** Buttons container gap */
     buttonsGap: string;
 }
 
-const SIZE_CONFIG: Record<FileCardSize, SizeConfig> = {
+const SIZE_CONFIG: Record<'small' | 'medium' | 'large', SizeConfig> = {
     small: {
         height: '48px',
         paddingLeft: 'var(--spacing-4)',
         paddingY: 'var(--spacing-4)',
         gap: 'var(--spacing-4)',
         borderRadius: 'var(--corner-radius-default-small)',
-        elevationSize: 'small',
-        iconPadding: 'var(--spacing-4)',
-        iconSize: 16,
+        iconSize: 'small',
         nameClass: 'text-h9',
         sizeClass: 'text-b6',
         detailsGap: 'var(--spacing-2)',
-        buttonPadding: 'var(--spacing-4)',
+        buttonSize: 'small',
         buttonIconSize: 16,
-        buttonRadius: 'var(--corner-radius-thematic-small)',
         buttonsPaddingRight: 'var(--spacing-4)',
         buttonsGap: 'var(--spacing-4)',
     },
-    default: {
+    medium: {
         height: '60px',
         paddingLeft: 'var(--spacing-5)',
         paddingY: 'var(--spacing-4)',
         gap: 'var(--spacing-5)',
         borderRadius: 'var(--corner-radius-default-medium)',
-        elevationSize: 'medium',
-        iconPadding: '10px',
-        iconSize: 20,
+        iconSize: 'medium',
         nameClass: 'text-h8',
         sizeClass: 'text-b5',
         detailsGap: '0px',
-        buttonPadding: 'var(--spacing-4)',
+        buttonSize: 'small',
         buttonIconSize: 16,
-        buttonRadius: 'var(--corner-radius-thematic-small)',
         buttonsPaddingRight: 'var(--spacing-5)',
         buttonsGap: 'var(--spacing-4)',
     },
@@ -102,15 +105,12 @@ const SIZE_CONFIG: Record<FileCardSize, SizeConfig> = {
         paddingY: 'var(--spacing-5)',
         gap: 'var(--spacing-6)',
         borderRadius: 'var(--corner-radius-default-medium)',
-        elevationSize: 'large',
-        iconPadding: 'var(--spacing-5)',
-        iconSize: 24,
+        iconSize: 'large',
         nameClass: 'text-h7',
         sizeClass: 'text-b4',
         detailsGap: '0px',
-        buttonPadding: '10px',
+        buttonSize: 'medium',
         buttonIconSize: 20,
-        buttonRadius: 'var(--corner-radius-thematic-medium)',
         buttonsPaddingRight: 'var(--spacing-5)',
         buttonsGap: 'var(--spacing-5)',
     },
@@ -119,51 +119,35 @@ const SIZE_CONFIG: Record<FileCardSize, SizeConfig> = {
 // Format Configuration
 
 interface FormatConfig {
-    /** Background color for the icon container */
-    iconBg: string;
-    /** Border color for the icon container */
-    iconBorder: string;
-    /** Icon color */
-    iconColor: string;
+    /** Semantic role matching the file format */
+    role: ContainedIconRole;
     /** The Phosphor icon component */
     Icon: React.ElementType;
 }
 
 const FORMAT_CONFIG: Record<FileCardFormat, FormatConfig> = {
     general: {
-        iconBg: 'var(--color-neutral-surface-subtle)',
-        iconBorder: 'var(--color-neutral-outline-subtlest)',
-        iconColor: 'var(--color-neutral-icon-medium)',
+        role: 'neutral',
         Icon: File,
     },
     pdf: {
-        iconBg: 'var(--color-state-error-subtlest)',
-        iconBorder: 'var(--color-state-error-subtler)',
-        iconColor: 'var(--color-state-error-strong)',
+        role: 'error',
         Icon: FilePdf,
     },
     zip: {
-        iconBg: 'var(--color-brand-secondary-subtlest)',
-        iconBorder: 'var(--color-brand-secondary-subtler)',
-        iconColor: 'var(--color-brand-secondary-strong)',
+        role: 'secondary',
         Icon: FileArchive,
     },
     figma: {
-        iconBg: 'var(--color-brand-secondary-subtlest)',
-        iconBorder: 'var(--color-brand-secondary-subtler)',
-        iconColor: 'var(--color-brand-secondary-strong)',
+        role: 'secondary',
         Icon: FigmaLogo,
     },
     document: {
-        iconBg: 'var(--color-brand-secondary-subtlest)',
-        iconBorder: 'var(--color-brand-secondary-subtler)',
-        iconColor: 'var(--color-brand-secondary-strong)',
+        role: 'secondary',
         Icon: FileDoc,
     },
     spreadsheet: {
-        iconBg: 'var(--color-state-success-subtlest)',
-        iconBorder: 'var(--color-state-success-subtler)',
-        iconColor: 'var(--color-state-success-strong)',
+        role: 'success',
         Icon: Table,
     },
 };
@@ -171,7 +155,9 @@ const FORMAT_CONFIG: Record<FileCardFormat, FormatConfig> = {
 // Props
 
 export interface FileCardProps {
-    /** Size variant */
+    /** Visual style treatment for the contained icon: 'simple' | 'expressive' */
+    iconStyle?: FileCardIconStyle;
+    /** Size variant: 'small' | 'medium' | 'large' */
     size?: FileCardSize;
     /** File format, determines icon and color scheme */
     format?: FileCardFormat;
@@ -185,6 +171,10 @@ export interface FileCardProps {
     removable?: boolean;
     /** Custom icon to override the format icon */
     icon?: ReactNode;
+    /** Corner radius type for the contained icon: 'default' | 'control' | 'full' */
+    iconCornerRadiusType?: ContainedIconCornerRadiusType;
+    /** Explicit corner-radius override for the contained icon */
+    iconCornerRadius?: string;
     /** Called when the download button is clicked */
     onDownload?: () => void;
     /** Called when the remove button is clicked */
@@ -196,18 +186,22 @@ export interface FileCardProps {
 // Component
 
 export const FileCard: FC<FileCardProps> = ({
-    size = 'default',
+    iconStyle = 'simple',
+    size = 'medium',
     format = 'general',
     fileName = 'Sample file',
     fileSize = '3.2 MB',
     downloadable = true,
     removable = true,
     icon,
+    iconCornerRadiusType = 'full',
+    iconCornerRadius = 'var(--corner-radius-default-fully-rounded)',
     onDownload,
     onRemove,
     className = '',
 }) => {
-    const config = SIZE_CONFIG[size];
+    const effectiveSize: 'small' | 'medium' | 'large' = size === 'default' ? 'medium' : size;
+    const config = SIZE_CONFIG[effectiveSize];
     const formatCfg = FORMAT_CONFIG[format];
     const IconComponent = formatCfg.Icon;
 
@@ -217,52 +211,28 @@ export const FileCard: FC<FileCardProps> = ({
         height: config.height,
         paddingLeft: config.paddingLeft,
         gap: config.gap,
-        backgroundColor: 'var(--color-neutral-surface-subtlest)',
-        border: '1px solid var(--color-neutral-outline-subtle)',
-        borderRadius: config.borderRadius,
-        backdropFilter: `blur(var(--elevation-${config.elevationSize}-blur))`,
-        WebkitBackdropFilter: `blur(var(--elevation-${config.elevationSize}-blur))`,
         width: '100%',
     }), [config]);
 
-    const iconContainerStyle = useMemo<CSSProperties>(() => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: config.iconPadding,
-        border: `1px solid ${formatCfg.iconBorder}`,
-        borderRadius: 'var(--corner-radius-default-fully-rounded)',
-        backgroundColor: formatCfg.iconBg,
-        flexShrink: 0,
-        position: 'relative',
-    }), [config.iconPadding, formatCfg]);
-
-    const glowStyle = useMemo<CSSProperties>(() => ({
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
-        borderRadius: 'inherit',
-        boxShadow: 'var(--glow-small)',
-    }), []);
-
     return (
-        <div
-            className={cn('relative', className)}
+        <Material
+            size={MATERIAL_SIZE_MAP[effectiveSize]}
+            elevation="default"
+            cornerRadius={config.borderRadius}
+            className={className}
             style={containerStyle}
             role="listitem"
             aria-label={`${fileName}, ${fileSize}`}
         >
-            {/* File Icon */}
-            <div style={iconContainerStyle}>
-                {icon || (
-                    <IconComponent
-                        size={config.iconSize}
-                        weight="regular"
-                        style={{ color: formatCfg.iconColor, flexShrink: 0 }}
-                    />
-                )}
-                <div style={glowStyle} aria-hidden />
-            </div>
+            {/* Contained File Icon */}
+            <ContainedIcon
+                style={iconStyle}
+                role={formatCfg.role}
+                size={config.iconSize}
+                cornerRadiusType={iconCornerRadiusType}
+                cornerRadius={iconCornerRadius}
+                icon={icon || IconComponent}
+            />
 
             {/* File Details */}
             <div
@@ -294,47 +264,41 @@ export const FileCard: FC<FileCardProps> = ({
                     }}
                 >
                     {downloadable && (
-                        <button
-                            type="button"
-                            className="flex items-center justify-center overflow-hidden shrink-0 cursor-pointer"
-                            style={{
-                                padding: config.buttonPadding,
-                                borderRadius: config.buttonRadius,
-                                backgroundColor: 'var(--color-neutral-surface-medium)',
-                            }}
+                        <Button
+                            variant="neutral"
+                            buttonStyle="filled"
+                            size={config.buttonSize}
+                            leadingIcon={
+                                <DownloadSimple
+                                    size={config.buttonIconSize}
+                                    weight="regular"
+                                />
+                            }
                             onClick={onDownload}
                             aria-label={`Download ${fileName}`}
-                        >
-                            <DownloadSimple
-                                size={config.buttonIconSize}
-                                weight="regular"
-                                style={{ color: 'var(--color-neutral-icon-strong)' }}
-                            />
-                        </button>
+                        />
                     )}
                     {removable && (
-                        <button
-                            type="button"
-                            className="flex items-center justify-center overflow-hidden shrink-0 cursor-pointer"
-                            style={{
-                                padding: config.buttonPadding,
-                                borderRadius: config.buttonRadius,
-                            }}
+                        <Button
+                            variant="neutral"
+                            buttonStyle="subtle"
+                            size={config.buttonSize}
+                            leadingIcon={
+                                <X
+                                    size={config.buttonIconSize}
+                                    weight="regular"
+                                />
+                            }
                             onClick={onRemove}
                             aria-label={`Remove ${fileName}`}
-                        >
-                            <X
-                                size={config.buttonIconSize}
-                                weight="regular"
-                                style={{ color: 'var(--color-neutral-icon-medium)' }}
-                            />
-                        </button>
+                        />
                     )}
                 </div>
             )}
-        </div>
+        </Material>
     );
 };
 
 FileCard.displayName = 'FileCard';
 export default FileCard;
+

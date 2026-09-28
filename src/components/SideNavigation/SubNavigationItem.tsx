@@ -8,14 +8,20 @@ import { Badge } from '../Badge/Badge';
 import { Material } from '../Material/Material';
 
 // Types
+export const SUB_NAVIGATION_ITEM_VARIANTS = ['primary', 'neutral'] as const;
+export const SUB_NAVIGATION_ITEM_STYLES = ['simple', 'expressive'] as const;
+
+export type SubNavigationItemVariant = (typeof SUB_NAVIGATION_ITEM_VARIANTS)[number];
+export type SubNavigationItemStyle = (typeof SUB_NAVIGATION_ITEM_STYLES)[number] | 'Simple' | 'Expressive';
 type ItemState = 'default' | 'hovered' | 'selected';
-export type SubNavigationItemVariant = 'primary' | 'neutral';
 
 export interface SubNavigationItemProps {
     /** Label text */
     label: string;
     /** Style variant: primary uses brand colors, neutral uses Material surface */
     variant?: SubNavigationItemVariant;
+    /** Visual style treatment: 'simple' | 'expressive' */
+    style?: SubNavigationItemStyle;
     /** Whether this item is selected/active */
     selected?: boolean;
     /** Badge count or text */
@@ -39,21 +45,25 @@ const subNavigationItemStyles = cva(
     [
         'flex-1 h-10 flex items-center gap-2',
         'px-3 py-2',
-        'rounded-[var(--corner-radius-thematic-medium)]',
-        'transition-colors duration-150 ease-out',
-        'outline-none border border-transparent',
+        'rounded-[var(--corner-radius-control-medium)]',
+        'transition-[background-color,box-shadow,outline] duration-150 ease-out',
+        'outline-none border',
         'cursor-pointer select-none',
     ],
     {
         variants: {
             state: {
-                default: 'bg-transparent text-[var(--color-neutral-text-medium)]',
-                hovered: 'bg-[var(--color-neutral-surface-medium)] text-[var(--color-neutral-text-strong)]',
+                default: 'border-transparent bg-transparent text-[var(--color-neutral-text-medium)]',
+                hovered: 'border-transparent bg-[var(--color-neutral-surface-medium)] text-[var(--color-neutral-text-strong)]',
                 selected: '',
             },
             variant: {
                 primary: '',
                 neutral: '',
+            },
+            style: {
+                simple: '',
+                expressive: '',
             },
             disabled: {
                 true: 'opacity-50 cursor-not-allowed',
@@ -61,10 +71,60 @@ const subNavigationItemStyles = cva(
             },
         },
         compoundVariants: [
-            { state: 'selected', variant: 'primary', className: 'text-[var(--color-brand-primary-strong)]' },
-            { state: 'selected', variant: 'neutral', className: 'bg-transparent border-transparent shadow-none text-[var(--color-neutral-text-strong)]' },
+            // Primary selected + expressive
+            {
+                state: 'selected',
+                variant: 'primary',
+                style: 'expressive',
+                className: [
+                    'border-transparent',
+                    'shadow-[var(--inset-subtle-medium)]',
+                    '[background:var(--gradient-thematic-fill-primary-subtle)_padding-box,var(--gradient-thematic-outline-primary-subtle)_border-box]',
+                    '[background-origin:border-box]',
+                    '[background-clip:padding-box,border-box]',
+                    'text-[var(--color-brand-primary-strong)]',
+                ],
+            },
+            // Primary selected + simple
+            {
+                state: 'selected',
+                variant: 'primary',
+                style: 'simple',
+                className: [
+                    'bg-[var(--color-brand-primary-subtlest)]',
+                    'border-[var(--color-brand-primary-subtler)]',
+                    'shadow-none',
+                    'text-[var(--color-brand-primary-strong)]',
+                ],
+            },
+            // Neutral selected + expressive
+            {
+                state: 'selected',
+                variant: 'neutral',
+                style: 'expressive',
+                className: [
+                    'border-transparent',
+                    'shadow-[var(--inset-subtle-medium)]',
+                    '[background:var(--gradient-thematic-fill-neutral)_padding-box,var(--gradient-thematic-outline-neutral)_border-box]',
+                    '[background-origin:border-box]',
+                    '[background-clip:padding-box,border-box]',
+                    'text-[var(--color-neutral-text-strong)]',
+                ],
+            },
+            // Neutral selected + simple — transparent; Material wrapper handles surface
+            {
+                state: 'selected',
+                variant: 'neutral',
+                style: 'simple',
+                className: [
+                    'bg-transparent',
+                    'border-transparent',
+                    'shadow-none',
+                    'text-[var(--color-neutral-text-strong)]',
+                ],
+            },
         ],
-        defaultVariants: { state: 'default', variant: 'primary', disabled: false },
+        defaultVariants: { state: 'default', variant: 'neutral', style: 'simple', disabled: false },
     }
 );
 
@@ -73,7 +133,8 @@ export type SubNavigationItemStylesProps = VariantProps<typeof subNavigationItem
 // Component
 export const SubNavigationItem: React.FC<SubNavigationItemProps> = ({
     label,
-    variant = 'primary',
+    variant = 'neutral',
+    style = 'simple',
     selected = false,
     badge,
     showBadge = true,
@@ -85,6 +146,8 @@ export const SubNavigationItem: React.FC<SubNavigationItemProps> = ({
 }) => {
     const [isHovered, setIsHovered] = React.useState(false);
     const { isFocusVisible, focusProps } = useFocusRing();
+
+    const normalizedStyle = (style ? String(style).toLowerCase() : 'simple') as 'simple' | 'expressive';
 
     // Determine visual state
     const state: ItemState = useMemo(() => {
@@ -110,23 +173,8 @@ export const SubNavigationItem: React.FC<SubNavigationItemProps> = ({
     const onEnter = useCallback(() => !disabled && setIsHovered(true), [disabled]);
     const onLeave = useCallback(() => setIsHovered(false), []);
 
-    // Determine if we need a Material wrapper (neutral + selected)
-    const useNeutralMaterial = variant === 'neutral' && state === 'selected';
-
-    // Selected state uses gradient background (primary variant only)
-    const selectedBackgroundStyle = useMemo(
-        () =>
-            state === 'selected' && variant === 'primary'
-                ? {
-                    background:
-                        'linear-gradient(var(--color-brand-primary-subtlest), var(--color-brand-primary-subtlest)) padding-box, var(--gradient-thematic-outline-primary-subtle) border-box',
-                    backgroundOrigin: 'border-box',
-                    backgroundClip: 'padding-box, border-box',
-                    boxShadow: 'var(--inset-subtle-medium)',
-                }
-                : {},
-        [state, variant]
-    );
+    // Determine if we need a Material wrapper (neutral + simple + selected)
+    const useNeutralMaterial = variant === 'neutral' && normalizedStyle === 'simple' && state === 'selected';
 
     // Focus ring style - use inset boxShadow to prevent clipping
     const focusRingStyle = useMemo(
@@ -161,8 +209,8 @@ export const SubNavigationItem: React.FC<SubNavigationItemProps> = ({
             {/* Menu item button */}
             <div
                 id={id}
-                className={subNavigationItemStyles({ state, variant, disabled })}
-                style={{ ...selectedBackgroundStyle, ...focusRingStyle }}
+                className={cn(subNavigationItemStyles({ state, variant, style: normalizedStyle, disabled }))}
+                style={focusRingStyle}
                 onClick={handleClick}
                 onMouseEnter={onEnter}
                 onMouseLeave={onLeave}
@@ -208,13 +256,13 @@ export const SubNavigationItem: React.FC<SubNavigationItemProps> = ({
                     <Material
                         size="small"
                         elevation="default"
-                        cornerRadiusType="thematic"
-                        cornerRadius="var(--corner-radius-thematic-medium)"
+                        cornerRadiusType="control"
+                        cornerRadius="var(--corner-radius-control-medium)"
                     >
                         <div
                             id={id}
-                            className={subNavigationItemStyles({ state, variant, disabled })}
-                            style={{ ...focusRingStyle }}
+                            className={cn(subNavigationItemStyles({ state, variant, style: normalizedStyle, disabled }))}
+                            style={focusRingStyle}
                             onClick={handleClick}
                             onMouseEnter={onEnter}
                             onMouseLeave={onLeave}

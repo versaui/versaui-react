@@ -21,7 +21,7 @@ const SIZE_CONFIG = {
         containerGap: 16,
         textGap: 8,
         borderRadius: 'var(--corner-radius-default-medium)',
-        iconBorderRadius: 'var(--corner-radius-thematic-medium)',
+        iconBorderRadius: 'var(--corner-radius-control-medium)',
         nonContainer: { height: 64, paddingLeft: 4, paddingRight: 0, paddingVertical: 12 }
     },
     default: {
@@ -34,7 +34,7 @@ const SIZE_CONFIG = {
         containerGap: 12,
         textGap: 8,
         borderRadius: 'var(--corner-radius-default-medium)',
-        iconBorderRadius: 'var(--corner-radius-thematic-small)',
+        iconBorderRadius: 'var(--corner-radius-control-small)',
         nonContainer: { height: 48, paddingLeft: 4, paddingRight: 0, paddingVertical: 8 }
     }
 } as const;

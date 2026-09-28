@@ -281,9 +281,9 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({
         : 'none';
 
     // Radius based on size
-    const radius = size === 'large' ? 'var(--corner-radius-thematic-large, 8px)'
-        : size === 'small' ? 'var(--corner-radius-thematic-small, 4px)'
-            : 'var(--corner-radius-thematic-medium, 6px)';
+    const radius = size === 'large' ? 'var(--corner-radius-control-large, 8px)'
+        : size === 'small' ? 'var(--corner-radius-control-small, 4px)'
+            : 'var(--corner-radius-control-medium, 6px)';
 
     // HANDLERS
 

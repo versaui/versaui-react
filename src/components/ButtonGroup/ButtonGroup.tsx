@@ -43,10 +43,10 @@ export interface ButtonGroupProps {
     disabled?: boolean;
 }
 
-// Border radius based on size (using thematic tokens)
+// Border radius based on size (using control tokens)
 const BORDER_RADIUS: Record<ButtonGroupSize, string> = {
-    default: 'var(--corner-radius-thematic-medium)',
-    small: 'var(--corner-radius-thematic-small)',
+    default: 'var(--corner-radius-control-medium)',
+    small: 'var(--corner-radius-control-small)',
 };
 
 export function ButtonGroup({
@@ -129,10 +129,12 @@ export function ButtonGroup({
             aria-label={ariaLabel}
             onKeyDown={handleKeyDown}
         >
-            {items.map((item) => {
+            {items.map((item, index) => {
                 const isActive = activeId === item.id;
                 const isIconOnly = !item.label;
                 const isItemDisabled = disabled || item.disabled;
+                const isFirst = index === 0;
+                const isLast = index === items.length - 1;
 
                 return (
                     <ButtonGroupItem
@@ -145,6 +147,8 @@ export function ButtonGroup({
                         trailingIcon={!isIconOnly ? item.trailingIcon : undefined}
                         onClick={() => handleItemClick(item.id)}
                         ariaLabel={item.ariaLabel}
+                        isFirst={isFirst}
+                        isLast={isLast}
                     >
                         {item.label}
                     </ButtonGroupItem>

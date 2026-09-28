@@ -77,92 +77,174 @@
     --color-state-warning-subtle: var(--color-primitive-vibrant-amber-400);
     --color-state-warning-subtler: var(--color-primitive-vibrant-amber-100);
     --color-state-warning-subtlest: var(--color-primitive-vibrant-amber-50);
-    --color-thematic-fill-error-bottom: var(--color-state-error-stronger);
-    --color-thematic-fill-error-top: var(--color-state-error-medium);
-    --color-thematic-fill-neutral-bottom: var(--color-neutral-surface-strong);
-    --color-thematic-fill-neutral-top: var(--color-neutral-surface-medium);
-    --color-thematic-fill-primary-bottom: var(--color-brand-primary-stronger);
-    --color-thematic-fill-primary-top: var(--color-brand-primary-medium);
-    --color-thematic-fill-secondary-bottom: var(--color-brand-secondary-stronger);
-    --color-thematic-fill-secondary-top: var(--color-brand-secondary-medium);
-    --color-thematic-fill-success-bottom: var(--color-state-success-stronger);
-    --color-thematic-fill-success-top: var(--color-state-success-medium);
-    --color-thematic-outline-error-bottom: var(--color-state-error-stronger);
-    --color-thematic-outline-error-bottom-subtle: var(--color-state-error-subtler);
-    --color-thematic-outline-error-middle: var(--color-state-error-strong);
-    --color-thematic-outline-error-middle-subtle: var(--color-state-error-subtler);
-    --color-thematic-outline-error-top: var(--color-state-error-subtle);
-    --color-thematic-outline-error-top-subtle: var(--color-state-error-subtlest);
-    --color-thematic-outline-neutral-bottom: var(--color-neutral-outline-medium);
-    --color-thematic-outline-neutral-middle: var(--color-neutral-outline-medium);
-    --color-thematic-outline-neutral-top: var(--color-neutral-outline-subtle);
-    --color-thematic-outline-primary-bottom: var(--color-brand-primary-stronger);
-    --color-thematic-outline-primary-bottom-subtle: var(--color-brand-primary-subtler);
-    --color-thematic-outline-primary-middle: var(--color-brand-primary-strong);
-    --color-thematic-outline-primary-middle-subtle: var(--color-brand-primary-subtler);
-    --color-thematic-outline-primary-top: var(--color-brand-primary-subtle);
-    --color-thematic-outline-primary-top-subtle: var(--color-brand-primary-subtlest);
-    --color-thematic-outline-secondary-bottom-subtle: var(--color-brand-secondary-subtler);
-    --color-thematic-outline-secondary-middle-subtle: var(--color-brand-secondary-subtler);
-    --color-thematic-outline-secondary-top-subtle: var(--color-brand-secondary-subtlest);
-    --color-thematic-outline-success-bottom-subtle: var(--color-state-success-subtler);
-    --color-thematic-outline-success-middle-subtle: var(--color-state-success-subtler);
-    --color-thematic-outline-success-top-subtle: var(--color-state-success-subtlest);
-    --color-thematic-outline-surface-bottom: var(--color-neutral-outline-subtle);
-    --color-thematic-outline-surface-middle: var(--color-neutral-outline-subtle);
-    --color-thematic-outline-surface-top: var(--color-neutral-outline-subtle);
-    --color-thematic-outline-warning-bottom-subtle: var(--color-state-warning-subtler);
-    --color-thematic-outline-warning-middle-subtle: var(--color-state-warning-subtler);
-    --color-thematic-outline-warning-top-subtle: var(--color-state-warning-subtlest);
+    /* Expressive Colors (v2.5) */
+    --color-expressive-fill-error-bottom-strong: var(--color-state-error-stronger);
+    --color-expressive-fill-error-bottom-subtle: var(--color-state-error-subtler);
+    --color-expressive-fill-error-top-strong: var(--color-state-error-medium);
+    --color-expressive-fill-error-top-subtle: var(--color-state-error-subtlest);
+    --color-expressive-fill-neutral-bottom: var(--color-neutral-surface-strong);
+    --color-expressive-fill-neutral-top: var(--color-neutral-surface-medium);
+    --color-expressive-fill-primary-bottom-strong: var(--color-brand-primary-stronger);
+    --color-expressive-fill-primary-bottom-subtle: var(--color-brand-primary-subtler);
+    --color-expressive-fill-primary-top-strong: var(--color-brand-primary-medium);
+    --color-expressive-fill-primary-top-subtle: var(--color-brand-primary-subtlest);
+    --color-expressive-fill-secondary-bottom-strong: var(--color-brand-secondary-stronger);
+    --color-expressive-fill-secondary-bottom-subtle: var(--color-brand-secondary-subtler);
+    --color-expressive-fill-secondary-top-strong: var(--color-brand-secondary-medium);
+    --color-expressive-fill-secondary-top-subtle: var(--color-brand-secondary-subtlest);
+    --color-expressive-fill-success-bottom-strong: var(--color-state-success-stronger);
+    --color-expressive-fill-success-bottom-subtle: var(--color-state-success-subtler);
+    --color-expressive-fill-success-top-strong: var(--color-state-success-medium);
+    --color-expressive-fill-success-top-subtle: var(--color-state-success-subtlest);
+    --color-expressive-fill-warning-bottom-subtle: var(--color-state-warning-subtler);
+    --color-expressive-fill-warning-top-subtle: var(--color-state-warning-subtlest);
+    --color-expressive-outline-error-bottom-strong: var(--color-state-error-stronger);
+    --color-expressive-outline-error-bottom-subtle: var(--color-state-error-subtler);
+    --color-expressive-outline-error-middle-strong: var(--color-state-error-strong);
+    --color-expressive-outline-error-middle-subtle: var(--color-state-error-subtler);
+    --color-expressive-outline-error-top-strong: var(--color-state-error-subtle);
+    --color-expressive-outline-error-top-subtle: var(--color-state-error-subtlest);
+    --color-expressive-outline-neutral-bottom: var(--color-neutral-outline-medium);
+    --color-expressive-outline-neutral-middle: var(--color-neutral-outline-medium);
+    --color-expressive-outline-neutral-top: var(--color-neutral-outline-subtle);
+    --color-expressive-outline-primary-bottom-strong: var(--color-brand-primary-stronger);
+    --color-expressive-outline-primary-bottom-subtle: var(--color-brand-primary-subtler);
+    --color-expressive-outline-primary-middle-strong: var(--color-brand-primary-strong);
+    --color-expressive-outline-primary-middle-subtle: var(--color-brand-primary-subtler);
+    --color-expressive-outline-primary-top-strong: var(--color-brand-primary-subtle);
+    --color-expressive-outline-primary-top-subtle: var(--color-brand-primary-subtlest);
+    --color-expressive-outline-secondary-bottom-subtle: var(--color-brand-secondary-subtler);
+    --color-expressive-outline-secondary-middle-subtle: var(--color-brand-secondary-subtler);
+    --color-expressive-outline-secondary-top-subtle: var(--color-brand-secondary-subtlest);
+    --color-expressive-outline-success-bottom-subtle: var(--color-state-success-subtler);
+    --color-expressive-outline-success-middle-subtle: var(--color-state-success-subtler);
+    --color-expressive-outline-success-top-subtle: var(--color-state-success-subtlest);
+    --color-neutral-outline-material-bottom: var(--color-neutral-outline-subtle);
+    --color-neutral-outline-material-middle: var(--color-neutral-outline-subtle);
+    --color-neutral-outline-material-top: var(--color-neutral-outline-subtle);
+    --color-expressive-outline-warning-bottom-subtle: var(--color-state-warning-subtler);
+    --color-expressive-outline-warning-middle-subtle: var(--color-state-warning-subtler);
+    --color-expressive-outline-warning-top-subtle: var(--color-state-warning-subtlest);
+
+    /* Backward compatibility aliases - Thematic Colors */
+    --color-thematic-fill-error-bottom: var(--color-expressive-fill-error-bottom-strong);
+    --color-thematic-fill-error-top: var(--color-expressive-fill-error-top-strong);
+    --color-thematic-fill-error-bottom-subtle: var(--color-expressive-fill-error-bottom-subtle);
+    --color-thematic-fill-error-top-subtle: var(--color-expressive-fill-error-top-subtle);
+    --color-thematic-fill-neutral-bottom: var(--color-expressive-fill-neutral-bottom);
+    --color-thematic-fill-neutral-top: var(--color-expressive-fill-neutral-top);
+    --color-thematic-fill-primary-bottom: var(--color-expressive-fill-primary-bottom-strong);
+    --color-thematic-fill-primary-top: var(--color-expressive-fill-primary-top-strong);
+    --color-thematic-fill-primary-bottom-subtle: var(--color-expressive-fill-primary-bottom-subtle);
+    --color-thematic-fill-primary-top-subtle: var(--color-expressive-fill-primary-top-subtle);
+    --color-thematic-fill-secondary-bottom: var(--color-expressive-fill-secondary-bottom-strong);
+    --color-thematic-fill-secondary-top: var(--color-expressive-fill-secondary-top-strong);
+    --color-thematic-fill-secondary-bottom-subtle: var(--color-expressive-fill-secondary-bottom-subtle);
+    --color-thematic-fill-secondary-top-subtle: var(--color-expressive-fill-secondary-top-subtle);
+    --color-thematic-fill-success-bottom: var(--color-expressive-fill-success-bottom-strong);
+    --color-thematic-fill-success-top: var(--color-expressive-fill-success-top-strong);
+    --color-thematic-fill-success-bottom-subtle: var(--color-expressive-fill-success-bottom-subtle);
+    --color-thematic-fill-success-top-subtle: var(--color-expressive-fill-success-top-subtle);
+    --color-thematic-fill-warning-bottom-subtle: var(--color-expressive-fill-warning-bottom-subtle);
+    --color-thematic-fill-warning-top-subtle: var(--color-expressive-fill-warning-top-subtle);
+    --color-thematic-outline-error-bottom: var(--color-expressive-outline-error-bottom-strong);
+    --color-thematic-outline-error-middle: var(--color-expressive-outline-error-middle-strong);
+    --color-thematic-outline-error-top: var(--color-expressive-outline-error-top-strong);
+    --color-thematic-outline-error-bottom-subtle: var(--color-expressive-outline-error-bottom-subtle);
+    --color-thematic-outline-error-middle-subtle: var(--color-expressive-outline-error-middle-subtle);
+    --color-thematic-outline-error-top-subtle: var(--color-expressive-outline-error-top-subtle);
+    --color-thematic-outline-neutral-bottom: var(--color-expressive-outline-neutral-bottom);
+    --color-thematic-outline-neutral-middle: var(--color-expressive-outline-neutral-middle);
+    --color-thematic-outline-neutral-top: var(--color-expressive-outline-neutral-top);
+    --color-thematic-outline-primary-bottom: var(--color-expressive-outline-primary-bottom-strong);
+    --color-thematic-outline-primary-middle: var(--color-expressive-outline-primary-middle-strong);
+    --color-thematic-outline-primary-top: var(--color-expressive-outline-primary-top-strong);
+    --color-thematic-outline-primary-bottom-subtle: var(--color-expressive-outline-primary-bottom-subtle);
+    --color-thematic-outline-primary-middle-subtle: var(--color-expressive-outline-primary-middle-subtle);
+    --color-thematic-outline-primary-top-subtle: var(--color-expressive-outline-primary-top-subtle);
+    --color-thematic-outline-secondary-bottom-subtle: var(--color-expressive-outline-secondary-bottom-subtle);
+    --color-thematic-outline-secondary-middle-subtle: var(--color-expressive-outline-secondary-middle-subtle);
+    --color-thematic-outline-secondary-top-subtle: var(--color-expressive-outline-secondary-top-subtle);
+    --color-thematic-outline-success-bottom-subtle: var(--color-expressive-outline-success-bottom-subtle);
+    --color-thematic-outline-success-middle-subtle: var(--color-expressive-outline-success-middle-subtle);
+    --color-thematic-outline-success-top-subtle: var(--color-expressive-outline-success-top-subtle);
+    --color-thematic-outline-warning-bottom-subtle: var(--color-expressive-outline-warning-bottom-subtle);
+    --color-thematic-outline-warning-middle-subtle: var(--color-expressive-outline-warning-middle-subtle);
+    --color-thematic-outline-warning-top-subtle: var(--color-expressive-outline-warning-top-subtle);
     --corner-radius-default-fully-rounded: 200px;
     --corner-radius-default-large: 12px;
     --corner-radius-default-medium: 8px;
     --corner-radius-default-small: 4px;
     --corner-radius-default-x-large: 16px;
     --corner-radius-default-x-small: 2px;
-    --corner-radius-thematic-large: 8px;
-    --corner-radius-thematic-medium: 6px;
-    --corner-radius-thematic-small: 4px;
-    --corner-radius-thematic-x-large: 10px;
-    --corner-radius-thematic-x-small: 2px;
-    --corner-radius-thematic-xx-large: 12px;
+    --corner-radius-control-large: 8px;
+    --corner-radius-control-medium: 6px;
+    --corner-radius-control-small: 4px;
+    --corner-radius-control-x-large: 10px;
+    --corner-radius-control-x-small: 2px;
+    --corner-radius-control-xx-large: 12px;
+    /* Backward compatibility aliases */
+    --corner-radius-thematic-large: var(--corner-radius-control-large);
+    --corner-radius-thematic-medium: var(--corner-radius-control-medium);
+    --corner-radius-thematic-small: var(--corner-radius-control-small);
+    --corner-radius-thematic-x-large: var(--corner-radius-control-x-large);
+    --corner-radius-thematic-x-small: var(--corner-radius-control-x-small);
+    --corner-radius-thematic-xx-large: var(--corner-radius-control-xx-large);
     --effects-divider-intrusion: #00000014;
-    --effects-elevation-background-blur-large: 0px;
-    --effects-elevation-background-blur-medium: 0px;
-    --effects-elevation-background-blur-small: 0px;
-    --effects-elevation-drop-shadow-blur-large-1: 12px;
-    --effects-elevation-drop-shadow-blur-large-2: 16px;
-    --effects-elevation-drop-shadow-blur-large-3: 20px;
-    --effects-elevation-drop-shadow-blur-medium-1: 8px;
-    --effects-elevation-drop-shadow-blur-medium-2: 12px;
-    --effects-elevation-drop-shadow-blur-medium-3: 16px;
-    --effects-elevation-drop-shadow-blur-small-1: 2px;
-    --effects-elevation-drop-shadow-blur-small-2: 4px;
-    --effects-elevation-drop-shadow-blur-small-3: 6px;
-    --effects-elevation-drop-shadow-color-large-1: #00000014;
-    --effects-elevation-drop-shadow-color-large-2: #0000001F;
-    --effects-elevation-drop-shadow-color-large-3: #00000029;
-    --effects-elevation-drop-shadow-color-medium-1: #0000000A;
-    --effects-elevation-drop-shadow-color-medium-2: #00000014;
-    --effects-elevation-drop-shadow-color-medium-3: #0000001F;
-    --effects-elevation-drop-shadow-color-small-1: #0000000A;
-    --effects-elevation-drop-shadow-color-small-2: #00000014;
-    --effects-elevation-drop-shadow-color-small-3: #0000001F;
-    --effects-elevation-drop-shadow-y-large-1: 3px;
-    --effects-elevation-drop-shadow-y-large-2: 4px;
-    --effects-elevation-drop-shadow-y-large-3: 5px;
-    --effects-elevation-drop-shadow-y-medium-1: 2px;
-    --effects-elevation-drop-shadow-y-medium-2: 3px;
-    --effects-elevation-drop-shadow-y-medium-3: 4px;
-    --effects-elevation-drop-shadow-y-small-1: 1px;
-    --effects-elevation-drop-shadow-y-small-2: 2px;
-    --effects-elevation-drop-shadow-y-small-3: 3px;
+    --effects-material-elevation-background-blur-large: 0px;
+    --effects-material-elevation-background-blur-medium: 0px;
+    --effects-material-elevation-background-blur-small: 0px;
+    --effects-material-elevation-background-blur-x-small: 0px;
+    --effects-material-elevation-drop-shadow-blur-large-1: 16px;
+    --effects-material-elevation-drop-shadow-blur-large-2: 24px;
+    --effects-material-elevation-drop-shadow-blur-large-3: 32px;
+    --effects-material-elevation-drop-shadow-blur-medium-1: 8px;
+    --effects-material-elevation-drop-shadow-blur-medium-2: 16px;
+    --effects-material-elevation-drop-shadow-blur-medium-3: 20px;
+    --effects-material-elevation-drop-shadow-blur-small-1: 4px;
+    --effects-material-elevation-drop-shadow-blur-small-2: 8px;
+    --effects-material-elevation-drop-shadow-blur-small-3: 12px;
+    --effects-material-elevation-drop-shadow-color-large-1: #00000014;
+    --effects-material-elevation-drop-shadow-color-large-2: #0000001F;
+    --effects-material-elevation-drop-shadow-color-large-3: #00000029;
+    --effects-material-elevation-drop-shadow-color-medium-1: #0000000A;
+    --effects-material-elevation-drop-shadow-color-medium-2: #00000014;
+    --effects-material-elevation-drop-shadow-color-medium-3: #0000001F;
+    --effects-material-elevation-drop-shadow-color-small-1: #0000000A;
+    --effects-material-elevation-drop-shadow-color-small-2: #00000014;
+    --effects-material-elevation-drop-shadow-color-small-3: #0000001F;
+    --effects-material-elevation-drop-shadow-y-large-1: 3px;
+    --effects-material-elevation-drop-shadow-y-large-2: 4px;
+    --effects-material-elevation-drop-shadow-y-large-3: 5px;
+    --effects-material-elevation-drop-shadow-y-medium-1: 2px;
+    --effects-material-elevation-drop-shadow-y-medium-2: 3px;
+    --effects-material-elevation-drop-shadow-y-medium-3: 4px;
+    --effects-material-elevation-drop-shadow-y-small-1: 1px;
+    --effects-material-elevation-drop-shadow-y-small-2: 2px;
+    --effects-material-elevation-drop-shadow-y-small-3: 3px;
+    --effects-material-elevation-outer-rim-color-large: #00000000;
+    --effects-material-elevation-outer-rim-color-medium: #00000000;
+    --effects-material-elevation-outer-rim-color-small: #00000000;
+    --effects-material-elevation-outer-rim-spread-large: 0px;
+    --effects-material-elevation-outer-rim-spread-medium: 0px;
+    --effects-material-elevation-outer-rim-spread-small: 0px;
+    --effects-material-inset-inner-shadow-blur-large: 0px;
+    --effects-material-inset-inner-shadow-blur-medium: 0px;
+    --effects-material-inset-inner-shadow-blur-small: 0px;
+    --effects-material-inset-inner-shadow-color-bottom: #00000000;
+    --effects-material-inset-inner-shadow-color-top: #FFFFFF00;
+    --effects-material-inset-inner-shadow-spread-large: 0px;
+    --effects-material-inset-inner-shadow-spread-medium: 0px;
+    --effects-material-inset-inner-shadow-spread-small: 0px;
+    --effects-material-inset-inner-shadow-y-bottom-large: 0px;
+    --effects-material-inset-inner-shadow-y-bottom-medium: 0px;
+    --effects-material-inset-inner-shadow-y-bottom-small: 0px;
+    --effects-material-inset-inner-shadow-y-top-large: 0px;
+    --effects-material-inset-inner-shadow-y-top-medium: 0px;
+    --effects-material-inset-inner-shadow-y-top-small: 0px;
     --effects-glow-inner-shadow-blur-large: 0px;
     --effects-glow-inner-shadow-blur-medium: 0px;
     --effects-glow-inner-shadow-blur-small: 0px;
-    --effects-illustration-background-blur-large: 0px;
-    --effects-illustration-background-blur-medium: 0px;
-    --effects-illustration-background-blur-small: 0px;
     --effects-illustration-inner-shadow-blur-large: 4px;
     --effects-illustration-inner-shadow-blur-medium: 2px;
     --effects-illustration-inner-shadow-blur-small: 1px;
@@ -174,19 +256,19 @@
     --effects-illustration-inner-shadow-y-top-large: 4px;
     --effects-illustration-inner-shadow-y-top-medium: 3px;
     --effects-illustration-inner-shadow-y-top-small: 2px;
-    --effects-inset-inner-shadow-blur-large: 1px;
-    --effects-inset-inner-shadow-blur-medium: 1px;
-    --effects-inset-inner-shadow-blur-small: 1px;
-    --effects-inset-inner-shadow-color-bottom: #00000052;
-    --effects-inset-inner-shadow-color-bottom-subtle: #0000001A;
-    --effects-inset-inner-shadow-color-top: #FFFFFF66;
-    --effects-inset-inner-shadow-color-top-subtle: #FFFFFFF5;
-    --effects-inset-inner-shadow-y-bottom-large: -2.5px;
-    --effects-inset-inner-shadow-y-bottom-medium: -2px;
-    --effects-inset-inner-shadow-y-bottom-small: -1.5px;
-    --effects-inset-inner-shadow-y-top-large: 2.5px;
-    --effects-inset-inner-shadow-y-top-medium: 2px;
-    --effects-inset-inner-shadow-y-top-small: 1.5px;
+    --effects-expressive-inset-inner-shadow-blur-large: 1px;
+    --effects-expressive-inset-inner-shadow-blur-medium: 1px;
+    --effects-expressive-inset-inner-shadow-blur-small: 1px;
+    --effects-expressive-inset-inner-shadow-color-bottom: #00000052;
+    --effects-expressive-inset-inner-shadow-color-bottom-subtle: #0000001A;
+    --effects-expressive-inset-inner-shadow-color-top: #FFFFFF66;
+    --effects-expressive-inset-inner-shadow-color-top-subtle: #FFFFFFF5;
+    --effects-expressive-inset-inner-shadow-y-bottom-large: -2.5px;
+    --effects-expressive-inset-inner-shadow-y-bottom-medium: -2px;
+    --effects-expressive-inset-inner-shadow-y-bottom-small: -1.5px;
+    --effects-expressive-inset-inner-shadow-y-top-large: 2.5px;
+    --effects-expressive-inset-inner-shadow-y-top-medium: 2px;
+    --effects-expressive-inset-inner-shadow-y-top-small: 1.5px;
     --iconography-icon-size-large: 24px;
     --iconography-icon-size-medium: 20px;
     --iconography-icon-size-small: 16px;
@@ -289,47 +371,109 @@
     --typography-font-weight-title: 600;
 
     /* Composites */
-    --elevation-small-blur: var(--effects-elevation-background-blur-small);
+    --elevation-small-blur: var(--effects-material-elevation-background-blur-small);
     --elevation-small-0-shadow: none;
-    --elevation-small-1-shadow: 0 var(--effects-elevation-drop-shadow-y-small-1) var(--effects-elevation-drop-shadow-blur-small-1) 0 var(--effects-elevation-drop-shadow-color-small-1);
-    --elevation-small-2-shadow: 0 var(--effects-elevation-drop-shadow-y-small-2) var(--effects-elevation-drop-shadow-blur-small-2) 0 var(--effects-elevation-drop-shadow-color-small-2);
-    --elevation-small-3-shadow: 0 var(--effects-elevation-drop-shadow-y-small-3) var(--effects-elevation-drop-shadow-blur-small-3) 0 var(--effects-elevation-drop-shadow-color-small-3);
-    --elevation-medium-blur: var(--effects-elevation-background-blur-medium);
+    --elevation-small-1-shadow: 0 var(--effects-material-elevation-drop-shadow-y-small-1) var(--effects-material-elevation-drop-shadow-blur-small-1) 0 var(--effects-material-elevation-drop-shadow-color-small-1);
+    --elevation-small-2-shadow: 0 var(--effects-material-elevation-drop-shadow-y-small-2) var(--effects-material-elevation-drop-shadow-blur-small-2) 0 var(--effects-material-elevation-drop-shadow-color-small-2);
+    --elevation-small-3-shadow: 0 var(--effects-material-elevation-drop-shadow-y-small-3) var(--effects-material-elevation-drop-shadow-blur-small-3) 0 var(--effects-material-elevation-drop-shadow-color-small-3);
+    --elevation-medium-blur: var(--effects-material-elevation-background-blur-medium);
     --elevation-medium-0-shadow: none;
-    --elevation-medium-1-shadow: 0 var(--effects-elevation-drop-shadow-y-medium-1) var(--effects-elevation-drop-shadow-blur-medium-1) 0 var(--effects-elevation-drop-shadow-color-medium-1);
-    --elevation-medium-2-shadow: 0 var(--effects-elevation-drop-shadow-y-medium-2) var(--effects-elevation-drop-shadow-blur-medium-2) 0 var(--effects-elevation-drop-shadow-color-medium-2);
-    --elevation-medium-3-shadow: 0 var(--effects-elevation-drop-shadow-y-medium-3) var(--effects-elevation-drop-shadow-blur-medium-3) 0 var(--effects-elevation-drop-shadow-color-medium-3);
-    --elevation-large-blur: var(--effects-elevation-background-blur-large);
+    --elevation-medium-1-shadow: 0 var(--effects-material-elevation-drop-shadow-y-medium-1) var(--effects-material-elevation-drop-shadow-blur-medium-1) 0 var(--effects-material-elevation-drop-shadow-color-medium-1);
+    --elevation-medium-2-shadow: 0 var(--effects-material-elevation-drop-shadow-y-medium-2) var(--effects-material-elevation-drop-shadow-blur-medium-2) 0 var(--effects-material-elevation-drop-shadow-color-medium-2);
+    --elevation-medium-3-shadow: 0 var(--effects-material-elevation-drop-shadow-y-medium-3) var(--effects-material-elevation-drop-shadow-blur-medium-3) 0 var(--effects-material-elevation-drop-shadow-color-medium-3);
+    --elevation-large-blur: var(--effects-material-elevation-background-blur-large);
     --elevation-large-0-shadow: none;
-    --elevation-large-1-shadow: 0 var(--effects-elevation-drop-shadow-y-large-1) var(--effects-elevation-drop-shadow-blur-large-1) 0 var(--effects-elevation-drop-shadow-color-large-1);
-    --elevation-large-2-shadow: 0 var(--effects-elevation-drop-shadow-y-large-2) var(--effects-elevation-drop-shadow-blur-large-2) 0 var(--effects-elevation-drop-shadow-color-large-2);
-    --elevation-large-3-shadow: 0 var(--effects-elevation-drop-shadow-y-large-3) var(--effects-elevation-drop-shadow-blur-large-3) 0 var(--effects-elevation-drop-shadow-color-large-3);
-    --inset-default-small: inset 0 var(--effects-inset-inner-shadow-y-top-small) var(--effects-inset-inner-shadow-blur-small) 0 var(--effects-inset-inner-shadow-color-top), inset 0 var(--effects-inset-inner-shadow-y-bottom-small) var(--effects-inset-inner-shadow-blur-small) 0 var(--effects-inset-inner-shadow-color-bottom), var(--elevation-small-1-shadow);
-    --inset-subtle-small: inset 0 var(--effects-inset-inner-shadow-y-top-small) var(--effects-inset-inner-shadow-blur-small) 0 var(--effects-inset-inner-shadow-color-top-subtle), inset 0 var(--effects-inset-inner-shadow-y-bottom-small) var(--effects-inset-inner-shadow-blur-small) 0 var(--effects-inset-inner-shadow-color-bottom-subtle), var(--elevation-small-1-shadow);
-    --inset-default-medium: inset 0 var(--effects-inset-inner-shadow-y-top-medium) var(--effects-inset-inner-shadow-blur-medium) 0 var(--effects-inset-inner-shadow-color-top), inset 0 var(--effects-inset-inner-shadow-y-bottom-medium) var(--effects-inset-inner-shadow-blur-medium) 0 var(--effects-inset-inner-shadow-color-bottom), var(--elevation-medium-1-shadow);
-    --inset-subtle-medium: inset 0 var(--effects-inset-inner-shadow-y-top-medium) var(--effects-inset-inner-shadow-blur-medium) 0 var(--effects-inset-inner-shadow-color-top-subtle), inset 0 var(--effects-inset-inner-shadow-y-bottom-medium) var(--effects-inset-inner-shadow-blur-medium) 0 var(--effects-inset-inner-shadow-color-bottom-subtle), var(--elevation-medium-1-shadow);
-    --inset-default-large: inset 0 var(--effects-inset-inner-shadow-y-top-large) var(--effects-inset-inner-shadow-blur-large) 0 var(--effects-inset-inner-shadow-color-top), inset 0 var(--effects-inset-inner-shadow-y-bottom-large) var(--effects-inset-inner-shadow-blur-large) 0 var(--effects-inset-inner-shadow-color-bottom), var(--elevation-medium-1-shadow);
-    --inset-subtle-large: inset 0 var(--effects-inset-inner-shadow-y-top-large) var(--effects-inset-inner-shadow-blur-large) 0 var(--effects-inset-inner-shadow-color-top-subtle), inset 0 var(--effects-inset-inner-shadow-y-bottom-large) var(--effects-inset-inner-shadow-blur-large) 0 var(--effects-inset-inner-shadow-color-bottom-subtle), var(--elevation-medium-1-shadow);
+    --elevation-large-1-shadow: 0 var(--effects-material-elevation-drop-shadow-y-large-1) var(--effects-material-elevation-drop-shadow-blur-large-1) 0 var(--effects-material-elevation-drop-shadow-color-large-1);
+    --elevation-large-2-shadow: 0 var(--effects-material-elevation-drop-shadow-y-large-2) var(--effects-material-elevation-drop-shadow-blur-large-2) 0 var(--effects-material-elevation-drop-shadow-color-large-2);
+    --elevation-large-3-shadow: 0 var(--effects-material-elevation-drop-shadow-y-large-3) var(--effects-material-elevation-drop-shadow-blur-large-3) 0 var(--effects-material-elevation-drop-shadow-color-large-3);
+    --material-rim-small-shadow: 0 0 0 var(--effects-material-elevation-outer-rim-spread-small) var(--effects-material-elevation-outer-rim-color-small);
+    --material-rim-medium-shadow: 0 0 0 var(--effects-material-elevation-outer-rim-spread-medium) var(--effects-material-elevation-outer-rim-color-medium);
+    --material-rim-large-shadow: 0 0 0 var(--effects-material-elevation-outer-rim-spread-large) var(--effects-material-elevation-outer-rim-color-large);
+    --expressive-inset-strong-small: inset 0 var(--effects-expressive-inset-inner-shadow-y-top-small) var(--effects-expressive-inset-inner-shadow-blur-small) 0 var(--effects-expressive-inset-inner-shadow-color-top), inset 0 var(--effects-expressive-inset-inner-shadow-y-bottom-small) var(--effects-expressive-inset-inner-shadow-blur-small) 0 var(--effects-expressive-inset-inner-shadow-color-bottom), var(--elevation-small-1-shadow);
+    --expressive-inset-strong-medium: inset 0 var(--effects-expressive-inset-inner-shadow-y-top-medium) var(--effects-expressive-inset-inner-shadow-blur-medium) 0 var(--effects-expressive-inset-inner-shadow-color-top), inset 0 var(--effects-expressive-inset-inner-shadow-y-bottom-medium) var(--effects-expressive-inset-inner-shadow-blur-medium) 0 var(--effects-expressive-inset-inner-shadow-color-bottom), var(--elevation-medium-1-shadow);
+    --expressive-inset-strong-large: inset 0 var(--effects-expressive-inset-inner-shadow-y-top-large) var(--effects-expressive-inset-inner-shadow-blur-large) 0 var(--effects-expressive-inset-inner-shadow-color-top), inset 0 var(--effects-expressive-inset-inner-shadow-y-bottom-large) var(--effects-expressive-inset-inner-shadow-blur-large) 0 var(--effects-expressive-inset-inner-shadow-color-bottom), var(--elevation-medium-1-shadow);
+    --expressive-inset-subtle-small: inset 0 var(--effects-expressive-inset-inner-shadow-y-top-small) var(--effects-expressive-inset-inner-shadow-blur-small) 0 var(--effects-expressive-inset-inner-shadow-color-top-subtle), inset 0 var(--effects-expressive-inset-inner-shadow-y-bottom-small) var(--effects-expressive-inset-inner-shadow-blur-small) 0 var(--effects-expressive-inset-inner-shadow-color-bottom-subtle), var(--elevation-small-1-shadow);
+    --expressive-inset-subtle-medium: inset 0 var(--effects-expressive-inset-inner-shadow-y-top-medium) var(--effects-expressive-inset-inner-shadow-blur-medium) 0 var(--effects-expressive-inset-inner-shadow-color-top-subtle), inset 0 var(--effects-expressive-inset-inner-shadow-y-bottom-medium) var(--effects-expressive-inset-inner-shadow-blur-medium) 0 var(--effects-expressive-inset-inner-shadow-color-bottom-subtle), var(--elevation-medium-1-shadow);
+    --expressive-inset-subtle-large: inset 0 var(--effects-expressive-inset-inner-shadow-y-top-large) var(--effects-expressive-inset-inner-shadow-blur-large) 0 var(--effects-expressive-inset-inner-shadow-color-top-subtle), inset 0 var(--effects-expressive-inset-inner-shadow-y-bottom-large) var(--effects-expressive-inset-inner-shadow-blur-large) 0 var(--effects-expressive-inset-inner-shadow-color-bottom-subtle), var(--elevation-medium-1-shadow);
+    /* Backward compatibility aliases - Inset Composites */
+    --inset-default-small: var(--expressive-inset-strong-small);
+    --inset-default-medium: var(--expressive-inset-strong-medium);
+    --inset-default-large: var(--expressive-inset-strong-large);
+    --inset-subtle-small: var(--expressive-inset-subtle-small);
+    --inset-subtle-medium: var(--expressive-inset-subtle-medium);
+    --inset-subtle-large: var(--expressive-inset-subtle-large);
+    --thematic-inset-default-small: var(--expressive-inset-strong-small);
+    --thematic-inset-default-medium: var(--expressive-inset-strong-medium);
+    --thematic-inset-default-large: var(--expressive-inset-strong-large);
+    --thematic-inset-subtle-small: var(--expressive-inset-subtle-small);
+    --thematic-inset-subtle-medium: var(--expressive-inset-subtle-medium);
+    --thematic-inset-subtle-large: var(--expressive-inset-subtle-large);
+    --expressive-inset-default-small: var(--expressive-inset-strong-small);
+    --expressive-inset-default-medium: var(--expressive-inset-strong-medium);
+    --expressive-inset-default-large: var(--expressive-inset-strong-large);
     --glow-small: inset 0 0 var(--effects-glow-inner-shadow-blur-small) 0 rgba(255, 255, 255, 0.8);
     --glow-medium: inset 0 0 var(--effects-glow-inner-shadow-blur-medium) 0 rgba(255, 255, 255, 0.8);
     --glow-large: inset 0 0 var(--effects-glow-inner-shadow-blur-large) 0 rgba(255, 255, 255, 0.8);
     --illustration-inset-small-shadow: inset 0 var(--effects-illustration-inner-shadow-y-top-small) var(--effects-illustration-inner-shadow-blur-small) 0 var(--effects-illustration-inner-shadow-color-top), inset 0 var(--effects-illustration-inner-shadow-y-bottom-small) var(--effects-illustration-inner-shadow-blur-small) 0 var(--effects-illustration-inner-shadow-color-bottom);
     --illustration-inset-medium-shadow: inset 0 var(--effects-illustration-inner-shadow-y-top-medium) var(--effects-illustration-inner-shadow-blur-medium) 0 var(--effects-illustration-inner-shadow-color-top), inset 0 var(--effects-illustration-inner-shadow-y-bottom-medium) var(--effects-illustration-inner-shadow-blur-medium) 0 var(--effects-illustration-inner-shadow-color-bottom);
     --illustration-inset-large-shadow: inset 0 var(--effects-illustration-inner-shadow-y-top-large) var(--effects-illustration-inner-shadow-blur-large) 0 var(--effects-illustration-inner-shadow-color-top), inset 0 var(--effects-illustration-inner-shadow-y-bottom-large) var(--effects-illustration-inner-shadow-blur-large) 0 var(--effects-illustration-inner-shadow-color-bottom);
-    --gradient-thematic-fill-primary: linear-gradient(180deg, var(--color-thematic-fill-primary-top) 0%, var(--color-thematic-fill-primary-bottom) 100%);
-    --gradient-thematic-fill-secondary: linear-gradient(180deg, var(--color-thematic-fill-secondary-top) 0%, var(--color-thematic-fill-secondary-bottom) 100%);
-    --gradient-thematic-fill-error: linear-gradient(180deg, var(--color-thematic-fill-error-top) 0%, var(--color-thematic-fill-error-bottom) 100%);
-    --gradient-thematic-fill-success: linear-gradient(180deg, var(--color-thematic-fill-success-top) 0%, var(--color-thematic-fill-success-bottom) 100%);
-    --gradient-thematic-fill-neutral: linear-gradient(180deg, var(--color-thematic-fill-neutral-top) 0%, var(--color-thematic-fill-neutral-bottom) 100%);
-    --gradient-thematic-outline-primary: linear-gradient(180deg, var(--color-thematic-outline-primary-top) 0%, var(--color-thematic-outline-primary-middle) 50%, var(--color-thematic-outline-primary-bottom) 100%);
-    --gradient-thematic-outline-primary-subtle: linear-gradient(180deg, var(--color-thematic-outline-primary-top-subtle) 0%, var(--color-thematic-outline-primary-middle-subtle) 50%, var(--color-thematic-outline-primary-bottom-subtle) 100%);
-    --gradient-thematic-outline-secondary-subtle: linear-gradient(180deg, var(--color-thematic-outline-secondary-top-subtle) 0%, var(--color-thematic-outline-secondary-middle-subtle) 50%, var(--color-thematic-outline-secondary-bottom-subtle) 100%);
-    --gradient-thematic-outline-error: linear-gradient(180deg, var(--color-thematic-outline-error-top) 0%, var(--color-thematic-outline-error-middle) 50%, var(--color-thematic-outline-error-bottom) 100%);
-    --gradient-thematic-outline-error-subtle: linear-gradient(180deg, var(--color-thematic-outline-error-top-subtle) 0%, var(--color-thematic-outline-error-middle-subtle) 50%, var(--color-thematic-outline-error-bottom-subtle) 100%);
-    --gradient-thematic-outline-success-subtle: linear-gradient(180deg, var(--color-thematic-outline-success-top-subtle) 0%, var(--color-thematic-outline-success-middle-subtle) 50%, var(--color-thematic-outline-success-bottom-subtle) 100%);
-    --gradient-thematic-outline-warning-subtle: linear-gradient(180deg, var(--color-thematic-outline-warning-top-subtle) 0%, var(--color-thematic-outline-warning-middle-subtle) 50%, var(--color-thematic-outline-warning-bottom-subtle) 100%);
-    --gradient-thematic-outline-neutral: linear-gradient(180deg, var(--color-thematic-outline-neutral-top) 0%, var(--color-thematic-outline-neutral-middle) 50%, var(--color-thematic-outline-neutral-bottom) 100%);
-    --gradient-thematic-outline-surface: linear-gradient(180deg, var(--color-thematic-outline-surface-top) 0%, var(--color-thematic-outline-surface-middle) 50%, var(--color-thematic-outline-surface-bottom) 100%);
+    --illustration-small-shadow: var(--illustration-inset-small-shadow), var(--elevation-small-1-shadow);
+    --illustration-medium-shadow: var(--illustration-inset-medium-shadow), var(--elevation-medium-1-shadow);
+    --illustration-large-shadow: var(--illustration-inset-large-shadow), var(--elevation-medium-1-shadow);
+    --material-inset-small-shadow: inset 0 var(--effects-material-inset-inner-shadow-y-top-small) var(--effects-material-inset-inner-shadow-blur-small) var(--effects-material-inset-inner-shadow-spread-small) var(--effects-material-inset-inner-shadow-color-top), inset 0 var(--effects-material-inset-inner-shadow-y-bottom-small) var(--effects-material-inset-inner-shadow-blur-small) var(--effects-material-inset-inner-shadow-spread-small) var(--effects-material-inset-inner-shadow-color-bottom);
+    --material-inset-medium-shadow: inset 0 var(--effects-material-inset-inner-shadow-y-top-medium) var(--effects-material-inset-inner-shadow-blur-medium) var(--effects-material-inset-inner-shadow-spread-medium) var(--effects-material-inset-inner-shadow-color-top), inset 0 var(--effects-material-inset-inner-shadow-y-bottom-medium) var(--effects-material-inset-inner-shadow-blur-medium) var(--effects-material-inset-inner-shadow-spread-medium) var(--effects-material-inset-inner-shadow-color-bottom);
+    --material-inset-large-shadow: inset 0 var(--effects-material-inset-inner-shadow-y-top-large) var(--effects-material-inset-inner-shadow-blur-large) var(--effects-material-inset-inner-shadow-spread-large) var(--effects-material-inset-inner-shadow-color-top), inset 0 var(--effects-material-inset-inner-shadow-y-bottom-large) var(--effects-material-inset-inner-shadow-blur-large) var(--effects-material-inset-inner-shadow-spread-large) var(--effects-material-inset-inner-shadow-color-bottom);
+    --material-small-shadow: var(--material-inset-small-shadow), var(--material-rim-small-shadow), var(--elevation-small-1-shadow);
+    --material-medium-shadow: var(--material-inset-medium-shadow), var(--material-rim-medium-shadow), var(--elevation-medium-1-shadow);
+    --material-large-shadow: var(--material-inset-large-shadow), var(--material-rim-large-shadow), var(--elevation-large-1-shadow);
+    /* Expressive Gradients (v2.5) */
+    --gradient-expressive-fill-primary-strong: linear-gradient(180deg, var(--color-expressive-fill-primary-top-strong) 0%, var(--color-expressive-fill-primary-bottom-strong) 100%);
+    --gradient-expressive-fill-secondary-strong: linear-gradient(180deg, var(--color-expressive-fill-secondary-top-strong) 0%, var(--color-expressive-fill-secondary-bottom-strong) 100%);
+    --gradient-expressive-fill-error-strong: linear-gradient(180deg, var(--color-expressive-fill-error-top-strong) 0%, var(--color-expressive-fill-error-bottom-strong) 100%);
+    --gradient-expressive-fill-success-strong: linear-gradient(180deg, var(--color-expressive-fill-success-top-strong) 0%, var(--color-expressive-fill-success-bottom-strong) 100%);
+    --gradient-expressive-fill-neutral: linear-gradient(180deg, var(--color-expressive-fill-neutral-top) 0%, var(--color-expressive-fill-neutral-bottom) 100%);
+    --gradient-expressive-fill-primary-subtle: linear-gradient(180deg, var(--color-expressive-fill-primary-top-subtle) 0%, var(--color-expressive-fill-primary-bottom-subtle) 100%);
+    --gradient-expressive-fill-secondary-subtle: linear-gradient(180deg, var(--color-expressive-fill-secondary-top-subtle) 0%, var(--color-expressive-fill-secondary-bottom-subtle) 100%);
+    --gradient-expressive-fill-error-subtle: linear-gradient(180deg, var(--color-expressive-fill-error-top-subtle) 0%, var(--color-expressive-fill-error-bottom-subtle) 100%);
+    --gradient-expressive-fill-success-subtle: linear-gradient(180deg, var(--color-expressive-fill-success-top-subtle) 0%, var(--color-expressive-fill-success-bottom-subtle) 100%);
+    --gradient-expressive-fill-warning-subtle: linear-gradient(180deg, var(--color-expressive-fill-warning-top-subtle) 0%, var(--color-expressive-fill-warning-bottom-subtle) 100%);
+    --gradient-expressive-outline-primary-strong: linear-gradient(180deg, var(--color-expressive-outline-primary-top-strong) 0%, var(--color-expressive-outline-primary-middle-strong) 50%, var(--color-expressive-outline-primary-bottom-strong) 100%);
+    --gradient-expressive-outline-primary-subtle: linear-gradient(180deg, var(--color-expressive-outline-primary-top-subtle) 0%, var(--color-expressive-outline-primary-middle-subtle) 50%, var(--color-expressive-outline-primary-bottom-subtle) 100%);
+    --gradient-expressive-outline-secondary-subtle: linear-gradient(180deg, var(--color-expressive-outline-secondary-top-subtle) 0%, var(--color-expressive-outline-secondary-middle-subtle) 50%, var(--color-expressive-outline-secondary-bottom-subtle) 100%);
+    --gradient-expressive-outline-error-strong: linear-gradient(180deg, var(--color-expressive-outline-error-top-strong) 0%, var(--color-expressive-outline-error-middle-strong) 50%, var(--color-expressive-outline-error-bottom-strong) 100%);
+    --gradient-expressive-outline-error-subtle: linear-gradient(180deg, var(--color-expressive-outline-error-top-subtle) 0%, var(--color-expressive-outline-error-middle-subtle) 50%, var(--color-expressive-outline-error-bottom-subtle) 100%);
+    --gradient-expressive-outline-success-subtle: linear-gradient(180deg, var(--color-expressive-outline-success-top-subtle) 0%, var(--color-expressive-outline-success-middle-subtle) 50%, var(--color-expressive-outline-success-bottom-subtle) 100%);
+    --gradient-expressive-outline-warning-subtle: linear-gradient(180deg, var(--color-expressive-outline-warning-top-subtle) 0%, var(--color-expressive-outline-warning-middle-subtle) 50%, var(--color-expressive-outline-warning-bottom-subtle) 100%);
+    --gradient-expressive-outline-neutral: linear-gradient(180deg, var(--color-expressive-outline-neutral-top) 0%, var(--color-expressive-outline-neutral-middle) 50%, var(--color-expressive-outline-neutral-bottom) 100%);
+
+    /* Backward compatibility aliases - Thematic Gradients */
+    --gradient-thematic-fill-primary: var(--gradient-expressive-fill-primary-strong);
+    --gradient-thematic-fill-secondary: var(--gradient-expressive-fill-secondary-strong);
+    --gradient-thematic-fill-error: var(--gradient-expressive-fill-error-strong);
+    --gradient-thematic-fill-success: var(--gradient-expressive-fill-success-strong);
+    --gradient-thematic-fill-neutral: var(--gradient-expressive-fill-neutral);
+    --gradient-thematic-fill-primary-subtle: var(--gradient-expressive-fill-primary-subtle);
+    --gradient-thematic-fill-secondary-subtle: var(--gradient-expressive-fill-secondary-subtle);
+    --gradient-thematic-fill-error-subtle: var(--gradient-expressive-fill-error-subtle);
+    --gradient-thematic-fill-success-subtle: var(--gradient-expressive-fill-success-subtle);
+    --gradient-thematic-fill-warning-subtle: var(--gradient-expressive-fill-warning-subtle);
+    --gradient-thematic-outline-primary: var(--gradient-expressive-outline-primary-strong);
+    --gradient-thematic-outline-primary-subtle: var(--gradient-expressive-outline-primary-subtle);
+    --gradient-thematic-outline-secondary-subtle: var(--gradient-expressive-outline-secondary-subtle);
+    --gradient-thematic-outline-error: var(--gradient-expressive-outline-error-strong);
+    --gradient-thematic-outline-error-subtle: var(--gradient-expressive-outline-error-subtle);
+    --gradient-thematic-outline-success-subtle: var(--gradient-expressive-outline-success-subtle);
+    --gradient-thematic-outline-warning-subtle: var(--gradient-expressive-outline-warning-subtle);
+    --gradient-thematic-outline-neutral: var(--gradient-expressive-outline-neutral);
+
+    /* Direct aliases without -strong suffix for convenience */
+    --gradient-expressive-fill-primary: var(--gradient-expressive-fill-primary-strong);
+    --gradient-expressive-fill-secondary: var(--gradient-expressive-fill-secondary-strong);
+    --gradient-expressive-fill-error: var(--gradient-expressive-fill-error-strong);
+    --gradient-expressive-fill-success: var(--gradient-expressive-fill-success-strong);
+    --gradient-expressive-outline-primary: var(--gradient-expressive-outline-primary-strong);
+    --gradient-expressive-outline-error: var(--gradient-expressive-outline-error-strong);
+    --gradient-material-outline: linear-gradient(180deg, var(--color-neutral-outline-material-top) 0%, var(--color-neutral-outline-material-middle) 5%, var(--color-neutral-outline-material-middle) 95%, var(--color-neutral-outline-material-bottom) 100%);
     --focus-ring-primary: 0 0 0 2px var(--color-brand-primary-subtler);
     --focus-ring-error: 0 0 0 2px var(--color-state-error-subtler);
     --focus-ring-success: 0 0 0 2px var(--color-state-success-subtler);
@@ -601,7 +745,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: var(--gradient-thematic-outline-surface);
+  background: var(--gradient-material-outline);
   -webkit-mask: linear-gradient(white 0 0) content-box, linear-gradient(white 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -627,53 +771,53 @@
 
 /* Elevation shadows: Small size */
 .material-small.material-elevation-flat {
-  box-shadow: var(--elevation-small-0-shadow);
+  box-shadow: var(--material-rim-small-shadow);
 }
 
 .material-small.material-elevation-default {
-  box-shadow: var(--elevation-small-1-shadow);
+  box-shadow: var(--material-inset-small-shadow), var(--material-rim-small-shadow), var(--elevation-small-1-shadow);
 }
 
 .material-small.material-elevation-elevated {
-  box-shadow: var(--elevation-small-2-shadow);
+  box-shadow: var(--material-inset-small-shadow), var(--material-rim-small-shadow), var(--elevation-small-2-shadow);
 }
 
 .material-small.material-elevation-floating {
-  box-shadow: var(--elevation-small-3-shadow);
+  box-shadow: var(--material-rim-small-shadow), var(--elevation-small-3-shadow);
 }
 
 /* Elevation shadows: Medium size */
 .material-medium.material-elevation-flat {
-  box-shadow: var(--elevation-medium-0-shadow);
+  box-shadow: var(--material-rim-medium-shadow);
 }
 
 .material-medium.material-elevation-default {
-  box-shadow: var(--elevation-medium-1-shadow);
+  box-shadow: var(--material-inset-medium-shadow), var(--material-rim-medium-shadow), var(--elevation-medium-1-shadow);
 }
 
 .material-medium.material-elevation-elevated {
-  box-shadow: var(--elevation-medium-2-shadow);
+  box-shadow: var(--material-inset-medium-shadow), var(--material-rim-medium-shadow), var(--elevation-medium-2-shadow);
 }
 
 .material-medium.material-elevation-floating {
-  box-shadow: var(--elevation-medium-3-shadow);
+  box-shadow: var(--material-rim-medium-shadow), var(--elevation-medium-3-shadow);
 }
 
 /* Elevation shadows: Large size */
 .material-large.material-elevation-flat {
-  box-shadow: var(--elevation-large-0-shadow);
+  box-shadow: var(--material-rim-large-shadow);
 }
 
 .material-large.material-elevation-default {
-  box-shadow: var(--elevation-large-1-shadow);
+  box-shadow: var(--material-inset-large-shadow), var(--material-rim-large-shadow), var(--elevation-large-1-shadow);
 }
 
 .material-large.material-elevation-elevated {
-  box-shadow: var(--elevation-large-2-shadow);
+  box-shadow: var(--material-inset-large-shadow), var(--material-rim-large-shadow), var(--elevation-large-2-shadow);
 }
 
 .material-large.material-elevation-floating {
-  box-shadow: var(--elevation-large-3-shadow);
+  box-shadow: var(--material-rim-large-shadow), var(--elevation-large-3-shadow);
 }
 
 /* ===== Chart Component Keyframes ===== */
@@ -683,8 +827,28 @@
     opacity: 0;
     transform: scale(0.97) translateY(4px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
+  }
+}
+
+/* ===== Reaction Component Keyframes ===== */
+
+@keyframes reactionEmojiPop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  60% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

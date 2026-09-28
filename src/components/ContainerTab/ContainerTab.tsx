@@ -12,11 +12,13 @@ export const CONTAINER_TAB_ORIENTATIONS = ['horizontal', 'vertical'] as const;
 export const CONTAINER_TAB_STATES = ['default', 'hovered', 'selected', 'disabled'] as const;
 export const CONTAINER_TAB_SIZES = ['default', 'small'] as const;
 export const CONTAINER_TAB_VARIANTS = ['primary', 'neutral'] as const;
+export const CONTAINER_TAB_STYLES = ['simple', 'expressive'] as const;
 
 export type ContainerTabOrientation = (typeof CONTAINER_TAB_ORIENTATIONS)[number];
 export type ContainerTabState = (typeof CONTAINER_TAB_STATES)[number];
 export type ContainerTabSize = (typeof CONTAINER_TAB_SIZES)[number];
 export type ContainerTabVariant = (typeof CONTAINER_TAB_VARIANTS)[number];
+export type ContainerTabStyle = (typeof CONTAINER_TAB_STYLES)[number] | 'Simple' | 'Expressive';
 
 // Container variants
 const containerVariants = cva(
@@ -32,8 +34,8 @@ const containerVariants = cva(
                 vertical: 'justify-start w-full',
             },
             size: {
-                default: 'gap-[var(--spacing-2)] py-2 px-3 rounded-[var(--corner-radius-thematic-medium)]',
-                small: 'gap-[2px] p-2 h-8 rounded-[var(--corner-radius-thematic-small)]',
+                default: 'gap-[var(--spacing-2)] py-2 px-3 rounded-[var(--corner-radius-control-medium)]',
+                small: 'gap-[2px] p-2 h-8 rounded-[var(--corner-radius-control-small)]',
             },
             state: {
                 default: 'bg-transparent border border-transparent',
@@ -45,28 +47,58 @@ const containerVariants = cva(
                 primary: '',
                 neutral: '',
             },
+            style: {
+                simple: '',
+                expressive: '',
+            },
             disabled: {
                 true: 'cursor-not-allowed',
                 false: 'cursor-pointer',
             },
         },
         compoundVariants: [
-            // Primary selected
+            // Primary selected + expressive
             {
                 state: 'selected',
                 variant: 'primary',
+                style: 'expressive',
                 className: [
                     'border-transparent',
                     'shadow-[var(--inset-subtle-small)]',
-                    '[background:linear-gradient(var(--color-brand-primary-subtlest),var(--color-brand-primary-subtlest))_padding-box,var(--gradient-thematic-outline-primary-subtle)_border-box]',
+                    '[background:var(--gradient-thematic-fill-primary-subtle)_padding-box,var(--gradient-thematic-outline-primary-subtle)_border-box]',
                     '[background-origin:border-box]',
                     '[background-clip:padding-box,border-box]',
                 ],
             },
-            // Neutral selected — container becomes transparent; Material wrapper handles surface
+            // Primary selected + simple
+            {
+                state: 'selected',
+                variant: 'primary',
+                style: 'simple',
+                className: [
+                    'bg-[var(--color-brand-primary-subtlest)]',
+                    'border-[var(--color-brand-primary-subtler)]',
+                    'shadow-none',
+                ],
+            },
+            // Neutral selected + expressive
             {
                 state: 'selected',
                 variant: 'neutral',
+                style: 'expressive',
+                className: [
+                    'border-transparent',
+                    'shadow-[var(--inset-subtle-small)]',
+                    '[background:var(--gradient-thematic-fill-neutral)_padding-box,var(--gradient-thematic-outline-neutral)_border-box]',
+                    '[background-origin:border-box]',
+                    '[background-clip:padding-box,border-box]',
+                ],
+            },
+            // Neutral selected + simple — container becomes transparent; Material wrapper handles surface
+            {
+                state: 'selected',
+                variant: 'neutral',
+                style: 'simple',
                 className: [
                     'bg-transparent',
                     'border-transparent',
@@ -79,6 +111,7 @@ const containerVariants = cva(
             size: 'default',
             state: 'default',
             variant: 'primary',
+            style: 'simple',
             disabled: false,
         },
     }
@@ -166,13 +199,15 @@ const labelVariants = cva(
     }
 );
 
-export interface ContainerTabProps extends VariantProps<typeof containerVariants> {
+export interface ContainerTabProps extends Omit<VariantProps<typeof containerVariants>, 'style'> {
     /** Orientation of the tab */
     orientation?: ContainerTabOrientation;
     /** Size of the tab */
     size?: ContainerTabSize;
-    /** Style variant of the tab */
+    /** Variant of the tab */
     variant?: ContainerTabVariant;
+    /** Visual style treatment: 'simple' | 'expressive' */
+    style?: ContainerTabStyle;
     /** Visual state (for demo purposes) */
     state?: ContainerTabState;
     /** Whether to show the leading icon */
@@ -199,6 +234,7 @@ export function ContainerTab({
     orientation = 'horizontal',
     size = 'default',
     variant = 'primary',
+    style = 'simple',
     state = 'default',
     showIcon = true,
     leadingIcon,
@@ -212,6 +248,8 @@ export function ContainerTab({
 }: ContainerTabProps) {
     const [isHovered, setIsHovered] = useState(false);
     const { isFocusVisible, focusProps } = useFocusRing();
+
+    const normalizedStyle = (style ? String(style).toLowerCase() : 'simple') as 'simple' | 'expressive';
 
     // Derive actual state from props
     const actualState: ContainerTabState = disabled ? 'disabled' : (selected ? 'selected' : state);
@@ -254,9 +292,19 @@ export function ContainerTab({
         return 'default';
     };
 
+    // Icon weight based on style prop (duotone for expressive, regular for simple)
+    const iconWeight: 'regular' | 'duotone' = normalizedStyle === 'expressive' ? 'duotone' : 'regular';
+
     // Icon size based on size prop
     const iconSize = size === 'small' ? 16 : 20;
-    const icon = leadingIcon || <CirclesThreeIcon size={iconSize} weight="regular" />;
+    const icon = leadingIcon
+        ? (React.isValidElement(leadingIcon)
+            ? React.cloneElement(leadingIcon as React.ReactElement<any>, {
+                  size: (leadingIcon.props as any)?.size ?? iconSize,
+                  weight: iconWeight,
+              })
+            : leadingIcon)
+        : <CirclesThreeIcon size={iconSize} weight={iconWeight} />;
 
     // Text class based on size prop
     const textClass = size === 'small' ? 'text-baseline-h9' : 'text-baseline-h8';
@@ -264,13 +312,13 @@ export function ContainerTab({
     // Label height based on size
     const labelHeight = size === 'small' ? 'h-4' : 'h-6';
 
-    // Determine if we need a Material wrapper (neutral + selected)
-    const useNeutralMaterial = variant === 'neutral' && visualState === 'selected';
+    // Determine if we need a Material wrapper (neutral + simple + selected)
+    const useNeutralMaterial = variant === 'neutral' && normalizedStyle === 'simple' && visualState === 'selected';
 
     // Map ContainerTab size to Material props
     const materialCornerRadius = size === 'small'
-        ? 'var(--corner-radius-thematic-small)'
-        : 'var(--corner-radius-thematic-medium)';
+        ? 'var(--corner-radius-control-small)'
+        : 'var(--corner-radius-control-medium)';
 
     const tabContent = (
         <div
@@ -278,7 +326,7 @@ export function ContainerTab({
             tabIndex={isDisabled ? -1 : 0}
             aria-selected={actualState === 'selected'}
             aria-disabled={isDisabled}
-            className={clsx(containerVariants({ orientation, size, state: visualState, variant, disabled: isDisabled }), className)}
+            className={clsx(containerVariants({ orientation, size, state: visualState, variant, style: normalizedStyle, disabled: isDisabled }), className)}
             style={{
                 outline: isFocusVisible && !isDisabled ? '2px solid var(--color-brand-primary-subtler)' : 'none',
                 outlineOffset: '0px',
@@ -317,7 +365,7 @@ export function ContainerTab({
             <Material
                 size="small"
                 elevation="default"
-                cornerRadiusType="thematic"
+                cornerRadiusType="control"
                 cornerRadius={materialCornerRadius}
             >
                 {tabContent}

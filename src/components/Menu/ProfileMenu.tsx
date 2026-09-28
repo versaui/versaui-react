@@ -197,7 +197,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({
                 {showUpgrade && (
                     <Button
                         variant="primary"
-                        buttonStyle="thematic"
+                        buttonStyle="expressive"
                         size="small"
                         leadingIcon={upgradeIcon}
                         onClick={upgradeOnClick}

@@ -4,10 +4,11 @@ import React, { type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
 import { LightningIcon } from '@phosphor-icons/react';
-import { Button } from '../Button/Button';
+import { Button, type ButtonStyle } from '../Button/Button';
 import { CircularProgressBar } from '../ProgressBar/CircularProgressBar';
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 import { useSideNavigationContextSafe } from './SideNavigationContext';
+import type { SideNavigationItemStyle } from './SideNavigationItem';
 
 // Types
 export type FeatureCardWidget = 'upgrade' | 'usage' | 'custom';
@@ -17,6 +18,8 @@ export interface SideNavigationFeatureCardProps {
     widget?: FeatureCardWidget;
     /** Whether sidebar is collapsed (can be provided via context) */
     collapsed?: boolean;
+    /** Visual style treatment: 'simple' | 'expressive' (defaults to 'simple' or context) */
+    style?: SideNavigationItemStyle;
     /** Upgrade widget text */
     upgradeText?: string;
     /** Button text */
@@ -82,13 +85,20 @@ interface UpgradeButtonProps {
     onClick?: () => void;
     fullWidth?: boolean;
     iconOnly?: boolean;
+    buttonStyle?: ButtonStyle;
 }
 
-const UpgradeButton: React.FC<UpgradeButtonProps> = ({ text, onClick, fullWidth, iconOnly }) => (
+const UpgradeButton: React.FC<UpgradeButtonProps> = ({
+    text,
+    onClick,
+    fullWidth,
+    iconOnly,
+    buttonStyle = 'filled',
+}) => (
     <Button
         variant="primary"
         size="small"
-        buttonStyle="thematic"
+        buttonStyle={buttonStyle}
         leadingIcon={<LightningIcon size={16} weight="regular" />}
         onClick={onClick}
         aria-label={text}
@@ -102,6 +112,7 @@ const UpgradeButton: React.FC<UpgradeButtonProps> = ({ text, onClick, fullWidth,
 export const SideNavigationFeatureCard: React.FC<SideNavigationFeatureCardProps> = ({
     widget = 'upgrade',
     collapsed: collapsedProp,
+    style: styleProp,
     upgradeText = 'Upgrade to Business Plan for more users and projects.',
     buttonText = 'Upgrade Plan',
     onButtonClick,
@@ -111,9 +122,12 @@ export const SideNavigationFeatureCard: React.FC<SideNavigationFeatureCardProps>
     customContent,
     className = '',
 }) => {
-    // Get collapsed from context if not provided as prop
+    // Get collapsed and style from context if not provided as prop
     const context = useSideNavigationContextSafe();
     const collapsed = collapsedProp ?? context?.collapsed ?? false;
+    const resolvedStyle = (styleProp ?? context?.style ?? 'simple').toLowerCase();
+    const isExpressive = resolvedStyle === 'expressive';
+    const buttonStyle: ButtonStyle = isExpressive ? 'expressive' : 'filled';
 
     // Custom widget - render custom content
     if (widget === 'custom' && customContent) {
@@ -128,7 +142,7 @@ export const SideNavigationFeatureCard: React.FC<SideNavigationFeatureCardProps>
     if (widget === 'upgrade' && collapsed) {
         return (
             <div className={cn(collapsedUpgradeContainerStyles({ collapsed }), className)}>
-                <UpgradeButton text={buttonText} onClick={onButtonClick} iconOnly fullWidth />
+                <UpgradeButton text={buttonText} onClick={onButtonClick} iconOnly fullWidth buttonStyle={buttonStyle} />
             </div>
         );
     }
@@ -138,7 +152,7 @@ export const SideNavigationFeatureCard: React.FC<SideNavigationFeatureCardProps>
         return (
             <div className={cn(featureCardStyles({ collapsed, widget }), className)}>
                 <CircularProgressBar size="small" value={usagePercentage} showLabel />
-                <UpgradeButton text={buttonText} onClick={onButtonClick} iconOnly fullWidth />
+                <UpgradeButton text={buttonText} onClick={onButtonClick} iconOnly fullWidth buttonStyle={buttonStyle} />
             </div>
         );
     }
@@ -148,7 +162,7 @@ export const SideNavigationFeatureCard: React.FC<SideNavigationFeatureCardProps>
         return (
             <div className={cn(featureCardStyles({ collapsed, widget }), className)}>
                 <div className="text-b5 text-[var(--color-neutral-text-strong)]">{upgradeText}</div>
-                <UpgradeButton text={buttonText} onClick={onButtonClick} fullWidth />
+                <UpgradeButton text={buttonText} onClick={onButtonClick} fullWidth buttonStyle={buttonStyle} />
             </div>
         );
     }
@@ -163,7 +177,7 @@ export const SideNavigationFeatureCard: React.FC<SideNavigationFeatureCardProps>
                     <div className="text-b6 text-[var(--color-neutral-text-medium)]">{usageStatus}</div>
                 </div>
             </div>
-            <UpgradeButton text={buttonText} onClick={onButtonClick} fullWidth />
+            <UpgradeButton text={buttonText} onClick={onButtonClick} fullWidth buttonStyle={buttonStyle} />
         </div>
     );
 };

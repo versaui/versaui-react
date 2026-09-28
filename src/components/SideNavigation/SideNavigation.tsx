@@ -16,7 +16,7 @@ import { SidebarSimpleIcon } from '@phosphor-icons/react';
 import { Logo, type LogoBrand } from '../Logo/Logo';
 import { Button, type ButtonStyle } from '../Button/Button';
 import { Divider } from '../Divider/Divider';
-import { SideNavigationItem, type SideNavigationItemVariant } from './SideNavigationItem';
+import { SideNavigationItem, type SideNavigationItemVariant, type SideNavigationItemStyle } from './SideNavigationItem';
 import { SubNavigationItem } from './SubNavigationItem';
 import { SideNavigationFeatureCard, type FeatureCardWidget } from './SideNavigationFeatureCard';
 import { SideNavigationProvider, type SideNavigationContextValue } from './SideNavigationContext';
@@ -46,8 +46,10 @@ export interface SideNavigationProps {
     selectedId?: string;
     /** Callback when a navigation item is selected */
     onSelect?: (id: string) => void;
-    /** Style variant for navigation items */
+    /** Color scheme variant for navigation items */
     variant?: SideNavigationItemVariant;
+    /** Visual style treatment for navigation items: 'simple' | 'expressive' */
+    style?: SideNavigationItemStyle;
     /** Menu sections (data-driven API) */
     sections?: MenuSection[];
     /** Bottom navigation items (data-driven API) */
@@ -150,6 +152,7 @@ interface SideNavigationInternalContextValue {
     collapsedLogo: ReactNode;
     logoBrand?: LogoBrand;
     collapseButtonProps?: { buttonStyle?: ButtonStyle; variant?: 'primary' | 'neutral' | 'error'; size?: 'small' | 'medium' | 'large' };
+    style?: SideNavigationItemStyle;
 }
 
 const SideNavigationInternalContext = createContext<SideNavigationInternalContextValue | null>(null);
@@ -163,7 +166,7 @@ function useSideNavigationInternal() {
 // Compound Sub-components
 /** Logo slot - renders appropriate logo based on collapsed state */
 function SideNavigationLogo({ children }: { children?: ReactNode }) {
-    const { collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand, collapseButtonProps } =
+    const { collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand, collapseButtonProps, style } =
         useSideNavigationInternal();
 
     if (!showLogo && !children) return null;
@@ -172,13 +175,16 @@ function SideNavigationLogo({ children }: { children?: ReactNode }) {
         return <>{children}</>;
     }
 
+    const normalizedStyle = (style ? String(style).toLowerCase() : 'simple') as 'simple' | 'expressive';
+    const collapseBtnStyle: ButtonStyle = normalizedStyle === 'expressive' ? 'expressive' : 'outline';
+
     if (collapsed) {
         if (shouldShowCollapseButton && headerHovered) {
             return (
                 <Button
                     variant="neutral"
                     size="small"
-                    buttonStyle="thematic"
+                    buttonStyle={collapseBtnStyle}
                     leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
                     onClick={handleCollapseToggle}
                     aria-label="Expand sidebar"
@@ -199,7 +205,7 @@ function SideNavigationSection({ label, children }: { label?: string; children: 
     const { collapsed } = useSideNavigationInternal();
 
     return (
-        <div className="flex flex-col items-stretch gap-1 shrink-0 self-stretch">
+        <div className="flex flex-col items-stretch gap-0.5 shrink-0 self-stretch">
             {label && !collapsed && (
                 <div className="px-2 py-1">
                     <span
@@ -235,7 +241,8 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
     onCollapsedChange,
     selectedId = '',
     onSelect,
-    variant = 'primary',
+    variant = 'neutral',
+    style = 'simple',
     sections = [],
     bottomItems = [],
     showLogo = true,
@@ -269,6 +276,9 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
         const shouldShowCollapseButton = showCollapseButton && !isMobile;
         const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
         const [headerHovered, setHeaderHovered] = useState(false);
+
+        const normalizedStyle = (style ? String(style).toLowerCase() : 'simple') as 'simple' | 'expressive';
+        const collapseBtnStyle: ButtonStyle = normalizedStyle === 'expressive' ? 'expressive' : 'outline';
 
         const toggleExpanded = useCallback((id: string) => {
             setExpandedItems((prev) => {
@@ -331,8 +341,9 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                 expandedItems,
                 onNavigate: handleSelect,
                 onToggleExpand: toggleExpanded,
+                style,
             }),
-            [collapsed, selectedId, expandedItems, handleSelect, toggleExpanded]
+            [collapsed, selectedId, expandedItems, handleSelect, toggleExpanded, style]
         );
 
         // Internal context for compound components
@@ -348,8 +359,9 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                 collapsedLogo,
                 logoBrand,
                 collapseButtonProps,
+                style,
             }),
-            [collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand, collapseButtonProps]
+            [collapsed, headerHovered, handleCollapseToggle, showLogo, shouldShowCollapseButton, logo, collapsedLogo, logoBrand, collapseButtonProps, style]
         );
 
         // Render a menu item (data-driven API)
@@ -366,6 +378,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                             key={item.id}
                             type="nested"
                             variant={variant}
+                            style={style}
                             label={item.label}
                             leadingIcon={item.icon}
                             badge={item.badge}
@@ -377,6 +390,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                 <SubNavigationItem
                                     key={child.id}
                                     variant={variant}
+                                    style={style}
                                     label={child.label}
                                     badge={child.badge}
                                     selected={selectedId === child.id}
@@ -392,6 +406,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                         key={item.id}
                         type="default"
                         variant={variant}
+                        style={style}
                         label={item.label}
                         leadingIcon={item.icon}
                         badge={item.badge}
@@ -401,7 +416,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                     />
                 );
             },
-            [collapsed, expandedItems, selectedId, handleSelect, toggleExpanded, variant]
+            [collapsed, expandedItems, selectedId, handleSelect, toggleExpanded, variant, style]
         );
 
         // Determine if using compound component pattern (children) or data-driven props
@@ -440,7 +455,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                         <Button
                                                             variant="neutral"
                                                             size="small"
-                                                            buttonStyle="thematic"
+                                                            buttonStyle={collapseBtnStyle}
                                                             leadingIcon={
                                                                 <SidebarSimpleIcon size={16} weight="regular" />
                                                             }
@@ -458,7 +473,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                 <Button
                                                     variant="neutral"
                                                     size="small"
-                                                    buttonStyle="thematic"
+                                                    buttonStyle={collapseBtnStyle}
                                                     leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
                                                     onClick={handleCollapseToggle}
                                                     aria-label="Expand sidebar"
@@ -484,7 +499,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                                     <Button
                                                         variant="neutral"
                                                         size="small"
-                                                        buttonStyle="thematic"
+                                                        buttonStyle={collapseBtnStyle}
                                                         leadingIcon={<SidebarSimpleIcon size={16} weight="regular" />}
                                                         onClick={handleCollapseToggle}
                                                         aria-label="Collapse sidebar"
@@ -500,7 +515,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                         {sections.map((section, i) => (
                                             <React.Fragment key={i}>
                                                 {i > 0 && <Divider orientation="horizontal" style="intrusion" />}
-                                                <div className="flex flex-col items-stretch gap-1 shrink-0 self-stretch">
+                                                <div className="flex flex-col items-stretch gap-0.5 shrink-0 self-stretch">
                                                     {section.header && !collapsed && (
                                                         <div className="px-2 py-1">
                                                             <span
@@ -534,6 +549,7 @@ export const SideNavigation: React.FC<SideNavigationProps> & {
                                         <SideNavigationFeatureCard
                                             widget={featureCardWidget}
                                             collapsed={collapsed}
+                                            style={style}
                                             upgradeText={featureCardContent}
                                             buttonText={featureCardButtonText}
                                             onButtonClick={onFeatureCardClick}

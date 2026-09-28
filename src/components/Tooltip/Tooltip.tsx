@@ -147,7 +147,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
             style={{
                 background: 'var(--color-neutral-surface-subtlest)',
                 border: '1px solid var(--color-neutral-outline-subtle)',
-                borderRadius: 'var(--corner-radius-thematic-medium)',
+                borderRadius: 'var(--corner-radius-control-medium)',
                 padding: '0 8px',
                 minWidth: 'auto',
                 height: 24,

@@ -50,7 +50,7 @@ const SIZE_CONFIG: Record<DropdownInputSize, {
         inputPx: 4,
         prefixedLabelInputPaddingLeft: 8,
         gap: 8,
-        cornerRadius: 'var(--corner-radius-thematic-large, 8px)',
+        cornerRadius: 'var(--corner-radius-control-large, 8px)',
         cornerRadiusValue: 8,
         valueTypescale: 'b3',
         floatLabelTypescale: 'b5',
@@ -72,7 +72,7 @@ const SIZE_CONFIG: Record<DropdownInputSize, {
         inputPx: 0,
         prefixedLabelInputPaddingLeft: 8,
         gap: 8,
-        cornerRadius: 'var(--corner-radius-thematic-medium, 6px)',
+        cornerRadius: 'var(--corner-radius-control-medium, 6px)',
         cornerRadiusValue: 6,
         valueTypescale: 'b4',
         floatLabelTypescale: 'b6',
@@ -91,7 +91,7 @@ const SIZE_CONFIG: Record<DropdownInputSize, {
         inputPx: 4,
         prefixedLabelInputPaddingLeft: 6,
         gap: 8,
-        cornerRadius: 'var(--corner-radius-thematic-small, 4px)',
+        cornerRadius: 'var(--corner-radius-control-small, 4px)',
         cornerRadiusValue: 4,
         valueTypescale: 'b5',
         floatLabelTypescale: 'b5',
@@ -154,9 +154,9 @@ const dropdownInputVariants = cva(
     {
         variants: {
             size: {
-                small: 'h-8 px-2 gap-2 rounded-[var(--corner-radius-thematic-small,4px)] min-w-[120px]',
-                default: 'h-10 px-[10px] gap-2 rounded-[var(--corner-radius-thematic-medium,6px)] min-w-[160px]',
-                large: 'h-12 px-3 gap-2 rounded-[var(--corner-radius-thematic-large,8px)] min-w-[200px]',
+                small: 'h-8 px-2 gap-2 rounded-[var(--corner-radius-control-small,4px)] min-w-[120px]',
+                default: 'h-10 px-[10px] gap-2 rounded-[var(--corner-radius-control-medium,6px)] min-w-[160px]',
+                large: 'h-12 px-3 gap-2 rounded-[var(--corner-radius-control-large,8px)] min-w-[200px]',
             },
             type: {
                 default: '',

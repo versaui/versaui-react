@@ -21,7 +21,7 @@ const containerVariants = cva(
         variants: {
             avatarOnly: {
                 true: 'gap-2 p-0 rounded-full',
-                false: 'gap-1.5 py-1 pl-1 pr-1.5 rounded-[var(--corner-radius-thematic-small)]',
+                false: 'gap-1.5 py-1 pl-1 pr-1.5 rounded-[var(--corner-radius-control-small)]',
             },
             state: {
                 default: '',

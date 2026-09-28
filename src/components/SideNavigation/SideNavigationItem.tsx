@@ -12,8 +12,13 @@ import { Material } from '../Material/Material';
 import { useSideNavigationContextSafe } from './SideNavigationContext';
 
 // Types
-export type SideNavigationItemType = 'default' | 'nested' | 'icon-only';
-export type SideNavigationItemVariant = 'primary' | 'neutral';
+export const SIDE_NAVIGATION_ITEM_TYPES = ['default', 'nested', 'icon-only'] as const;
+export const SIDE_NAVIGATION_ITEM_VARIANTS = ['primary', 'neutral'] as const;
+export const SIDE_NAVIGATION_ITEM_STYLES = ['simple', 'expressive'] as const;
+
+export type SideNavigationItemType = (typeof SIDE_NAVIGATION_ITEM_TYPES)[number];
+export type SideNavigationItemVariant = (typeof SIDE_NAVIGATION_ITEM_VARIANTS)[number];
+export type SideNavigationItemStyle = (typeof SIDE_NAVIGATION_ITEM_STYLES)[number] | 'Simple' | 'Expressive';
 type ItemState = 'default' | 'hovered' | 'selected';
 
 export interface SideNavigationItemProps {
@@ -21,6 +26,8 @@ export interface SideNavigationItemProps {
     type?: SideNavigationItemType;
     /** Style variant: primary uses brand colors, neutral uses Material surface */
     variant?: SideNavigationItemVariant;
+    /** Visual style treatment: 'simple' | 'expressive' */
+    style?: SideNavigationItemStyle;
     /** Label text */
     label?: string;
     /** Leading icon */
@@ -55,8 +62,8 @@ export interface SideNavigationItemProps {
 const sideNavigationItemStyles = cva(
     [
         'flex items-center cursor-pointer select-none',
-        'transition-colors duration-150 ease-out',
-        'rounded-[var(--corner-radius-thematic-medium)]',
+        'transition-[background-color,box-shadow,outline] duration-150 ease-out',
+        'rounded-[var(--corner-radius-control-medium)]',
         'outline-none border border-transparent',
     ],
     {
@@ -64,11 +71,15 @@ const sideNavigationItemStyles = cva(
             state: {
                 default: 'bg-transparent',
                 hovered: 'bg-[var(--color-neutral-surface-medium)]',
-                selected: '', // Handled separately due to gradient
+                selected: '',
             },
             variant: {
                 primary: '',
                 neutral: '',
+            },
+            style: {
+                simple: '',
+                expressive: '',
             },
             collapsed: {
                 true: 'w-12 h-10 px-3.5 py-2.5 justify-center',
@@ -80,12 +91,56 @@ const sideNavigationItemStyles = cva(
             },
         },
         compoundVariants: [
-            // Primary selected — shadow
-            { state: 'selected', variant: 'primary', className: 'shadow-[var(--inset-subtle-medium)]' },
-            // Neutral selected — transparent; Material wrapper handles surface
-            { state: 'selected', variant: 'neutral', className: 'bg-transparent border-transparent shadow-none' },
+            // Primary selected + expressive
+            {
+                state: 'selected',
+                variant: 'primary',
+                style: 'expressive',
+                className: [
+                    'border-transparent',
+                    'shadow-[var(--inset-subtle-medium)]',
+                    '[background:var(--gradient-thematic-fill-primary-subtle)_padding-box,var(--gradient-thematic-outline-primary-subtle)_border-box]',
+                    '[background-origin:border-box]',
+                    '[background-clip:padding-box,border-box]',
+                ],
+            },
+            // Primary selected + simple
+            {
+                state: 'selected',
+                variant: 'primary',
+                style: 'simple',
+                className: [
+                    'bg-[var(--color-brand-primary-subtlest)]',
+                    'border-[var(--color-brand-primary-subtler)]',
+                    'shadow-none',
+                ],
+            },
+            // Neutral selected + expressive
+            {
+                state: 'selected',
+                variant: 'neutral',
+                style: 'expressive',
+                className: [
+                    'border-transparent',
+                    'shadow-[var(--inset-subtle-medium)]',
+                    '[background:var(--gradient-thematic-fill-neutral)_padding-box,var(--gradient-thematic-outline-neutral)_border-box]',
+                    '[background-origin:border-box]',
+                    '[background-clip:padding-box,border-box]',
+                ],
+            },
+            // Neutral selected + simple — transparent; Material wrapper handles surface
+            {
+                state: 'selected',
+                variant: 'neutral',
+                style: 'simple',
+                className: [
+                    'bg-transparent',
+                    'border-transparent',
+                    'shadow-none',
+                ],
+            },
         ],
-        defaultVariants: { state: 'default', variant: 'primary', collapsed: false, disabled: false },
+        defaultVariants: { state: 'default', variant: 'neutral', style: 'simple', collapsed: false, disabled: false },
     }
 );
 
@@ -105,7 +160,7 @@ const iconStyles = cva('flex items-center justify-center shrink-0 transition-col
         { state: 'selected', variant: 'primary', className: 'text-[var(--color-brand-primary-strong)]' },
         { state: 'selected', variant: 'neutral', className: 'text-[var(--color-neutral-icon-strong)]' },
     ],
-    defaultVariants: { state: 'default', variant: 'primary' },
+    defaultVariants: { state: 'default', variant: 'neutral' },
 });
 
 const textStyles = cva(
@@ -133,7 +188,7 @@ const textStyles = cva(
             { state: 'selected', variant: 'primary', className: 'text-[var(--color-brand-primary-strong)]' },
             { state: 'selected', variant: 'neutral', className: 'text-[var(--color-neutral-text-strong)]' },
         ],
-        defaultVariants: { state: 'default', variant: 'primary', collapsed: false },
+        defaultVariants: { state: 'default', variant: 'neutral', collapsed: false },
     }
 );
 
@@ -142,7 +197,8 @@ export type SideNavigationItemStylesProps = VariantProps<typeof sideNavigationIt
 // Component
 export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
     type = 'default',
-    variant = 'primary',
+    variant = 'neutral',
+    style = 'simple',
     label,
     leadingIcon,
     badge,
@@ -167,6 +223,8 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
 
     const isNested = type === 'nested';
     const isIconOnly = type === 'icon-only';
+
+    const normalizedStyle = (style ? String(style).toLowerCase() : 'simple') as 'simple' | 'expressive';
 
     // Determine visual state
     const state: ItemState = useMemo(() => {
@@ -197,22 +255,20 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
         }
     }, [disabled, handleClick]);
 
-    // Determine if we need a Material wrapper (neutral + selected)
-    const useNeutralMaterial = variant === 'neutral' && state === 'selected';
+    // Determine if we need a Material wrapper (neutral + simple + selected)
+    const useNeutralMaterial = variant === 'neutral' && normalizedStyle === 'simple' && state === 'selected';
 
-    // Selected state uses gradient background (primary variant only)
-    const selectedBackgroundStyle = useMemo(
-        () =>
-            state === 'selected' && variant === 'primary'
-                ? {
-                    background:
-                        'linear-gradient(var(--color-brand-primary-subtlest), var(--color-brand-primary-subtlest)) padding-box, var(--gradient-thematic-outline-primary-subtle) border-box',
-                    backgroundOrigin: 'border-box',
-                    backgroundClip: 'padding-box, border-box',
-                }
-                : {},
-        [state, variant]
-    );
+    // Icon weight based on style prop (duotone for expressive, regular for simple)
+    const iconWeight: 'regular' | 'duotone' = normalizedStyle === 'expressive' ? 'duotone' : 'regular';
+
+    const icon = leadingIcon
+        ? (React.isValidElement(leadingIcon)
+            ? React.cloneElement(leadingIcon as React.ReactElement<any>, {
+                size: (leadingIcon.props as any)?.size ?? 20,
+                weight: iconWeight,
+            })
+            : leadingIcon)
+        : null;
 
     // Focus ring style - use inset boxShadow to prevent clipping
     const focusRingStyle = useMemo(
@@ -234,10 +290,10 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
             <AriaButton
                 id={id}
                 className={cn(
-                    sideNavigationItemStyles({ state, variant, collapsed: true, disabled }),
+                    sideNavigationItemStyles({ state, variant, style: normalizedStyle, collapsed: true, disabled }),
                     className
                 )}
-                style={{ ...selectedBackgroundStyle, ...focusRingStyle }}
+                style={focusRingStyle}
                 onPress={handleClick}
                 onHoverStart={onEnter}
                 onHoverEnd={onLeave}
@@ -245,7 +301,7 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
                 isDisabled={disabled}
                 aria-label={label}
             >
-                <div className={cn(iconStyles({ state, variant }), 'w-5 h-5')}>{leadingIcon}</div>
+                {icon && <div className={cn(iconStyles({ state, variant }), 'w-5 h-5')}>{icon}</div>}
             </AriaButton>
         );
 
@@ -274,8 +330,8 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
                     collapsed ? 'flex-none' : 'flex-1 h-6'
                 )}
             >
-                {leadingIcon && (
-                    <div className={cn(iconStyles({ state, variant }), 'w-5 h-5')}>{leadingIcon}</div>
+                {icon && (
+                    <div className={cn(iconStyles({ state, variant }), 'w-5 h-5')}>{icon}</div>
                 )}
                 {label && !collapsed && (
                     <>
@@ -311,8 +367,8 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
         <Tooltip type="plain" placement="right" content={label} offset={12}>
             <AriaButton
                 id={id}
-                className={cn(sideNavigationItemStyles({ state, variant, collapsed, disabled }), className)}
-                style={{ ...selectedBackgroundStyle, ...focusRingStyle }}
+                className={cn(sideNavigationItemStyles({ state, variant, style: normalizedStyle, collapsed, disabled }), className)}
+                style={focusRingStyle}
                 onPress={handleClick}
                 onHoverStart={onEnter}
                 onHoverEnd={onLeave}
@@ -327,8 +383,8 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
     ) : (
         <div
             id={id}
-            className={cn(sideNavigationItemStyles({ state, variant, collapsed, disabled }), className)}
-            style={{ ...selectedBackgroundStyle, ...focusRingStyle }}
+            className={cn(sideNavigationItemStyles({ state, variant, style: normalizedStyle, collapsed, disabled }), className)}
+            style={focusRingStyle}
             onClick={handleClick}
             onMouseEnter={onEnter}
             onMouseLeave={onLeave}
@@ -350,8 +406,8 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
             <Material
                 size="small"
                 elevation="default"
-                cornerRadiusType="thematic"
-                cornerRadius="var(--corner-radius-thematic-medium)"
+                cornerRadiusType="control"
+                cornerRadius="var(--corner-radius-control-medium)"
             >
                 {content}
             </Material>
@@ -359,7 +415,7 @@ export const SideNavigationItem: React.FC<SideNavigationItemProps> = ({
     ) : content;
 
     return (
-        <div className="flex flex-col items-start w-full rounded-[var(--corner-radius-thematic-medium)]">
+        <div className="flex flex-col items-start w-full rounded-[var(--corner-radius-control-medium)]">
             {wrappedContent}
             {/* Sub-navigation for nested items */}
             {isNested && (

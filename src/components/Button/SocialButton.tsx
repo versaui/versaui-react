@@ -39,7 +39,7 @@ const SIZE_CONFIG: Record<SocialButtonSize, {
             fontWeight: 'var(--typography-font-weight-title)',
             lineHeight: 'var(--typescale-H7-line-height)'
         },
-        borderRadius: 'var(--corner-radius-thematic-large)',
+        borderRadius: 'var(--corner-radius-control-large)',
         shadow: 'var(--elevation-medium-1-shadow)'
     },
     default: {
@@ -54,7 +54,7 @@ const SIZE_CONFIG: Record<SocialButtonSize, {
             fontWeight: 'var(--typography-font-weight-title)',
             lineHeight: 'var(--typescale-H8-line-height)'
         },
-        borderRadius: 'var(--corner-radius-thematic-medium)',
+        borderRadius: 'var(--corner-radius-control-medium)',
         shadow: 'var(--elevation-small-1-shadow)'
     },
     small: {
@@ -69,7 +69,7 @@ const SIZE_CONFIG: Record<SocialButtonSize, {
             fontWeight: 'var(--typography-font-weight-title)',
             lineHeight: 'var(--typescale-H9-line-height)'
         },
-        borderRadius: 'var(--corner-radius-thematic-small)',
+        borderRadius: 'var(--corner-radius-control-small)',
         shadow: 'var(--elevation-small-1-shadow)'
     }
 };
